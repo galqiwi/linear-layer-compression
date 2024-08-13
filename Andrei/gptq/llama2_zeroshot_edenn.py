@@ -194,7 +194,7 @@ if __name__ == '__main__':
     )
     
     mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
-    wandb.log({f"expected_mse": mse, "expected_entropy": entropy, "bitwidth": np.log2(args.edenn_n) / args.edenn_d})
+    wandb.log({f"expected_mse": mse, "expected_entropy": entropy, "bitwidth": np.log2(args.edenn_n) / args.edenn_d, "edenn_d": args.edenn_d, "edenn_n": args.edenn_n})
 
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
     model.seqlen = args.seqlen
