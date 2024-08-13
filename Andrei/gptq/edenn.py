@@ -1,5 +1,10 @@
+import math
 import numpy as np
 import torch
+from torch import nn
+import torch.nn.functional as F
+
+from fast_hadamard_transform import hadamard_transform
 
 import pathlib
 grids_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath("grids/")
@@ -11,15 +16,41 @@ for file in grids_folder.iterdir():
     if file.suffix == ".pt":
         dim, size = map(int, file.stem[4:].split('-'))
         GRIDS[dim] = GRIDS.get(dim, {})
-        GRIDS[dim][size] = torch.load(file)
+        GRIDS[dim][size] = torch.load(file).half()
 
 GRID_NORMS = {k1: {k2: torch.linalg.norm(GRIDS[k1][k2], dim=1) ** 2 for k2 in v1.keys()} for k1, v1 in GRIDS.items()}
 
 
 def entropy(idx):
     _, counts = torch.unique(idx, return_counts=True)
-    return -torch.sum(counts / len(idx) * torch.log2(counts / len(idx)))
+    counts = counts.to(torch.float)
+    return -torch.sum(counts / len(idx) * torch.log2(counts / len(idx))).item()
 
 def edenn(x, dim, size):
     idx = torch.argmax(2 * x @ GRIDS[dim][size].T - GRID_NORMS[dim][size], dim=-1)
     return GRIDS[dim][size][idx], entropy(idx)
+
+
+def pad_to_block(tensor, dims, had_block_size, value=0):
+    pad_dims = [0 for _ in range(2 * len(tensor.shape))]
+    for dim in dims:
+        size = tensor.shape[dim]
+        next_multiple_of_1024 = ((size - 1) // had_block_size + 1) * had_block_size
+        delta = next_multiple_of_1024 - size
+        pad_dims[-2 * dim - 1] = delta
+    
+    return F.pad(tensor, pad_dims, "constant", value)
+
+class HadLinear(nn.Module):
+    def __init__(self, weight, had_block_size=1024):
+        super().__init__()
+        self.had_block_size = had_block_size
+        self.weight = nn.Parameter(weight/math.sqrt(had_block_size))
+    
+    def forward(self, input):
+        input = pad_to_block(input, [-1], self.had_block_size)
+        mult = input.shape[-1] // self.had_block_size
+        input = input.reshape(input.shape[:-1] + (mult, self.had_block_size))
+        input = hadamard_transform(input, scale=1/math.sqrt(self.had_block_size))
+        input = input.reshape(input.shape[:-2] + (mult * self.had_block_size,))
+        return F.linear(input, self.weight)
