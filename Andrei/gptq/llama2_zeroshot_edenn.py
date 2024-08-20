@@ -1,3 +1,5 @@
+import os
+
 import torch
 import torch.nn as nn
 from transformers import AutoModelForCausalLM
@@ -27,6 +29,14 @@ def replace_submodule(module, submodule_path, new_submodule):
     for submodule in submodule_names[:-1]:
         module = getattr(module, submodule)
     setattr(module, submodule_names[-1], new_submodule)
+    
+def replace_empty(model: nn.Module):
+    linear_layers = find_layers(model)
+    for name, layer in tqdm(linear_layers.items(), desc="Replacing linear layers..."):
+        if "lm_head" in name:
+            continue
+        
+        replace_submodule(model, name, HadLinear(layer.weight))
 
 
 @torch.no_grad()
@@ -274,6 +284,10 @@ if __name__ == '__main__':
         '--nsamples', type=int, default=256,
         help='Number of calibration data samples.'
     )
+    parser.add_argument(
+        '--cache-dir', type=str, default=None,
+        help='Models cache dir',
+    )
     args = parser.parse_args()
     
     wandb.init(
@@ -302,15 +316,33 @@ if __name__ == '__main__':
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
     model.seqlen = args.seqlen
     model.eval()
-
-    match args.method:
-        case "rtn":
-            model = llama_rtn(model, args, DEV)
-        case "gptq":
-            dataloader, testloader = get_loaders(
-                args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
+    
+    ckpt_name = f"{args.model}_{args.method}_{args.edenn_d}_{args.edenn_n}.pt"
+    
+    if args.cache_dir is not None and os.path.isfile(f"{args.cache_dir}/{ckpt_name}"):
+        replace_empty(model)
+        
+        model.load_state_dict(torch.load(
+            f"{args.cache_dir}/{ckpt_name}"
+        ))
+    else:
+        match args.method:
+            case "rtn":
+                model = llama_rtn(model, args, DEV)
+            case "gptq":
+                dataloader, testloader = get_loaders(
+                    args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
+                )
+                model = llama_gptq(model, args, dataloader, DEV)
+        
+        if args.cache_dir is not None:
+            ckpt_path = f"{args.cache_dir}/{ckpt_name}"
+            last_slash_pos = ckpt_path.rfind("/")
+            os.makedirs(ckpt_path[:last_slash_pos], exist_ok=True)
+            torch.save(
+                model.state_dict(),
+                ckpt_path,
             )
-            model = llama_gptq(model, args, dataloader, DEV)
 
     datasets = ['wikitext2'] 
     for dataset in datasets:
