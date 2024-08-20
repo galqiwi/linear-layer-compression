@@ -48,8 +48,8 @@ def quantize_linear_layer(layer: nn.Linear, hadamard_groupsize: int, edenn_d: in
     weight = pad_to_block(weight, [1], edenn_d)
     
     weight = weight.reshape(weight.shape[0], -1, edenn_d)
-    for i in range(0, weight.shape[0], 128):
-        weight[i:i+128], entorpy = edenn(weight[i:i+128], edenn_d, edenn_n)
+    for i in range(0, weight.shape[0], 64):
+        weight[i:i+64], entorpy = edenn(weight[i:i+64], edenn_d, edenn_n)
     weight = weight.reshape(weight.shape[0], -1)[:,:real_num_columns]
     
     # Unscale
@@ -186,7 +186,8 @@ if __name__ == '__main__':
     
     wandb.init(
         # set the wandb project where this run will be logged
-        project="compression_horizon",
+        entity="rock-and-roll",
+        project="edenn-evals",
         
         # track hyperparameters and run metadata
         config=args,
@@ -194,7 +195,7 @@ if __name__ == '__main__':
     )
     
     mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
-    wandb.log({f"expected_mse": mse, "expected_entropy": entropy, "bitwidth": np.log2(args.edenn_n) / args.edenn_d, "edenn_d": args.edenn_d, "edenn_n": args.edenn_n})
+    wandb.log({"model": args.model, f"expected_mse": mse, "expected_entropy": entropy, "bitwidth": np.log2(args.edenn_n) / args.edenn_d, "edenn_d": args.edenn_d, "edenn_n": args.edenn_n})
 
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
     model.seqlen = args.seqlen
