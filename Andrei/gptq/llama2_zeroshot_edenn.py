@@ -7,7 +7,7 @@ from tqdm import tqdm, trange
 
 from edenn import edenn, pad_to_block, HadLinear
 from fast_hadamard_transform import hadamard_transform
-
+from gptq import apply_gptq, get_accumulate_input_fn
 
 DEV = torch.device('cuda')
 
@@ -31,8 +31,6 @@ def replace_submodule(module, submodule_path, new_submodule):
 
 @torch.no_grad()
 def quantize_linear_layer(layer: nn.Linear, hadamard_groupsize: int, edenn_d: int, edenn_n: int):
-    weight = layer.weight.clone()
-    
     # Pad to Hadamard transform size
     weight = pad_to_block(weight, [1], hadamard_groupsize)
     
@@ -59,7 +57,7 @@ def quantize_linear_layer(layer: nn.Linear, hadamard_groupsize: int, edenn_d: in
     
 
 @torch.no_grad()
-def llama_zeroshot(model, args, device):
+def llama_rtn(model, args, device):
     linear_layers = find_layers(model)
     
     for name, layer in tqdm(linear_layers.items(), desc="Quantizing linear layers..."):
@@ -69,6 +67,90 @@ def llama_zeroshot(model, args, device):
         wandb.log({f"layer_entropy": entropy})
         replace_submodule(model, name, quantized_layer.cpu())
         
+    return model
+
+
+@torch.no_grad()
+def llama_gptq(model, args, dataloader, dev):
+    use_cache = model.config.use_cache
+    model.config.use_cache = False
+    layers = model.model.layers
+
+    model.model.embed_tokens = model.model.embed_tokens.to(dev)
+    model.model.norm = model.model.norm.to(dev)
+    model.model.rotary_emb.inv_freq = model.model.rotary_emb.inv_freq.to(dev)
+    layers[0] = layers[0].to(dev)
+
+    dtype = next(iter(model.parameters())).dtype
+    inps = []
+    outs = []
+    attention_masks = []
+    position_ids = []
+
+    class Catcher(nn.Module):
+        def __init__(self, module):
+            super().__init__()
+            self.module = module
+        def forward(self, inp, **kwargs):
+            inps.append(inp)
+            outs.append(torch.zeros_like(inp))
+            attention_masks.append(kwargs['attention_mask'])
+            position_ids.append(kwargs['position_ids'])
+            raise ValueError
+    layers[0] = Catcher(layers[0])
+    for batch in dataloader:
+        try:
+            model(batch.to(dev))
+        except ValueError:
+            pass
+    layers[0] = layers[0].module
+
+    layers[0] = layers[0].cpu()
+    model.model.embed_tokens = model.model.embed_tokens.cpu()
+    model.model.norm = model.model.norm.cpu()
+    torch.cuda.empty_cache()
+
+    for i in trange(len(layers), desc="Quantizing with GPTQ..."):
+        layer = layers[i].to(dev)
+        linear_layers = find_layers(layer)
+
+        hessians = {name: None for name in linear_layers}
+        num_samples = {name: 0 for name in linear_layers}
+        handles = [
+            linear_layers[name].register_forward_hook(
+                get_accumulate_input_fn(name, hessians, num_samples)
+            ) for name in linear_layers
+        ]
+        for j in trange(args.nsamples, leave=False, desc="Before pass..."):
+            outs[j] = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
+        for h in handles:
+            h.remove()
+
+        for name, linear in linear_layers.items():
+            quantized_layer = apply_gptq(
+                linear.weight.data, 2 * hessians[name] / num_samples[name],
+                edenn_d=args.edenn_d, edenn_n=args.edenn_n,
+                had_block_size=args.hadamard_groupsize,
+            )
+                
+            quantized_linear = HadLinear(quantized_layer, args.hadamard_groupsize)
+            replace_submodule(layer, name, quantized_linear)
+
+        mse = 0
+        for j in trange(args.nsamples, leave=False, desc="After pass..."):
+            out = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
+            mse += torch.nn.functional.mse_loss(outs[j][0], out[0]).item()
+            inps[j] = out
+        wandb.log({"obc_mse": mse})
+
+        if any([inp.isnan().any() for inp in inps]):
+            raise Exception("NaNs!")
+        
+        layers[i] = layer.cpu()
+        del layer
+        torch.cuda.empty_cache()
+
+    model.config.use_cache = use_cache
     return model
         
 
@@ -145,7 +227,7 @@ def llama_eval(model, dataloader, dev):
 
 @torch.no_grad()
 def eval_grid(edenn_d: int, edenn_n: int):
-    x = torch.empty((2**16, edenn_d), device=DEV, dtype=torch.float16).normal_()
+    x = torch.empty((2**16, edenn_d), device=DEV).normal_()
     dequant, entropy = edenn(x, edenn_d, edenn_n)
     mse = (x - dequant).pow(2).mean().item()
     return mse, entropy / edenn_d
@@ -181,13 +263,23 @@ if __name__ == '__main__':
         '--seqlen',
         type=int, default=8192, help='Seq len for PPL evals.'
     )
-
+    parser.add_argument(
+        '--method', type=str, choices=["rtn", "gptq"], help="Method to quantize with",
+    )
+    parser.add_argument(
+        '--dataset', type=str, default='red', choices=['red'],
+        help='Where to extract calibration data from.'
+    )
+    parser.add_argument(
+        '--nsamples', type=int, default=256,
+        help='Number of calibration data samples.'
+    )
     args = parser.parse_args()
     
     wandb.init(
         # set the wandb project where this run will be logged
         entity="rock-and-roll",
-        project="edenn-evals",
+        project="edenn-gptq",
         
         # track hyperparameters and run metadata
         config=args,
@@ -195,20 +287,35 @@ if __name__ == '__main__':
     )
     
     mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
-    wandb.log({"model": args.model, f"expected_mse": mse, "expected_entropy": entropy, "bitwidth": np.log2(args.edenn_n) / args.edenn_d, "edenn_d": args.edenn_d, "edenn_n": args.edenn_n})
+    wandb.log({
+        "model": args.model,
+        "method": args.method,
+        "dataset": args.dataset,
+        "nsamples": args.nsamples,
+        "expected_mse": mse,
+        "expected_entropy": entropy,
+        "bitwidth": np.log2(args.edenn_n) / args.edenn_d,
+        "edenn_d": args.edenn_d,
+        "edenn_n": args.edenn_n
+    })
 
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
     model.seqlen = args.seqlen
     model.eval()
 
-
-    model = llama_zeroshot(model, args, DEV)
+    match args.method:
+        case "rtn":
+            model = llama_rtn(model, args, DEV)
+        case "gptq":
+            dataloader, testloader = get_loaders(
+                args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
+            )
+            model = llama_gptq(model, args, dataloader, DEV)
 
     datasets = ['wikitext2'] 
     for dataset in datasets:
         dataloader, testloader = get_loaders(
             dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
         )
-        print(dataset)
         ppl = llama_eval(model, testloader, DEV)
         wandb.log({f"{dataset}_PPL": ppl})

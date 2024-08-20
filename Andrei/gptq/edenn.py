@@ -16,7 +16,7 @@ for file in grids_folder.iterdir():
     if file.suffix == ".pt":
         dim, size = map(int, file.stem[4:].split('-'))
         GRIDS[dim] = GRIDS.get(dim, {})
-        GRIDS[dim][size] = torch.load(file).half()
+        GRIDS[dim][size] = torch.load(file)
 
 GRID_NORMS = {k1: {k2: torch.linalg.norm(GRIDS[k1][k2], dim=1) ** 2 for k2 in v1.keys()} for k1, v1 in GRIDS.items()}
 

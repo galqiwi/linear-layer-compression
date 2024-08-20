@@ -1,182 +1,150 @@
-import copy
 import math
-import time
+from typing import Mapping
 
 import torch
-import torch.nn as nn
-from torch.nn import functional as F
-import transformers
+from torch import Tensor, nn
+import torch.nn.functional as F
+
+from edenn import edenn, pad_to_block
 from fast_hadamard_transform import hadamard_transform
 
-from quant import *
-from hadamard import pad_to_block, quantize_hadamard
-from edenn import edenn
-
-DEBUG = False 
-
-torch.backends.cuda.matmul.allow_tf32 = False
-torch.backends.cudnn.allow_tf32 = False
+from tqdm.auto import tqdm, trange
 
 
-class GPTQ:
+@torch.no_grad()
+def gptq_block(block_weight: Tensor, block_hessian_inverse: Tensor, edenn_d: int, edenn_n: int) -> tuple[Tensor, Tensor]:
+    quantized_block_weight = torch.zeros_like(block_weight)
+    scaled_block_error = torch.zeros_like(block_weight)
 
-    def __init__(self, layer, stable=False):
-        self.layer = layer
-        self.dev = self.layer.weight.device
-        W = layer.weight.data.clone()
-        self.rows = W.shape[0]
-        self.columns = W.shape[1]
-        self.H = torch.zeros((self.columns, self.columns), device=self.dev)
-        self.nsamples = 0
+    # Interate over the block's columns
+    assert block_weight.shape[1] % edenn_d == 0
+    for i in range(0, block_weight.shape[1], edenn_d):
+        # Get the column and the corresponding inverse Hessian
+        column_weight = block_weight[:, i:i+edenn_d]
+        column_hessian_inverse = block_hessian_inverse[i, i]
 
-        self.stable = stable
-        self.mean = torch.zeros((self.columns, 1), device=self.dev)
+        # Quantize the column weight
+        quantized_column_weight, _ = edenn(column_weight, edenn_d, edenn_n)
+        quantized_block_weight[:, i:i+edenn_d] = quantized_column_weight.clone()
+        dequantized_column_weight = quantized_column_weight
 
-    def add_batch(self, inp, out):
-        if DEBUG:
-            self.inp1 = inp
-            self.out1 = out
-        if len(inp.shape) == 2:
-            inp = inp.unsqueeze(0)
-        tmp = inp.shape[0]
-        if len(inp.shape) == 3:
-            inp = inp.reshape((-1, inp.shape[-1]))
-        inp = inp.t()
+        # Update all the following columns within the block
+        scaled_column_error = (column_weight - dequantized_column_weight) / column_hessian_inverse
+        block_weight[:, i+1:] -= scaled_column_error.matmul(block_hessian_inverse[i:i+edenn_d, i+1:])
+        scaled_block_error[:, i:i+edenn_d] = scaled_column_error
 
-        if self.stable:
-            inp = inp.float()
-            delta = torch.mean(inp, 1, keepdims=True) - self.mean
-            self.H += inp.matmul(inp.t()) + delta.matmul(delta.t()) * self.nsamples * tmp / (self.nsamples + tmp)
-            self.nsamples += tmp
-            self.mean += delta * tmp / self.nsamples
+    return quantized_block_weight, scaled_block_error, block_weight
+
+
+def prepare_inverse_hessian(hessian: Tensor, percdamp: float) -> Tensor:
+    """Precomputes inverse Hessian
+    Args:
+        hessian (Tensor): problem hessian
+        percdamp (float): diagonal damping constant for numerical stability
+    Returns:
+        Tensor: precomputed inverse Hessian
+    """
+    damp = percdamp * torch.mean(torch.diag(hessian))
+    diag = torch.arange(hessian.shape[0], device=hessian.device)
+    hessian[diag, diag] += damp
+    hessian = torch.linalg.cholesky(hessian)
+    hessian = torch.cholesky_inverse(hessian)
+    hessian = torch.linalg.cholesky(hessian, upper=True)
+    return hessian
+
+
+def pad_to_block(tensor, dims, had_block_size, value=0):
+    pad_dims = [0 for _ in range(2 * len(tensor.shape))]
+    for dim in dims:
+        size = tensor.shape[dim]
+        next_multiple_of_1024 = ((size - 1) // had_block_size + 1) * had_block_size
+        delta = next_multiple_of_1024 - size
+        pad_dims[-2 * dim - 1] = delta
+    
+    return F.pad(tensor, pad_dims, "constant", value)
+
+
+@torch.no_grad()
+def apply_gptq(
+    weight: torch.Tensor, hessian: torch.Tensor, edenn_d:int, edenn_n:int,
+    had_block_size:int=1024, percdamp:float=.01
+) -> tuple[Tensor, Tensor, Tensor]:
+    blocksize = edenn_d
+    while blocksize < 128:
+        blocksize *= 2
+
+    dtype = weight.dtype
+    weight = weight.float()
+    num_columns = weight.shape[1]
+    hessian = hessian.float()
+
+    # Normalize
+
+    # scales = torch.linalg.norm(weight, axis=-1)
+    weight = pad_to_block(weight, [1], had_block_size, value=0.01)
+    hessian = pad_to_block(hessian, [0, 1], had_block_size)
+    
+    mult = weight.shape[1] // had_block_size
+    weight = weight.reshape(-1, mult, had_block_size)
+    hessian = hessian.reshape(mult, had_block_size, mult, had_block_size)
+            
+    weight = hadamard_transform(weight)
+    
+    scales = torch.linalg.norm(weight, axis=-1) / math.sqrt(had_block_size)
+    weight = weight / scales[:, :, None]
+    
+    hessian = hadamard_transform(
+        hadamard_transform(hessian, scale=1/math.sqrt(had_block_size)).permute(2, 3, 0, 1),
+        scale=1/math.sqrt(had_block_size)
+    ).permute(2, 3, 0, 1)
+    
+    weight = weight.reshape(-1, mult * had_block_size)
+    hessian = hessian.reshape(mult * had_block_size, mult * had_block_size)
+        
+    
+    # Process the Hessian to obtain the precomputed inverse Hessian
+    hessian_inverse = prepare_inverse_hessian(hessian, percdamp)
+
+    # Pad to edenn_d
+    real_num_columns = weight.shape[1]
+    weight = pad_to_block(weight, [1], edenn_d)
+
+    # Iterate over the columns in blockss
+    for block_start in trange(0, num_columns, blocksize, leave=False, desc="GPTQ blocks..."):
+        # YOUR CODE HERE>>>>>>>>>
+        block_end = min(block_start + blocksize, num_columns)
+
+        # Get the next block and quantize it
+        quantized_block_weight, block_error, weight[:, block_start:block_end] = gptq_block(
+            weight[:, block_start:block_end],
+            hessian_inverse[block_start:block_end, block_start:block_end],
+            edenn_d=edenn_d, edenn_n=edenn_n,
+        )
+
+        # Tune all the following blocks to mitigate the quantization error
+        weight[:, block_start:block_end] = quantized_block_weight.clone()
+        weight[:, block_end:] -= block_error.matmul(hessian_inverse[block_start:block_end, block_end:])
+        # <<<<<<<<<<<<<<<<<<<<<<<
+    weight = weight[:,:real_num_columns]
+        
+    weight = (weight.reshape(weight.shape[0], -1, had_block_size) * scales[:, :, None]).reshape(weight.shape[0], -1)
+    return weight.to(dtype)
+
+
+def get_accumulate_input_fn(name: str, hessians: Mapping[str, Tensor], num_samples: Mapping[str, int]):
+    """Generate a callback that updates the corresponding hessians and counts when given input
+    Args:
+        name (str): module name
+        hessians (Mapping[str, Tensor]): a dict of modules' hessians, accessible by module name
+        num_samples (Mapping[str, int]): a dict of callback call counters
+    """
+    def tmp(_, inp, out):
+        inp = inp[0].data # ... x hidden_size
+        inp = inp.reshape((-1, inp.shape[-1])) # inputs x hidden_size
+        inp = inp.t().float() # hidden_size x inputs
+        num_samples[name] += inp.shape[1]
+        if hessians[name] is None:
+            hessians[name] = inp.matmul(inp.t())
         else:
-            self.H *= self.nsamples / (self.nsamples + tmp)
-            self.nsamples += tmp
-            inp = math.sqrt(2 / self.nsamples) * inp.float()
-            self.H += inp.matmul(inp.t())
-
-    def fasterquant(
-        self, blocksize=128, percdamp=.1, groupsize=-1, clip=False, baseline=False, had=False, eden=0,
-    ):
-        if eden != 0:
-            assert had, 'eden requires had'
-        if had and (clip or groupsize == -1):
-            raise ValueError("Incoherence preprocessing is incompatible with clipping and groupsize=-1")
-        W = self.layer.weight.data.clone()
-        W = W.float()
-
-        tick = time.time()
-
-        if self.stable:
-            self.H /= self.nsamples
-            self.H += self.mean.matmul(self.mean.t())
-            self.H *= 2
-        H = self.H
-        del self.H
-
-        if had:
-            W = pad_to_block(W, [1], groupsize)
-            H = pad_to_block(H, [0, 1], groupsize)
-            if W.shape[1] != self.columns:
-                diag = torch.arange(self.columns, W.shape[1], device=self.dev)
-                H[diag, diag] = 1
-                self.columns = W.shape[1]
-            
-            mult = W.shape[1] // groupsize
-            W = W.reshape(-1, mult, groupsize)
-            H = H.reshape(mult, groupsize, mult, groupsize)
-            
-            self.quantizer.scale = torch.linalg.norm(W, axis=-1)
-            
-            W = hadamard_transform(W) / self.quantizer.scale[:, :, None]
-            H = hadamard_transform(
-                hadamard_transform(H, scale=1/np.sqrt(groupsize)).permute(2, 3, 0, 1),
-                scale=1/np.sqrt(groupsize)
-            ).permute(2, 3, 0, 1)
-            
-            W = W.reshape(-1, mult * groupsize)
-            H = H.reshape(mult * groupsize, mult * groupsize)
-
-        Losses = torch.zeros_like(W)
-        Q = torch.zeros_like(W)
-
-        if not baseline:
-            try:
-                damp = percdamp * torch.mean(torch.diag(H))
-                diag = torch.arange(self.columns, device=self.dev)
-                H[diag, diag] += damp
-                H = torch.linalg.cholesky(H)
-                H = torch.cholesky_inverse(H)
-                H = torch.linalg.cholesky(H, upper=True)
-                Hinv = H
-            except:
-                print('Singularity.')
-                baseline = True
-        if baseline:
-            del H
-            Hinv = torch.eye(self.columns, device=self.dev)
-
-        if groupsize == -1:
-            self.quantizer.find_params(W)
-        groups = []
-
-        for i1 in range(0, self.columns, blocksize):
-            i2 = min(i1 + blocksize, self.columns)
-            count = i2 - i1
-
-            W1 = W[:, i1:i2].clone()
-            Q1 = torch.zeros_like(W1)
-            Err1 = torch.zeros_like(W1)
-            Losses1 = torch.zeros_like(W1)
-            Hinv1 = Hinv[i1:i2, i1:i2]
-
-            if groupsize != -1 and not had:
-                self.quantizer.find_params(W1, solve=Hinv1 if clip else None)
-                groups.append(copy.deepcopy(self.quantizer))
-
-            step_size = eden if eden != 0 else 1
-            assert count % step_size == 0, 'count must be divisible by step_size'
-            for i in range(0, count, step_size):
-                w = W1[:, i:i + step_size]
-                d = Hinv1[i:i + step_size, i:i + step_size].diag()
-
-                if eden == 0:
-                    q = quantize(
-                        w, self.quantizer.scale, self.quantizer.zero, self.quantizer.maxq
-                    )
-                else:
-                    q = edenn(w, eden, self.quantizer.bits)
-
-                Q1[:, i:i + step_size] = q
-                Losses1[:, i:i + step_size] = (w - q) ** 2 / d ** 2
-
-                err1 = (w - q) / d
-                W1[:, i:] -= err1.matmul(Hinv1[i: i + step_size, i:])
-                Err1[:, i:i + step_size] = err1
-
-            Q[:, i1:i2] = Q1
-            Losses[:, i1:i2] = Losses1 / 2
-            W[:, i2:] -= Err1.matmul(Hinv[i1:i2, i2:])
-
-            if DEBUG:
-                self.layer.weight.data[:, :i2] = Q[:, :i2]
-                self.layer.weight.data[:, i2:] = W[:, i2:]
-                print(torch.sum((self.layer(self.inp1) - self.out1) ** 2))
-                print(torch.sum(Losses))
-
-        torch.cuda.synchronize()
-        print('time %.2f' % (time.time() - tick))
-        print('error', torch.sum(Losses).item())
-
-        if had:
-            Q = (Q.reshape(Q.shape[0], -1, groupsize) * self.quantizer.scale[:, :, None]).reshape(Q.shape[0], -1)
-
-        self.layer.weight = torch.nn.Parameter(Q.to(self.layer.weight.data.dtype), requires_grad=False)
-        if DEBUG:
-            print(torch.sum((self.layer(self.inp1) - self.out1) ** 2))
-
-        if groups:
-            scale = torch.cat([q.scale for q in groups], dim=1)
-            zero = torch.cat([q.zero for q in groups], dim=1)
-            return scale, zero
-        return self.quantizer.scale, self.quantizer.zero
+            hessians[name] += inp.matmul(inp.t())
+    return tmp
