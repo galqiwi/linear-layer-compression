@@ -322,6 +322,8 @@ if __name__ == '__main__':
     if args.cache_dir is not None and os.path.isfile(f"{args.cache_dir}/{ckpt_name}"):
         replace_empty(model)
         
+        print(f"Using quantized model at {args.cache_dir}/{ckpt_name}")
+        
         model.load_state_dict(torch.load(
             f"{args.cache_dir}/{ckpt_name}"
         ))
