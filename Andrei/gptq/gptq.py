@@ -108,11 +108,12 @@ def apply_gptq(
     # Pad to edenn_d
     real_num_columns = weight.shape[1]
     weight = pad_to_block(weight, [1], edenn_d)
+    hessian_inverse = pad_to_block(hessian_inverse, [0, 1], edenn_d, 0)
 
     # Iterate over the columns in blockss
     for block_start in trange(0, num_columns, blocksize, leave=False, desc="GPTQ blocks..."):
         # YOUR CODE HERE>>>>>>>>>
-        block_end = min(block_start + blocksize, num_columns)
+        block_end = min(block_start + blocksize, weight.shape[1])
 
         # Get the next block and quantize it
         quantized_block_weight, block_error, weight[:, block_start:block_end] = gptq_block(

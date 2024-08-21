@@ -44,7 +44,8 @@ def pad_to_block(tensor, dims, had_block_size, value=0):
 class HadLinear(nn.Module):
     def __init__(self, weight, had_block_size=1024):
         super().__init__()
-        self.had_block_size = had_block_size
+        self.register_buffer('had_block_size', torch.tensor(0))
+        self.had_block_size = torch.tensor(had_block_size)
         self.weight = nn.Parameter(weight/math.sqrt(had_block_size))
     
     def forward(self, input):
