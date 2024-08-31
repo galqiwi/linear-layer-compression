@@ -30,13 +30,13 @@ def replace_submodule(module, submodule_path, new_submodule):
         module = getattr(module, submodule)
     setattr(module, submodule_names[-1], new_submodule)
     
-def replace_empty(model: nn.Module):
+def replace_empty(model: nn.Module, had_block_size: int):
     linear_layers = find_layers(model)
     for name, layer in tqdm(linear_layers.items(), desc="Replacing linear layers..."):
         if "lm_head" in name:
             continue
         
-        replace_submodule(model, name, HadLinear(layer.weight))
+        replace_submodule(model, name, HadLinear(pad_to_block(layer.weight, [1], had_block_size)))
 
 
 @torch.no_grad()
@@ -235,6 +235,42 @@ def llama_eval(model, dataloader, dev):
     
     return ppl.item()
 
+
+def get_zero_shots(model, task_list = ('arc_easy',), num_fewshots=1):
+    import lm_eval
+    from lm_eval import evaluator
+
+    lm_eval_model = lm_eval.models.huggingface.HFLM(
+        pretrained=model,
+    )
+
+    tasks = lm_eval.tasks.get_task_dict(task_list)
+    if num_fewshots != 1:
+        # TODO: make fewshots properly
+        for task_name in tasks:
+            task = tasks[task_name]
+            if isinstance(task, tuple):
+                task = task[1]
+            if task is None:
+                continue
+            task.config.num_fewshot = num_fewshots
+
+    results = evaluator.evaluate(
+        lm=lm_eval_model,
+        task_dict=lm_eval.tasks.get_task_dict(task_list),
+    )
+
+    result_dict = {task_name: task_result['acc,none'] for task_name, task_result in results['results'].items()}
+    result_err_dict = {f'{task_name}_err': task_result['acc_stderr,none'] for task_name, task_result in
+                       results['results'].items()}
+    result_dict = dict(list(result_dict.items()) + list(result_err_dict.items()))
+
+    if num_fewshots != 1:
+        result_dict = {f'{task_name}@{num_fewshots}': acc for task_name, acc in result_dict.items()}
+
+    return result_dict
+
+
 @torch.no_grad()
 def eval_grid(edenn_d: int, edenn_n: int):
     x = torch.empty((2**16, edenn_d), device=DEV).normal_()
@@ -274,7 +310,7 @@ if __name__ == '__main__':
         type=int, default=8192, help='Seq len for PPL evals.'
     )
     parser.add_argument(
-        '--method', type=str, choices=["rtn", "gptq"], help="Method to quantize with",
+        '--method', type=str, choices=["rtn", "gptq"], default="gptq", help="Method to quantize with",
     )
     parser.add_argument(
         '--dataset', type=str, default='red', choices=['red'],
@@ -320,7 +356,7 @@ if __name__ == '__main__':
     ckpt_name = f"{args.model}_{args.method}_{args.edenn_d}_{args.edenn_n}.pt"
     
     if args.cache_dir is not None and os.path.isfile(f"{args.cache_dir}/{ckpt_name}"):
-        replace_empty(model)
+        replace_empty(model, args.hadamard_groupsize)
         
         print(f"Using quantized model at {args.cache_dir}/{ckpt_name}")
         
@@ -336,6 +372,8 @@ if __name__ == '__main__':
                     args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
                 )
                 model = llama_gptq(model, args, dataloader, DEV)
+            case _:
+                raise Exception("AAA")
         
         if args.cache_dir is not None:
             ckpt_path = f"{args.cache_dir}/{ckpt_name}"
@@ -353,3 +391,6 @@ if __name__ == '__main__':
         )
         ppl = llama_eval(model, testloader, DEV)
         wandb.log({f"{dataset}_PPL": ppl})
+    
+    model = model.to(DEV)
+    wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
