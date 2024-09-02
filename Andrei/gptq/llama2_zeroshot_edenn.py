@@ -159,8 +159,7 @@ def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamar
             mse += torch.nn.functional.mse_loss(outs[j][0], out[0]).item()
             norm += outs[j][0].float().pow(2).mean().item()
             inps[j] = out
-        print(mse, norm, mse / norm)
-        wandb.log({"block_rmse": mse / norm, "block_id": i})
+        wandb.log({"block_mse": mse, "block_rmse": mse / norm, "block_id": i})
 
         if any([inp.isnan().any() for inp in inps]):
             raise Exception("NaNs!")
