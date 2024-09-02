@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 import torch
 import torch.nn as nn
@@ -41,6 +42,7 @@ def replace_empty(model: nn.Module, had_block_size: int):
 
 @torch.no_grad()
 def quantize_linear_layer(layer: nn.Linear, hadamard_groupsize: int, edenn_d: int, edenn_n: int):
+    weight = layer.weight.float()
     # Pad to Hadamard transform size
     weight = pad_to_block(weight, [1], hadamard_groupsize)
     
@@ -63,17 +65,17 @@ def quantize_linear_layer(layer: nn.Linear, hadamard_groupsize: int, edenn_d: in
     # Unscale
     weight = (weight.reshape(weight.shape[0], -1, hadamard_groupsize) * scales[:, :, None]).reshape(weight.shape[0], -1)
     
-    return HadLinear(weight, hadamard_groupsize), entorpy
+    return HadLinear(weight.half(), hadamard_groupsize), entorpy
     
 
 @torch.no_grad()
-def llama_rtn(model, args, device):
+def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
     linear_layers = find_layers(model)
     
-    for name, layer in tqdm(linear_layers.items(), desc="Quantizing linear layers..."):
+    for (name, layer), (edenn_d, edenn_n) in tqdm(zip(linear_layers.items(), layerwise_edenn_config), desc="Quantizing linear layers..."):
         if "lm_head" in name:
             continue
-        quantized_layer, entropy = quantize_linear_layer(layer.to(device), args.hadamard_groupsize, args.edenn_d, args.edenn_n)
+        quantized_layer, entropy = quantize_linear_layer(layer.to(device), hadamard_groupsize, edenn_d, edenn_n)
         wandb.log({f"layer_entropy": entropy})
         replace_submodule(model, name, quantized_layer.cpu())
         
@@ -81,7 +83,7 @@ def llama_rtn(model, args, device):
 
 
 @torch.no_grad()
-def llama_gptq(model, args, dataloader, dev):
+def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamard_groupsize):
     use_cache = model.config.use_cache
     model.config.use_cache = False
     layers = model.model.layers
@@ -120,6 +122,7 @@ def llama_gptq(model, args, dataloader, dev):
     model.model.norm = model.model.norm.cpu()
     torch.cuda.empty_cache()
 
+    layer_counter = 0
     for i in trange(len(layers), desc="Quantizing with GPTQ..."):
         layer = layers[i].to(dev)
         linear_layers = find_layers(layer)
@@ -131,27 +134,33 @@ def llama_gptq(model, args, dataloader, dev):
                 get_accumulate_input_fn(name, hessians, num_samples)
             ) for name in linear_layers
         ]
-        for j in trange(args.nsamples, leave=False, desc="Before pass..."):
+        for j in trange(nsamples, leave=False, desc="Before pass..."):
             outs[j] = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
         for h in handles:
             h.remove()
 
         for name, linear in linear_layers.items():
+            (edenn_d, edenn_n) = layerwise_edenn_config[layer_counter]
+            layer_counter += 1
+            
             quantized_layer = apply_gptq(
                 linear.weight.data, 2 * hessians[name] / num_samples[name],
-                edenn_d=args.edenn_d, edenn_n=args.edenn_n,
-                had_block_size=args.hadamard_groupsize,
+                edenn_d=edenn_d, edenn_n=edenn_n,
+                had_block_size=hadamard_groupsize,
             )
                 
-            quantized_linear = HadLinear(quantized_layer, args.hadamard_groupsize)
+            quantized_linear = HadLinear(quantized_layer, hadamard_groupsize)
             replace_submodule(layer, name, quantized_linear)
 
         mse = 0
-        for j in trange(args.nsamples, leave=False, desc="After pass..."):
+        norm = 0
+        for j in trange(nsamples, leave=False, desc="After pass..."):
             out = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
             mse += torch.nn.functional.mse_loss(outs[j][0], out[0]).item()
+            norm += outs[j][0].float().pow(2).mean().item()
             inps[j] = out
-        wandb.log({"obc_mse": mse})
+        print(mse, norm, mse / norm)
+        wandb.log({"block_rmse": mse / norm, "block_id": i})
 
         if any([inp.isnan().any() for inp in inps]):
             raise Exception("NaNs!")
@@ -159,6 +168,8 @@ def llama_gptq(model, args, dataloader, dev):
         layers[i] = layer.cpu()
         del layer
         torch.cuda.empty_cache()
+        
+    assert layer_counter == 7 * 32
 
     model.config.use_cache = use_cache
     return model
@@ -279,6 +290,23 @@ def eval_grid(edenn_d: int, edenn_n: int):
     return mse, entropy / edenn_d
 
 
+def build_layerwise_edenn_config(
+    edenn_d: Optional[int], edenn_n: Optional[int], 
+    blockwise_edenn_config: Optional[list[(int, int)]],
+    layerwise_edenn_config: Optional[list[(int, int)]],
+) -> list[(int, int)]:
+    if layerwise_edenn_config is not None:
+        assert edenn_d is None and edenn_n is None and blockwise_edenn_config is None
+        return layerwise_edenn_config
+    
+    if blockwise_edenn_config is not None:
+        assert edenn_d is None and edenn_n is None
+        return [block_config for block_config in blockwise_edenn_config for _ in range(7)]
+    
+    assert edenn_d is not None and edenn_n is not None
+    return [[edenn_d, edenn_n] for _ in range(32 * 7)]
+
+
 if __name__ == '__main__':
     import argparse
     from datautils import *
@@ -290,12 +318,20 @@ if __name__ == '__main__':
         help='LlaMa model to load; pass location of hugginface converted checkpoint.'
     )
     parser.add_argument(
-        '--edenn-d', type=int,
+        '--edenn-d', type=int, default=None,
         help='EDENN grid dimension'
     )
     parser.add_argument(
-        '--edenn-n', type=int,
+        '--edenn-n', type=int, default=None,
         help='EDENN grid size'
+    )
+    parser.add_argument(
+        '--blockwise', type=str, default=None,
+        help='Blockwise edenn configs'
+    )
+    parser.add_argument(
+        '--layerwise', type=str, default=None,
+        help='Layerwise edenn configs'
     )
     parser.add_argument(
         '--hadamard_groupsize', type=int, default=1024, choices=[64, 128, 256, 512, 1024, 2048, 4096],
@@ -326,25 +362,28 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
     
+    if args.layerwise is not None:
+        import ast
+        args.layerwise = ast.literal_eval(args.layerwise)
+    if args.blockwise is not None:
+        import ast
+        args.blockwise = ast.literal_eval(args.blockwise)
+
     wandb.init(
         # set the wandb project where this run will be logged
         entity="rock-and-roll",
-        project="edenn-gptq",
+        project="edenn-gptq-hetero",
         
         # track hyperparameters and run metadata
         config=args,
-        name=f"{args.model=},{args.hadamard_groupsize=},{args.edenn_d=},{args.edenn_n=},{args.seed=}",
+        name=f"{args.model}",
     )
     
-    mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
     wandb.log({
         "model": args.model,
         "method": args.method,
         "dataset": args.dataset,
         "nsamples": args.nsamples,
-        "expected_mse": mse,
-        "expected_entropy": entropy,
-        "bitwidth": np.log2(args.edenn_n) / args.edenn_d,
         "edenn_d": args.edenn_d,
         "edenn_n": args.edenn_n
     })
@@ -353,7 +392,25 @@ if __name__ == '__main__':
     model.seqlen = args.seqlen
     model.eval()
     
-    ckpt_name = f"{args.model}_{args.method}_{args.edenn_d}_{args.edenn_n}.pt"
+    layerwise_edenn_config = build_layerwise_edenn_config(
+        args.edenn_d, args.edenn_n,
+        args.blockwise,
+        args.layerwise,
+    )
+    wandb.log({"layerwise_edenn_config": layerwise_edenn_config})
+    
+    if args.edenn_d is not None:
+        mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
+        wandb.log({
+            "expected_mse": mse,
+            "expected_entropy": entropy,
+            "bitwidth": np.log2(args.edenn_n) / args.edenn_d,
+        })
+    
+    if args.edenn_d is not None:
+        ckpt_name = f"{args.model}_{args.method}_{args.edenn_d}_{args.edenn_n}.pt"
+    else:
+        ckpt_name = f"{args.model}_{args.method}_{layerwise_edenn_config}.pt"
     
     if args.cache_dir is not None and os.path.isfile(f"{args.cache_dir}/{ckpt_name}"):
         replace_empty(model, args.hadamard_groupsize)
@@ -366,12 +423,12 @@ if __name__ == '__main__':
     else:
         match args.method:
             case "rtn":
-                model = llama_rtn(model, args, DEV)
+                model = llama_rtn(model, layerwise_edenn_config, args.hadamard_groupsize, DEV)
             case "gptq":
                 dataloader, testloader = get_loaders(
                     args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
                 )
-                model = llama_gptq(model, args, dataloader, DEV)
+                model = llama_gptq(model, args.nsamples, dataloader, DEV, layerwise_edenn_config, args.hadamard_groupsize)
             case _:
                 raise Exception("AAA")
         
@@ -392,5 +449,5 @@ if __name__ == '__main__':
         ppl = llama_eval(model, testloader, DEV)
         wandb.log({f"{dataset}_PPL": ppl})
     
-    model = model.to(DEV)
-    wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
+    # model = model.to(DEV)
+    # wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
