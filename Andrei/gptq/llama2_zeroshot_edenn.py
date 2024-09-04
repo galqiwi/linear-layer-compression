@@ -139,6 +139,8 @@ def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamar
         for h in handles:
             h.remove()
 
+        print(hessians.keys())
+
         for name, linear in linear_layers.items():
             (edenn_d, edenn_n) = layerwise_edenn_config[layer_counter]
             layer_counter += 1
