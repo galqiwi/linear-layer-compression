@@ -139,7 +139,7 @@ def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamar
         for h in handles:
             h.remove()
 
-        print(hessians.keys())
+        torch.save(hessians, f'xtx_{i}.pt')
 
         for name, linear in linear_layers.items():
             (edenn_d, edenn_n) = layerwise_edenn_config[layer_counter]
