@@ -145,14 +145,14 @@ def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamar
             (edenn_d, edenn_n) = layerwise_edenn_config[layer_counter]
             layer_counter += 1
             
-            quantized_layer = apply_gptq(
-                linear.weight.data, 2 * hessians[name] / num_samples[name],
-                edenn_d=edenn_d, edenn_n=edenn_n,
-                had_block_size=hadamard_groupsize,
-            )
-                
-            quantized_linear = HadLinear(quantized_layer, hadamard_groupsize)
-            replace_submodule(layer, name, quantized_linear)
+            # quantized_layer = apply_gptq(
+            #     linear.weight.data, 2 * hessians[name] / num_samples[name],
+            #     edenn_d=edenn_d, edenn_n=edenn_n,
+            #     had_block_size=hadamard_groupsize,
+            # )
+            #
+            # quantized_linear = HadLinear(quantized_layer, hadamard_groupsize)
+            # replace_submodule(layer, name, quantized_linear)
 
         mse = 0
         norm = 0
