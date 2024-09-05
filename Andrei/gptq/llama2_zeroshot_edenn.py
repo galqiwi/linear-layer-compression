@@ -383,7 +383,7 @@ if __name__ == '__main__':
     wandb.init(
         # set the wandb project where this run will be logged
         # entity="rock-and-roll",
-        project="ednn-test",
+        # project="ednn-test",
         
         # track hyperparameters and run metadata
         config=args,
