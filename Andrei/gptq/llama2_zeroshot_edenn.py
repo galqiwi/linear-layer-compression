@@ -362,14 +362,21 @@ if __name__ == '__main__':
         '--cache-dir', type=str, default=None,
         help='Models cache dir',
     )
+    parser.add_argument(
+        '--layer_idx', type=int, default=None,
+        help='Layer to compress.'
+    )
     args = parser.parse_args()
-    
+
     if args.layerwise is not None:
         import ast
         args.layerwise = ast.literal_eval(args.layerwise)
     if args.blockwise is not None:
         import ast
         args.blockwise = ast.literal_eval(args.blockwise)
+    if args.layer_idx is not None:
+        args.layerwise = [[-1, -1]] * 224
+        args.layerwise[args.layer_idx] = [args.ednn_d, args.ednn_n]
 
     wandb.init(
         # set the wandb project where this run will be logged
