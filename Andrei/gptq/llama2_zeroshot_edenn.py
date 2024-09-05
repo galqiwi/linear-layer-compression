@@ -378,6 +378,8 @@ if __name__ == '__main__':
         args.layerwise = [[-1, -1]] * 224
         args.layerwise[args.layer_idx] = [args.ednn_d, args.ednn_n]
 
+    print(f'{args.layerwise}')
+
     wandb.init(
         # set the wandb project where this run will be logged
         entity="rock-and-roll",
