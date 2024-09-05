@@ -298,7 +298,7 @@ def build_layerwise_edenn_config(
     layerwise_edenn_config: Optional[list[(int, int)]],
 ) -> list[(int, int)]:
     if layerwise_edenn_config is not None:
-        assert edenn_d is None and edenn_n is None and blockwise_edenn_config is None
+        # assert edenn_d is None and edenn_n is None and blockwise_edenn_config is None
         return layerwise_edenn_config
     
     if blockwise_edenn_config is not None:
