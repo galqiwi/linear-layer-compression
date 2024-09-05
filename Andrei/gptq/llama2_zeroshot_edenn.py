@@ -376,7 +376,7 @@ if __name__ == '__main__':
         args.blockwise = ast.literal_eval(args.blockwise)
     if args.layer_idx is not None:
         args.layerwise = [[-1, -1]] * 224
-        args.layerwise[args.layer_idx] = [args.ednn_d, args.ednn_n]
+        args.layerwise[args.layer_idx] = [args.edenn_d, args.edenn_n]
 
     print(f'{args.layerwise}')
 
