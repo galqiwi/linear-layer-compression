@@ -81,12 +81,13 @@ __global__ void Higgs2x256MatVec(
 
     int b_sh_rd = 5 * (threadIdx.x % 32);
     if (pred && a_gl_rd < a_gl_end) {
-      float scale = __half2float(scales[row_number * prob_m / HADAMARD_SIZE + b_gl_rd * 8 / HADAMARD_SIZE]);
+      float scale = __half2float(scales[(a_gl_rd * 32) / HADAMARD_SIZE]);
       const uint8_t* enc = reinterpret_cast<const uint8_t*>(&A[a_gl_rd]);
             
       #pragma unroll
       for (int i = 0; i < 4; i++) {
         uint32_t dec[4];
+        #pragma unroll
         for (int j = 0; j < 4; j++) {
           dec[j] = HIGGS_2_256[enc[4 * i + j]];
         }

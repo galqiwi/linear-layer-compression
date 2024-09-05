@@ -8,8 +8,6 @@ CUDA_FOLDER = os.path.dirname(os.path.abspath(__file__))
 CUDA_KERNEL = load(
     name="higgs_cuda",
     sources=[os.path.join(CUDA_FOLDER, "higgs.cpp"), os.path.join(CUDA_FOLDER, "higgs.cu")],
-    extra_cflags=["-g"],
-    extra_cuda_cflags=["-g", "-G", "-Xcompiler", "-O0", "-Xptxas -O0", "-lineinfo", "-O0"],
 )
 
 torch.library.define(
