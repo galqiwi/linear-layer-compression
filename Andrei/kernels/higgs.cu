@@ -55,7 +55,7 @@ __global__ void Higgs2x256MatVec(
   int prob_k
 ) {
   constexpr int group_size = 2;
-  int a_gl_stride = prob_k / 8 / 8;
+  int a_gl_stride = prob_k / 8 / 4;
   int a_gl_rd = (blockDim.x / 32) * blockIdx.x + (threadIdx.x / 32);
   int row_number = a_gl_rd;
   bool pred = a_gl_rd < prob_m;
@@ -64,57 +64,47 @@ __global__ void Higgs2x256MatVec(
   a_gl_rd = a_gl_stride * a_gl_rd + threadIdx.x % 32;
   int a_gl_end = a_gl_rd + a_gl_stride - threadIdx.x % 32;
 
-  __shared__ int4 sh_b[32 * 9];
+  __shared__ int4 sh_b[32 * 5];
   float res = 0;
 
-  int iters = (prob_k / 8 + 8 * 32 - 1) / (8 * 32);
+  int iters = (prob_k - 1) / 1024 + 1;
   while (iters--) {
     // We pad shared memory to avoid bank conflicts during reads
     __syncthreads();
-    for (int i = threadIdx.x; i < 32 * 8; i += blockDim.x) {
-      if (8 * (b_gl_rd + i) < prob_k)
-        sh_b[9 * (i / 8) + i % 8] = B[b_gl_rd + i];
+    for (int i = threadIdx.x; i < 32 * 4; i += blockDim.x) {
+      if (4 * (b_gl_rd + i) < prob_k)
+        sh_b[5 * (i / 4) + i % 4] = B[b_gl_rd + i];
     }
     __syncthreads();
 
     float iter_res = 0;
 
-    int b_sh_rd = 9 * (threadIdx.x % 32);
+    int b_sh_rd = 5 * (threadIdx.x % 32);
     if (pred && a_gl_rd < a_gl_end) {
       float scale = __half2float(scales[row_number * prob_m / HADAMARD_SIZE + b_gl_rd * 8 / HADAMARD_SIZE]);
       const uint8_t* enc = reinterpret_cast<const uint8_t*>(&A[a_gl_rd]);
             
       #pragma unroll
-      for (int i = 0; i < 8; i++) {
+      for (int i = 0; i < 4; i++) {
         uint32_t dec[4];
-        // read 32 bits of codes per thread
         for (int j = 0; j < 4; j++) {
           dec[j] = HIGGS_2_256[enc[4 * i + j]];
         }
         
-        // 128 = 8 * 16 bits
         half2* a = reinterpret_cast<half2*>(&dec);
-
-        // 128 = 8 * 16 bits
         half2* b = reinterpret_cast<half2*>(&sh_b[b_sh_rd]);
         half2 res2 = {};
         #pragma unroll
         for (int j = 0; j < 4; j++) {
           res2 = __hfma2(a[j], b[j], res2);
-          // res2.x += a[j].x + b[j].x;
-          // res2.y += a[j].y + b[j].y;
         }
         iter_res += __half2float(res2.x) + __half2float(res2.y);
-        iter_res *= scale;
-
-        // shift by 128 bits
         b_sh_rd += 1;
       }
-
-      // shift by 8 * 128 = 32 * 256 bits (256 bits of codes per thread)
-      a_gl_rd += 64;
+      iter_res *= scale;
+      a_gl_rd += 32;
     }
-    b_gl_rd += 32 * 8;
+    b_gl_rd += 32 * 4;
     res += iter_res;
   }
 

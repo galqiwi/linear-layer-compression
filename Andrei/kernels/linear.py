@@ -27,7 +27,6 @@ class HiggsLinear(nn.Module):
         out_features: int,
         higgs_d: int,
         higgs_n: int,
-        hadamard_size: int = 1024,
         bias=True,
         device=None,
         dtype=None,
@@ -35,18 +34,18 @@ class HiggsLinear(nn.Module):
         assert higgs_n == 256
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
-        self.hadamard_size = hadamard_size
+        self.hadamard_size = 1024
         self.higgs_d = higgs_d
         
-        in_features = ((in_features - 1) // hadamard_size + 1) * hadamard_size
-        num_hadamard_groups = in_features // hadamard_size
+        in_features = ((in_features - 1) // self.hadamard_size + 1) * self.hadamard_size
+        num_hadamard_groups = in_features // self.hadamard_size
         in_features = ((in_features - 1) // higgs_d + 1) * higgs_d
         num_higgs_groups = in_features // higgs_d
         
         # CODES
         self.codes = nn.Parameter(
-            torch.ones(
-                # -127, 128,
+            torch.randint(
+                -127, 128,
                 (out_features, num_higgs_groups),
                 device=device,
                 dtype=torch.int8,
