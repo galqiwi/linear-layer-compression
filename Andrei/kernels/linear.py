@@ -1,0 +1,83 @@
+import math
+
+import torch
+from torch import nn
+import torch.nn.functional as F
+
+from fast_hadamard_transform import hadamard_transform
+
+from higgs import CUDA_FOLDER
+
+
+def pad_to_block(tensor, dims, blocksize):
+    pad_dims = [0 for _ in range(2 * len(tensor.shape))]
+    for dim in dims:
+        size = tensor.shape[dim]
+        next_multiple_of_block = ((size - 1) // blocksize + 1) * blocksize
+        delta = next_multiple_of_block - size
+        pad_dims[-2 * dim - 1] = delta
+    
+    return F.pad(tensor, pad_dims, "constant", 0)
+
+
+class HiggsLinear(nn.Module):
+    def __init__(
+        self,
+        in_features: int,
+        out_features: int,
+        higgs_d: int,
+        higgs_n: int,
+        hadamard_size: int = 1024,
+        bias=True,
+        device=None,
+        dtype=None,
+    ):
+        assert higgs_n == 256
+        factory_kwargs = {"device": device, "dtype": dtype}
+        super().__init__()
+        self.hadamard_size = hadamard_size
+        self.higgs_d = higgs_d
+        
+        in_features = ((in_features - 1) // hadamard_size + 1) * hadamard_size
+        num_hadamard_groups = in_features // hadamard_size
+        in_features = ((in_features - 1) // higgs_d + 1) * higgs_d
+        num_higgs_groups = in_features // higgs_d
+        
+        # CODES
+        self.codes = nn.Parameter(
+            torch.ones(
+                # -127, 128,
+                (out_features, num_higgs_groups),
+                device=device,
+                dtype=torch.int8,
+            ),
+            requires_grad=False,
+        )
+        
+        # SCALES
+        self.scales = nn.Parameter(
+            torch.rand((out_features, num_hadamard_groups), **factory_kwargs), requires_grad=False
+        )
+
+        # BIAS
+        if bias:
+            self.bias = nn.Parameter(torch.empty(out_features, **factory_kwargs), requires_grad=False)
+        else:
+            self.register_parameter("bias", None)
+    
+    def forward(self, input):
+        input = pad_to_block(input, [-1], self.hadamard_size)
+        input = hadamard_transform(
+            input.reshape(input.shape[:-1] + (-1, self.hadamard_size)),
+            scale=1/math.sqrt(self.hadamard_size),
+        )
+        input = input.reshape(input.shape[:-2] + (-1,))
+        
+        input = pad_to_block(input, [-1], self.higgs_d)
+
+        return torch.ops.higgs.higgs2x256_matmat(
+            input,
+            self.codes,
+            self.scales,
+            self.bias,
+        )
