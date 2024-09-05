@@ -142,6 +142,9 @@ def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamar
         for name, linear in linear_layers.items():
             (edenn_d, edenn_n) = layerwise_edenn_config[layer_counter]
             layer_counter += 1
+
+            if edenn_d == -1:
+                continue
             
             quantized_layer = apply_gptq(
                 linear.weight.data, 2 * hessians[name] / num_samples[name],
