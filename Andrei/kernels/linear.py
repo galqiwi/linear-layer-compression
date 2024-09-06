@@ -39,7 +39,8 @@ class HiggsLinear(nn.Module):
         
         in_features = ((in_features - 1) // self.hadamard_size + 1) * self.hadamard_size
         num_hadamard_groups = in_features // self.hadamard_size
-        in_features = ((in_features - 1) // higgs_d + 1) * higgs_d
+        post_hadamard_size = ((self.hadamard_size - 1) // higgs_d) * higgs_d + higgs_d
+        in_features = ((in_features - 1) // post_hadamard_size + 1) * post_hadamard_size
         num_higgs_groups = in_features // higgs_d
         
         # CODES
