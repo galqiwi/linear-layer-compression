@@ -18,20 +18,20 @@ __global__ void HiggsAlignedMatVec(
   int prob_k
 ) {
   constexpr int halfs_in_uint4 = 128 / 16;
-  constexpr int steps_in_wave = hadamard_size / 256;
   constexpr int threads_in_wave = 32;
+  constexpr int steps_in_wave = hadamard_size / (threads_in_wave * 8);
 
   constexpr int codebook_size = group_size * (1 << codebook_bits) / halfs_in_uint4;
   __shared__ uint4 sh_codebook[codebook_size];
   for (int i = threadIdx.x; i < codebook_size; i += blockDim.x) {
     if constexpr (group_size == 2 && codebook_bits == 8) {
       sh_codebook[i] = HIGGS_2_256[i];
-    } else if constexpr (group_size == 2 && codebook_bits == 8) {
+    } else if constexpr (group_size == 4 && codebook_bits == 8) {
       sh_codebook[i] = HIGGS_4_256[i];
     }
   }
 
-  int a_gl_stride = prob_k / halfs_in_uint4 / steps_in_wave;
+  int a_gl_stride = prob_k / group_size / (16 / codebook_bits) / halfs_in_uint4;
   int a_gl_rd = (blockDim.x / threads_in_wave) * blockIdx.x + (threadIdx.x / threads_in_wave);
   bool pred = a_gl_rd < prob_m;
   int b_gl_rd = 0;
@@ -56,7 +56,7 @@ __global__ void HiggsAlignedMatVec(
 
     int b_sh_rd = (steps_in_wave + 1) * (threadIdx.x % threads_in_wave);
     if (pred && a_gl_rd < a_gl_end) {
-      float scale = __half2float(scales[(a_gl_rd * (128 / codebook_bits) * group_size) / hadamard_size]);
+      float scale = __half2float(scales[a_gl_rd * halfs_in_uint4 * (16 / codebook_bits) * group_size / hadamard_size]);
       const uint8_t* enc = reinterpret_cast<const uint8_t*>(&A[a_gl_rd]);
             
       #pragma unroll
@@ -66,9 +66,21 @@ __global__ void HiggsAlignedMatVec(
         for (int j = 0; j < 8 / group_size; j++) {
           if constexpr (group_size == 2 && codebook_bits == 8) {
             ((uint32_t*)dec)[j] = ((uint32_t*)sh_codebook)[enc[(8 / group_size) * i + j]]; // read 2 halfs at a time
-          } else if constexpr (group_size == 2 && codebook_bits == 8) {
+          } else if constexpr (group_size == 4 && codebook_bits == 8) {
             ((uint64_t*)dec)[j] = ((uint64_t*)sh_codebook)[enc[(8 / group_size) * i + j]]; // read 4 halfs at a time
           }
+        }
+
+        if (threadIdx.x == 31) {
+          printf("a_gl_rd: %i, scale_offset_fp16: %i, scale: %f, second_code: %i, last_decoded: %f, last_b: %f, iter_res: %f\n",
+            a_gl_rd,
+            a_gl_rd * halfs_in_uint4 * (16 / codebook_bits) * group_size / hadamard_size,
+            scale,
+            enc[(8 / group_size) * i + 1],
+            __half2float(((half*)dec)[7]),
+            __half2float(reinterpret_cast<half*>(&sh_b[b_sh_rd])[7]),
+            iter_res
+          );
         }
         
         half2* a = reinterpret_cast<half2*>(&dec);
@@ -82,7 +94,7 @@ __global__ void HiggsAlignedMatVec(
         b_sh_rd += 1;
       }
       iter_res *= scale;
-      a_gl_rd += threads_in_wave;
+      a_gl_rd += threads_in_wave * (16 / codebook_bits) / group_size;
     }
     b_gl_rd += threads_in_wave * steps_in_wave; // Move by hadamard_size
     res += iter_res;
@@ -128,7 +140,7 @@ void  higgs_aligned_matvec_cuda(
 
   int blocks = ceildiv(prob_m, thread_m);
   int threads = 32 * thread_m;
-  int shared = 16 * 32 * 9;
+  int shared = 16 * 32 * (hadamard_size / 32 / 8 + 1) + 16 * group_size * (1 << codebook_bits);
   cudaFuncSetAttribute(
     HiggsAlignedMatVec<group_size, codebook_bits, hadamard_size>, cudaFuncAttributeMaxDynamicSharedMemorySize, shared
   );
