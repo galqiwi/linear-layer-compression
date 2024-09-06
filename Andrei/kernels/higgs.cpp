@@ -28,7 +28,8 @@ inline bool check_use_bfloat16(const torch::Tensor& input) {
 
 
 
-void  higgs2x256_matvec_cuda(
+template<int group_size, int codebook_bits, int hadamard_size>
+void  higgs_aligned_matvec_cuda(
   const void* A,
   const void* B,
         void* C,
@@ -36,6 +37,8 @@ void  higgs2x256_matvec_cuda(
   int prob_m,
   int prob_k
 );
+extern template void  higgs_aligned_matvec_cuda<2, 8, 1024>(const void*, const void*, void*, const void*, int, int);
+extern template void  higgs_aligned_matvec_cuda<4, 8, 1024>(const void*, const void*, void*, const void*, int, int);
 
 inline torch::Tensor bias_unflatten_output(
         torch::Tensor& flat_output,
@@ -58,6 +61,8 @@ void higgs2x256_matvec(
   const torch::Tensor& B,
         torch::Tensor& C,
   const torch::Tensor& scales,
+  const int group_size,
+  const int codebook_bits,
   const bool use_bfloat16
 ) {
   const at::cuda::OptionalCUDAGuard device_guard(device_of(A));
@@ -65,15 +70,20 @@ void higgs2x256_matvec(
   int prob_k = B.size(0);
 
   if (!use_bfloat16) {
-    higgs2x256_matvec_cuda(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
-  } else {
-    throw c10::NotImplementedError(
-      {__func__, __FILE__, static_cast<uint32_t>(__LINE__)},
-      c10::str(
-        "FUCK YOU CUNT!"
-      )
-    );
+    if (group_size == 2 && codebook_bits == 8) {
+      higgs_aligned_matvec_cuda<2, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+      return;
+    } else if (group_size == 4 && codebook_bits == 8) {
+      higgs_aligned_matvec_cuda<4, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+      return;
+    }
   }
+  throw c10::NotImplementedError(
+    {__func__, __FILE__, static_cast<uint32_t>(__LINE__)},
+    c10::str(
+      "FUCK YOU CUNT!"
+    )
+  );
 }
 
 torch::Tensor higgs2x256_matmat(
@@ -82,6 +92,9 @@ torch::Tensor higgs2x256_matmat(
   const torch::Tensor& scales,
   const std::optional<torch::Tensor>& bias
 ) {
+  auto codebook_bits = codes.dtype().itemsize() * 8;
+  auto group_size = input.size(-1) / codes.size(1);
+
   bool use_bfloat16 = check_use_bfloat16(input);
   auto input_sizes = input.sizes();
   auto out_features = codes.size(0);
@@ -100,6 +113,8 @@ torch::Tensor higgs2x256_matmat(
       input_vec,
       output_vec,
       scales,
+      group_size,
+      codebook_bits,
       use_bfloat16
     );
   }
