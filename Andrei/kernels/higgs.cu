@@ -204,12 +204,12 @@ __global__ void Higgs3x256dMatVec(
       float scale = __half2float(scales[a_gl_rd_8 * group_size / scales_size]);
       const uint8_t* enc = reinterpret_cast<const uint8_t*>(A) + a_gl_rd_8;
 
-      uint16_t dec[36];
+      half dec[36];
       #pragma unroll
       for (int j = 0; j < 12; j++) {
-        dec[3 * j + 0] = __ldca(((uint16_t*)HIGGS_1_256) + 3 * enc[j] + 0); // read 1 halfs at a time
-        dec[3 * j + 1] = __ldca(((uint16_t*)HIGGS_1_256) + 3 * enc[j] + 1); // read 1 halfs at a time
-        dec[3 * j + 2] = __ldca(((uint16_t*)HIGGS_1_256) + 3 * enc[j] + 2); // read 1 halfs at a time
+        dec[3 * j + 0] = __ldca(((half*)HIGGS_3_256) + 3 * enc[j] + 0); // read 1 halfs at a time
+        dec[3 * j + 1] = __ldca(((half*)HIGGS_3_256) + 3 * enc[j] + 1); // read 1 halfs at a time
+        dec[3 * j + 2] = __ldca(((half*)HIGGS_3_256) + 3 * enc[j] + 2); // read 1 halfs at a time
       }
 
       half2* a = reinterpret_cast<half2*>(&dec + zeroth_offset);
