@@ -39,6 +39,7 @@ void  higgs_aligned_matvec_cuda(
 );
 extern template void  higgs_aligned_matvec_cuda<2, 8, 1024>(const void*, const void*, void*, const void*, int, int);
 extern template void  higgs_aligned_matvec_cuda<4, 8, 1024>(const void*, const void*, void*, const void*, int, int);
+extern template void  higgs_aligned_matvec_cuda<1, 8, 1024>(const void*, const void*, void*, const void*, int, int);
 
 inline torch::Tensor bias_unflatten_output(
         torch::Tensor& flat_output,
@@ -75,6 +76,9 @@ void higgs2x256_matvec(
       return;
     } else if (group_size == 4 && codebook_bits == 8) {
       higgs_aligned_matvec_cuda<4, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+      return;
+    } else if (group_size == 1 && codebook_bits == 8) {
+      higgs_aligned_matvec_cuda<1, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
       return;
     }
   }

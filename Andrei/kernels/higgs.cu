@@ -29,6 +29,8 @@ __global__ void HiggsAlignedMatVec(
       sh_codebook[i] = HIGGS_2_256[i];
     } else if constexpr (group_size == 4 && codebook_bits == 8) {
       sh_codebook[i] = HIGGS_4_256[i];
+    } else if constexpr (group_size == 1 && codebook_bits == 8) {
+      sh_codebook[i] = HIGGS_1_256[i];
     }
   }
 
@@ -68,6 +70,8 @@ __global__ void HiggsAlignedMatVec(
             ((uint32_t*)dec)[j] = ((uint32_t*)sh_codebook)[enc[(8 / group_size) * i + j]]; // read 2 halfs at a time
           } else if constexpr (group_size == 4 && codebook_bits == 8) {
             ((uint64_t*)dec)[j] = ((uint64_t*)sh_codebook)[enc[(8 / group_size) * i + j]]; // read 4 halfs at a time
+          } else if constexpr (group_size == 1 && codebook_bits == 8) {
+            ((uint16_t*)dec)[j] = ((uint16_t*)sh_codebook)[enc[(8 / group_size) * i + j]]; // read 1 halfs at a time
           }
         }
         
@@ -152,6 +156,15 @@ template void  higgs_aligned_matvec_cuda<2, 8, 1024>(
 );
 
 template void  higgs_aligned_matvec_cuda<4, 8, 1024>(
+  const void* __restrict__ A,
+  const void* __restrict__ B,
+        void* __restrict__ C,
+  const void* __restrict__ scales,
+  int prob_m,
+  int prob_k
+);
+
+template void  higgs_aligned_matvec_cuda<1, 8, 1024>(
   const void* __restrict__ A,
   const void* __restrict__ B,
         void* __restrict__ C,
