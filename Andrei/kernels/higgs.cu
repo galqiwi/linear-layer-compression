@@ -1,6 +1,3 @@
-#include <iostream>
-#include <vector>
-
 #include <cuda.h>
 #include <cuda_fp16.h>
 #include <cuda_bf16.h>
@@ -8,7 +5,7 @@
 
 #include "grids.h"
 
-template<int group_size=2, int codebook_bits=8, int hadamard_size=1024>
+template<int group_size, int codebook_bits, int hadamard_size>
 __global__ void HiggsAlignedMatVec(
   const uint4* __restrict__ A,
   const uint4* __restrict__ B,
@@ -21,18 +18,6 @@ __global__ void HiggsAlignedMatVec(
   constexpr int halfs_in_uint4 = 128 / 16;
   constexpr int threads_in_wave = 32;
   constexpr int steps_in_wave = hadamard_size / (threads_in_wave * 8);
-
-  constexpr int codebook_size = group_size * (1 << codebook_bits) / halfs_in_uint4;
-  __shared__ uint4 sh_codebook[codebook_size];
-  for (int i = threadIdx.x; i < codebook_size; i += blockDim.x) {
-    if constexpr (group_size == 2 && codebook_bits == 8) {
-      sh_codebook[i] = HIGGS_2_256[i];
-    } else if constexpr (group_size == 4 && codebook_bits == 8) {
-      sh_codebook[i] = HIGGS_4_256[i];
-    } else if constexpr (group_size == 1 && codebook_bits == 8) {
-      sh_codebook[i] = HIGGS_1_256[i];
-    }
-  }
 
   int a_gl_stride_half = prob_k / group_size / codes_in_half;
   int c_gl_wr = (blockDim.x / threads_in_wave) * blockIdx.x + (threadIdx.x / threads_in_wave);
@@ -67,11 +52,11 @@ __global__ void HiggsAlignedMatVec(
         #pragma unroll
         for (int j = 0; j < 8 / group_size; j++) {
           if constexpr (group_size == 2 && codebook_bits == 8) {
-            ((uint32_t*)dec)[j] = ((uint32_t*)sh_codebook)[enc[(8 / group_size) * i + j]]; // read 2 halfs at a time
+            ((uint32_t*)dec)[j] = __ldca(((uint32_t*)HIGGS_2_256) + enc[(8 / group_size) * i + j]); // read 2 halfs at a time
           } else if constexpr (group_size == 4 && codebook_bits == 8) {
-            ((uint64_t*)dec)[j] = ((uint64_t*)sh_codebook)[enc[(8 / group_size) * i + j]]; // read 4 halfs at a time
+            ((uint64_t*)dec)[j] = __ldca(((uint64_t*)HIGGS_4_256) + enc[(8 / group_size) * i + j]); // read 4 halfs at a time
           } else if constexpr (group_size == 1 && codebook_bits == 8) {
-            ((uint16_t*)dec)[j] = ((uint16_t*)sh_codebook)[enc[(8 / group_size) * i + j]]; // read 1 halfs at a time
+            ((uint16_t*)dec)[j] = __ldca(((uint16_t*)HIGGS_1_256) + enc[(8 / group_size) * i + j]); // read 1 halfs at a time
           }
         }
         
@@ -172,51 +157,3 @@ template void  higgs_aligned_matvec_cuda<1, 8, 1024>(
   int prob_m,
   int prob_k
 );
-
-// #define CUDACHECK(err) do { cuda_check((err), __FILE__, __LINE__); } while(false)
-// inline void cuda_check(cudaError_t error_code, const char *file, int line)
-// {
-//     if (error_code != cudaSuccess)
-//     {
-//         fprintf(stderr, "CUDA Error %d: %s. In file '%s' on line %d\n", error_code, cudaGetErrorString(error_code), file, line);
-//         fflush(stderr);
-//         exit(error_code);
-//     }
-// }
-
-// int main() {
-//     const auto codes = std::vector<uint8_t>(1024 * 1024 / 2, 1);
-//     uint8_t* codes_device;
-//     cudaMalloc(&codes_device, 1024 * 1024 / 2);
-//     cudaMemcpy((void**)codes_device, codes.data(), 1024 * 1024 / 2, cudaMemcpyHostToDevice);
-    
-//     const auto scales = std::vector<__half>(1024, 0.0001);
-//     __half* scales_device;
-//     cudaMalloc(&scales_device, 1024 * 2);
-//     cudaMemcpy((void**)scales_device, scales.data(), 1024 * 2, cudaMemcpyHostToDevice);
-
-//     const auto input = std::vector<__half>(1024, 1);
-//     __half* input_device;
-//     cudaMalloc(&input_device, 1024 * 2);
-//     cudaMemcpy((void**)input_device, input.data(), 1024 * 2, cudaMemcpyHostToDevice);
-
-//     auto output = std::vector<__half>(1024, 0);
-//     __half* output_device;
-//     cudaMalloc(&output_device, 1024 * 2);
-//     cudaMemcpy((void**)output_device, output.data(), 1024 * 2, cudaMemcpyHostToDevice);
-
-//     higgs2x256_matvec_cuda(
-//         codes_device,
-//         input_device,
-//         output_device,
-//         scales_device,
-//         1024,
-//         1024
-//     );
-//     cudaMemcpy((void**)output.data(), output_device, 1024 * 2, cudaMemcpyDeviceToHost);
-//     CUDACHECK(cudaPeekAtLastError());
-
-//     std::cout << static_cast<float>(output[0]) << std::endl;
-
-//     return 0;
-// };
