@@ -50,6 +50,15 @@ void  higgs_3x256_matvec_cuda(
   int prob_k
 );
 
+void  higgs_5x256_matvec_cuda(
+  const void* A,
+  const void* B,
+        void* C,
+  const void* scales,
+  int prob_m,
+  int prob_k
+);
+
 inline torch::Tensor bias_unflatten_output(
         torch::Tensor& flat_output,
   const std::optional<torch::Tensor>& bias,
@@ -91,6 +100,9 @@ void higgs_matvec(
       return;
     } else if (group_size == 3 && codebook_bits == 8) {
       higgs_3x256_matvec_cuda(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+      return;
+    } else if (group_size == 5 && codebook_bits == 8) {
+      higgs_5x256_matvec_cuda(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
       return;
     }
   }
