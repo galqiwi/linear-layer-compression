@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <cuda.h>
 #include <cuda_fp16.h>
 #include <cuda_bf16.h>
@@ -169,13 +171,10 @@ __global__ void Higgs3x256dMatVec(
 ) {
   constexpr int group_size = 3;
   constexpr int codebook_bits = 8;
-
-  constexpr int codes_in_half = 16 / codebook_bits;
-  constexpr int halfs_in_uint4 = 128 / 16;
+  constexpr int steps_in_wave = 4;
   constexpr int threads_in_wave = 32;
-  constexpr int steps_in_wave = scales_size / (threads_in_wave * 8);
 
-  const int a_gl_stride_8 = prob_k / group_size;
+  const int a_gl_stride_8 = (prob_k - 1) / group_size + 1;
   const int c_gl_wr = (blockDim.x / threads_in_wave) * blockIdx.x + (threadIdx.x / threads_in_wave);
   const bool pred = c_gl_wr < prob_m;
   int b_gl_rd = 0;
@@ -204,24 +203,36 @@ __global__ void Higgs3x256dMatVec(
       float scale = __half2float(scales[a_gl_rd_8 * group_size / scales_size]);
       const uint8_t* enc = reinterpret_cast<const uint8_t*>(A) + a_gl_rd_8;
 
+      // if (threadIdx.x == 0) {
+      //   printf("enc[:3]: %u %u %u, \n",
+      //     enc[0], enc[1], enc[2]
+      //   );
+      // }
+
       half dec[36];
       #pragma unroll
       for (int j = 0; j < 12; j++) {
-        dec[3 * j + 0] = __ldca(((half*)HIGGS_3_256) + 3 * enc[j] + 0); // read 1 halfs at a time
-        dec[3 * j + 1] = __ldca(((half*)HIGGS_3_256) + 3 * enc[j] + 1); // read 1 halfs at a time
-        dec[3 * j + 2] = __ldca(((half*)HIGGS_3_256) + 3 * enc[j] + 2); // read 1 halfs at a time
+        dec[3 * j + 0] = __ldca(((half*)HIGGS_3_256 + 3 * enc[j] + 0)); // read 1 halfs at a time
+        dec[3 * j + 1] = __ldca(((half*)HIGGS_3_256 + 3 * enc[j] + 1)); // read 1 halfs at a time
+        dec[3 * j + 2] = __ldca(((half*)HIGGS_3_256 + 3 * enc[j] + 2)); // read 1 halfs at a time
       }
+
+      // if (threadIdx.x == 0) {
+      //   printf("dec[:3]: %f %f %f, \n",
+      //     __half2float(dec[0]), __half2float(dec[1]), __half2float(dec[2])
+      //   );
+      // }
 
       half2* a = reinterpret_cast<half2*>(&dec + zeroth_offset);
       half2* b = reinterpret_cast<half2*>(&sh_b[b_sh_rd]);
       half2 res2 = {};
       #pragma unroll
-      for (int j = 0; j < 32; j++) {
+      for (int j = 0; j < 16; j++) {
         res2 = __hfma2(a[j], b[j], res2);
       }
       iter_res += __half2float(res2.x) + __half2float(res2.y);
       iter_res *= scale;
-      a_gl_rd_8 += scales_size / group_size;
+      a_gl_rd_8 += (scales_size - 1) / group_size + 1;
     }
     b_gl_rd += threads_in_wave * steps_in_wave; // Move by scales_size
     res += iter_res;
@@ -274,7 +285,7 @@ void  higgs_3x256_matvec_cuda(
   );
 }
 
-template void  higgs_3x256_matvec_cuda<1026>(
+template void  higgs_3x256_matvec_cuda<1024>(
   const void* __restrict__ A,
   const void* __restrict__ B,
         void* __restrict__ C,

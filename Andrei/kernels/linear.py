@@ -72,8 +72,6 @@ class HiggsLinear(nn.Module):
             scale=1/math.sqrt(self.hadamard_size),
         )
         input = input.reshape(input.shape[:-2] + (-1,))
-        
-        input = pad_to_block(input, [-1], self.higgs_d)
 
         return torch.ops.higgs.higgs2x256_matmat(
             input,
