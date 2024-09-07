@@ -200,7 +200,7 @@ __global__ void Higgs3x256dMatVec(
 
     int b_sh_rd = (steps_in_wave + 1) * (threadIdx.x % threads_in_wave);
     if (pred && a_gl_rd_8 < a_gl_end_8) {
-      float scale = __half2float(scales[a_gl_rd_8 * group_size / scales_size]);
+      float scale = __half2float(scales[a_gl_rd_8 / ((scales_size - 1) / group_size + 1)]);
       const uint8_t* enc = reinterpret_cast<const uint8_t*>(A) + a_gl_rd_8;
 
       half dec[36];
@@ -209,23 +209,6 @@ __global__ void Higgs3x256dMatVec(
         dec[3 * j + 0] = __ldca(((half*)HIGGS_3_256 + 3 * enc[j] + 0)); // read 1 halfs at a time
         dec[3 * j + 1] = __ldca(((half*)HIGGS_3_256 + 3 * enc[j] + 1)); // read 1 halfs at a time
         dec[3 * j + 2] = __ldca(((half*)HIGGS_3_256 + 3 * enc[j] + 2)); // read 1 halfs at a time
-      }
-
-      if (threadIdx.x == 2) {
-        printf("a_gl_rd_8: %i, a_offset: %i, b_offset: %i, zeroth_offset: %i\ndec:",
-          a_gl_rd_8,
-          a_gl_rd_8 * 3 + zeroth_offset,
-          (b_gl_rd + b_sh_rd / (steps_in_wave + 1) * steps_in_wave) * 8,
-          zeroth_offset
-        );
-        for (int j = 0; j < 32; j++) {
-          printf(" %f,", __half2float(dec[zeroth_offset + j]));
-        }
-        printf("\nb:");
-        for (int j = 0; j < 32; j++) {
-          printf(" %f,", __half2float(reinterpret_cast<half*>(&sh_b[b_sh_rd])[j]));
-        }
-        printf("\n\n");
       }
 
       half* a = reinterpret_cast<half*>(&dec[zeroth_offset]);
@@ -241,11 +224,6 @@ __global__ void Higgs3x256dMatVec(
         iter_res += __half2float(res_half);
       }
       
-      printf("%f ", iter_res);
-      __syncthreads();
-      if (threadIdx.x == 31) {
-        printf("\n");
-      }
       iter_res *= scale;
       a_gl_rd_8 += (scales_size - 1) / group_size + 1;
     }
