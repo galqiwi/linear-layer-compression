@@ -41,7 +41,8 @@ extern template void  higgs_aligned_matvec_cuda<2, 8, 1024>(const void*, const v
 extern template void  higgs_aligned_matvec_cuda<4, 8, 1024>(const void*, const void*, void*, const void*, int, int);
 extern template void  higgs_aligned_matvec_cuda<1, 8, 1024>(const void*, const void*, void*, const void*, int, int);
 
-void  higgs_3x256_matvec_cuda(
+template<int group_size>
+void  higgs_Kx256_matvec_cuda(
   const void* A,
   const void* B,
         void* C,
@@ -49,15 +50,9 @@ void  higgs_3x256_matvec_cuda(
   int prob_m,
   int prob_k
 );
-
-void  higgs_5x256_matvec_cuda(
-  const void* A,
-  const void* B,
-        void* C,
-  const void* scales,
-  int prob_m,
-  int prob_k
-);
+extern template void higgs_Kx256_matvec_cuda<3>(const void*, const void*, void*, const void*, int, int);
+extern template void higgs_Kx256_matvec_cuda<5>(const void*, const void*, void*, const void*, int, int);
+extern template void higgs_Kx256_matvec_cuda<6>(const void*, const void*, void*, const void*, int, int);
 
 inline torch::Tensor bias_unflatten_output(
         torch::Tensor& flat_output,
@@ -88,22 +83,29 @@ void higgs_matvec(
   int prob_m = C.size(0);
   int prob_k = B.size(0);
 
-  if (!use_bfloat16) {
-    if (group_size == 2 && codebook_bits == 8) {
-      higgs_aligned_matvec_cuda<2, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
-      return;
-    } else if (group_size == 4 && codebook_bits == 8) {
-      higgs_aligned_matvec_cuda<4, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
-      return;
-    } else if (group_size == 1 && codebook_bits == 8) {
+  if (!use_bfloat16 && codebook_bits == 8) {
+    switch (group_size)
+    {
+    case 1:
       higgs_aligned_matvec_cuda<1, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
       return;
-    } else if (group_size == 3 && codebook_bits == 8) {
-      higgs_3x256_matvec_cuda(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+    case 2:
+      higgs_aligned_matvec_cuda<2, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
       return;
-    } else if (group_size == 5 && codebook_bits == 8) {
-      higgs_5x256_matvec_cuda(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+    case 3:
+      higgs_Kx256_matvec_cuda<3>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
       return;
+    case 4:
+      higgs_aligned_matvec_cuda<4, 8, 1024>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+      return;
+    case 5:
+      higgs_Kx256_matvec_cuda<5>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+      return;
+    case 6:
+      higgs_Kx256_matvec_cuda<6>(A.data_ptr(), B.data_ptr(), C.data_ptr(), scales.data_ptr(), prob_m, prob_k);
+      return;
+    default:
+      break;
     }
   }
   throw c10::NotImplementedError(
