@@ -160,7 +160,6 @@ template void  higgs_aligned_matvec_cuda<1, 8, 1024>(
   int prob_k
 );
 
-template<int scales_size>
 __global__ void Higgs3x256dMatVec(
   const uint4* __restrict__ A,
   const uint4* __restrict__ B,
@@ -169,6 +168,7 @@ __global__ void Higgs3x256dMatVec(
   int prob_m,
   int prob_k
 ) {
+  constexpr int scales_size = 1024;
   constexpr int group_size = 3;
   constexpr int codebook_bits = 8;
   constexpr int steps_in_wave = 4;
@@ -241,7 +241,6 @@ __global__ void Higgs3x256dMatVec(
   }
 }
 
-template<int scales_size>
 void  higgs_3x256_matvec_cuda(
   const void* __restrict__ A,
   const void* __restrict__ B,
@@ -262,13 +261,14 @@ void  higgs_3x256_matvec_cuda(
     thread_m = ceildiv(prob_m, waves * sms);
   } while (thread_m > THREAD_M);
 
+  constexpr int scales_size = 1024;
   int blocks = ceildiv(prob_m, thread_m);
   int threads = 32 * thread_m;
   int shared = 16 * 32 * (scales_size / 32 / 8 + 1);
   cudaFuncSetAttribute(
-    Higgs3x256dMatVec<scales_size>, cudaFuncAttributeMaxDynamicSharedMemorySize, shared
+    Higgs3x256dMatVec, cudaFuncAttributeMaxDynamicSharedMemorySize, shared
   );
-  Higgs3x256dMatVec<scales_size><<<blocks, threads, shared>>>(
+  Higgs3x256dMatVec<<<blocks, threads, shared>>>(
     (const uint4*) A,
     (const uint4*) B,
     (uint4*) C,
@@ -277,12 +277,3 @@ void  higgs_3x256_matvec_cuda(
     prob_k
   );
 }
-
-template void  higgs_3x256_matvec_cuda<1024>(
-  const void* __restrict__ A,
-  const void* __restrict__ B,
-        void* __restrict__ C,
-  const void* __restrict__ scales,
-  int prob_m,
-  int prob_k
-);
