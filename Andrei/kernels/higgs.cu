@@ -174,11 +174,11 @@ __global__ void Higgs3x256dMatVec(
   constexpr int steps_in_wave = 4;
   constexpr int threads_in_wave = 32;
 
-  const int a_gl_stride_8 = (prob_k - 1) / group_size + 1;
+  const int a_gl_stride_8 =  (prob_k / scales_size) * ((scales_size - 1) / group_size + 1);
   const int c_gl_wr = (blockDim.x / threads_in_wave) * blockIdx.x + (threadIdx.x / threads_in_wave);
   const bool pred = c_gl_wr < prob_m;
   int b_gl_rd = 0;
-  int a_gl_rd_8 = a_gl_stride_8 * c_gl_wr + (threadIdx.x % threads_in_wave) * (scales_size / group_size) / threads_in_wave;
+  int a_gl_rd_8 = a_gl_stride_8 * c_gl_wr + (threadIdx.x % threads_in_wave) * (scales_size / threads_in_wave) / group_size;
   const int zeroth_offset = (((threadIdx.x % threads_in_wave) % 3) * 2) % 3;
 
   int a_gl_end_8 = a_gl_stride_8 * (c_gl_wr + 1);
@@ -203,12 +203,6 @@ __global__ void Higgs3x256dMatVec(
       float scale = __half2float(scales[a_gl_rd_8 * group_size / scales_size]);
       const uint8_t* enc = reinterpret_cast<const uint8_t*>(A) + a_gl_rd_8;
 
-      // if (threadIdx.x == 0) {
-      //   printf("enc[:3]: %u %u %u, \n",
-      //     enc[0], enc[1], enc[2]
-      //   );
-      // }
-
       half dec[36];
       #pragma unroll
       for (int j = 0; j < 12; j++) {
@@ -217,20 +211,41 @@ __global__ void Higgs3x256dMatVec(
         dec[3 * j + 2] = __ldca(((half*)HIGGS_3_256 + 3 * enc[j] + 2)); // read 1 halfs at a time
       }
 
-      // if (threadIdx.x == 0) {
-      //   printf("dec[:3]: %f %f %f, \n",
-      //     __half2float(dec[0]), __half2float(dec[1]), __half2float(dec[2])
-      //   );
-      // }
-
-      half2* a = reinterpret_cast<half2*>(&dec + zeroth_offset);
-      half2* b = reinterpret_cast<half2*>(&sh_b[b_sh_rd]);
-      half2 res2 = {};
-      #pragma unroll
-      for (int j = 0; j < 16; j++) {
-        res2 = __hfma2(a[j], b[j], res2);
+      if (threadIdx.x == 2) {
+        printf("a_gl_rd_8: %i, a_offset: %i, b_offset: %i, zeroth_offset: %i\ndec:",
+          a_gl_rd_8,
+          a_gl_rd_8 * 3 + zeroth_offset,
+          (b_gl_rd + b_sh_rd / (steps_in_wave + 1) * steps_in_wave) * 8,
+          zeroth_offset
+        );
+        for (int j = 0; j < 32; j++) {
+          printf(" %f,", __half2float(dec[zeroth_offset + j]));
+        }
+        printf("\nb:");
+        for (int j = 0; j < 32; j++) {
+          printf(" %f,", __half2float(reinterpret_cast<half*>(&sh_b[b_sh_rd])[j]));
+        }
+        printf("\n\n");
       }
-      iter_res += __half2float(res2.x) + __half2float(res2.y);
+
+      half* a = reinterpret_cast<half*>(&dec[zeroth_offset]);
+      half* b = reinterpret_cast<half*>(&sh_b[b_sh_rd]);
+      
+      #pragma unroll
+      for (int i = 0; i < 4; i++) {
+        half res_half = {};
+        #pragma unroll
+        for (int j = 0; j < 8; j++) {
+          res_half = __hfma(a[8 * i + j], b[8 * i + j], res_half);
+        }
+        iter_res += __half2float(res_half);
+      }
+      
+      printf("%f ", iter_res);
+      __syncthreads();
+      if (threadIdx.x == 31) {
+        printf("\n");
+      }
       iter_res *= scale;
       a_gl_rd_8 += (scales_size - 1) / group_size + 1;
     }

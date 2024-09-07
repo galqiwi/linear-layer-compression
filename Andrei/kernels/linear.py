@@ -56,7 +56,7 @@ class HiggsLinear(nn.Module):
         
         # SCALES
         self.scales = nn.Parameter(
-            torch.rand((out_features, num_hadamard_groups), **factory_kwargs), requires_grad=False
+            torch.ones((out_features, num_hadamard_groups), **factory_kwargs), requires_grad=False
         )
 
         # BIAS
