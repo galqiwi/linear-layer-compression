@@ -66,7 +66,7 @@ inline torch::Tensor bias_unflatten_output(
   return output;
 }
 
-void higgs2x256_matvec(
+void higgs_matvec(
   const torch::Tensor& A,
   const torch::Tensor& B,
         torch::Tensor& C,
@@ -102,7 +102,7 @@ void higgs2x256_matvec(
   );
 }
 
-torch::Tensor higgs2x256_matmat(
+torch::Tensor higgs_matmat(
   const torch::Tensor& input,
   const torch::Tensor& codes,
   const torch::Tensor& scales,
@@ -124,7 +124,7 @@ torch::Tensor higgs2x256_matmat(
   for (int i = 0; i < flat_input.size(0); ++i) {
     auto input_vec = flat_input.index({i});
     auto output_vec = flat_output.index({i});
-    higgs2x256_matvec(
+    higgs_matvec(
       codes,
       input_vec,
       output_vec,
@@ -142,5 +142,5 @@ torch::Tensor higgs2x256_matmat(
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-  m.def("higgs2x256_matmat", &higgs2x256_matmat, "2x256 matrix-matrix product through matvec.");
+  m.def("higgs_matmat", &higgs_matmat, "matrix-matrix product through matvec.");
 }

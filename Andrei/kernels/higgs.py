@@ -11,12 +11,12 @@ CUDA_KERNEL = load(
 )
 
 torch.library.define(
-    "higgs::higgs2x256_matmat", "(Tensor input, Tensor codes, Tensor scales, Tensor bias) -> Tensor"
+    "higgs::higgs_matmat", "(Tensor input, Tensor codes, Tensor scales, Tensor bias) -> Tensor"
 )
 
-torch.library.impl("higgs::higgs2x256_matmat", "default", CUDA_KERNEL.higgs2x256_matmat)
+torch.library.impl("higgs::higgs_matmat", "default", CUDA_KERNEL.higgs_matmat)
 
 
-@torch.library.impl_abstract("higgs::higgs2x256_matmat")
-def higgs2x256_matmat_meta(input, codes, scales, bias):
+@torch.library.impl_abstract("higgs::higgs_matmat")
+def higgs_matmat_meta(input, codes, scales, bias):
     return torch.empty(input.shape[:-1] + (codes.shape[0],), device=input.device, dtype=input.dtype)

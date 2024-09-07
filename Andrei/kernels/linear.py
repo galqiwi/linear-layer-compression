@@ -73,7 +73,7 @@ class HiggsLinear(nn.Module):
         )
         input = input.reshape(input.shape[:-2] + (-1,))
 
-        return torch.ops.higgs.higgs2x256_matmat(
+        return torch.ops.higgs.higgs_matmat(
             input,
             self.codes,
             self.scales,
