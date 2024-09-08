@@ -6,6 +6,8 @@ import torch.nn.functional as F
 
 from fast_hadamard_transform import hadamard_transform
 
+from aqlm.utils import _dequantize_weight
+
 from higgs import CUDA_FOLDER
 
 
@@ -27,6 +29,7 @@ class HiggsLinear(nn.Module):
         out_features: int,
         higgs_d: int,
         higgs_n: int = 256,
+        for_eval=False,
         bias=True,
         device=None,
         dtype=None,
@@ -36,6 +39,7 @@ class HiggsLinear(nn.Module):
         super().__init__()
         self.hadamard_size = 1024
         self.higgs_d = higgs_d
+        self.for_eval = for_eval
         
         in_features = ((in_features - 1) // self.hadamard_size + 1) * self.hadamard_size
         num_hadamard_groups = in_features // self.hadamard_size
@@ -47,19 +51,19 @@ class HiggsLinear(nn.Module):
         self.register_parameter(
             f'codes_{higgs_d}',
             nn.Parameter(
-                torch.randint(
-                    -127, 128,
+                torch.empty(
                     (out_features, num_higgs_groups),
                     device=device,
-                    dtype=torch.int8,
+                    dtype=torch.uint8,
                 ),
                 requires_grad=False,
             )
         )
+        self.codes = None
         
         # SCALES
         self.scales = nn.Parameter(
-            torch.rand((out_features, num_hadamard_groups), **factory_kwargs), requires_grad=False
+            torch.empty((out_features, num_hadamard_groups), **factory_kwargs), requires_grad=False
         )
 
         # BIAS
@@ -69,6 +73,19 @@ class HiggsLinear(nn.Module):
             self.register_parameter("bias", None)
     
     def forward(self, input):
+        if self.codes is None:
+            if self.for_eval:
+                post_hadamard_size = ((1024 - 1) // self.higgs_d + 1) * self.higgs_d
+                
+                self.codes = _dequantize_weight(
+                    self.__getattr__(f"codes_{self.higgs_d}")[:,:,None],
+                    torch.load(f"../grids/EDEN{self.higgs_d}-256.pt").half()[None,:,None,:],
+                )
+                self.codes = self.codes.reshape(self.codes.shape[0], -1, post_hadamard_size)[...,:1024]
+                self.codes *= self.scales[...,None]
+                self.codes = self.codes.reshape(self.codes.shape[0], -1)
+            else:
+                self.codes = self.__getattr__(f"codes_{self.higgs_d}")
         input = pad_to_block(input, [-1], self.hadamard_size)
         input = hadamard_transform(
             input.reshape(input.shape[:-1] + (-1, self.hadamard_size)),
@@ -76,12 +93,15 @@ class HiggsLinear(nn.Module):
         )
         input = input.reshape(input.shape[:-2] + (-1,))
 
-        return torch.ops.higgs.higgs_matmat(
-            input,
-            self.codes,
-            self.scales,
-            self.bias,
-        )
+        if self.for_eval:
+            return nn.functional.linear(input, self.codes, self.bias)
+        else:
+            return torch.ops.higgs.higgs_matmat(
+                input,
+                self.codes,
+                self.scales,
+                self.bias,
+            )
 
 
 class HiggsMultiLinear(nn.Module):
