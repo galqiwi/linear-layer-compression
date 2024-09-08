@@ -8,7 +8,7 @@ from transformers import AutoModelForCausalLM
 import wandb
 from tqdm import tqdm, trange
 
-from edenn import edenn, pad_to_block, HadLinear
+from edenn import higgs_quantize_dequantize, pad_to_block, HadLinear
 from fast_hadamard_transform import hadamard_transform
 from gptq import apply_gptq, get_accumulate_input_fn
 
@@ -51,19 +51,19 @@ def quantize_linear_layer(layer: nn.Linear, hadamard_groupsize: int, edenn_d: in
     weight = weight.reshape(-1, mult, hadamard_groupsize)
     scales = torch.linalg.norm(weight, axis=-1)
     weight = hadamard_transform(weight) / scales[:, :, None]
-    weight = weight.reshape(-1, mult * hadamard_groupsize)
     
     # Pad to edenn_d and project
-    real_num_columns = weight.shape[1]
-    weight = pad_to_block(weight, [1], edenn_d)
-    
-    weight = weight.reshape(weight.shape[0], -1, edenn_d)
+    weight = pad_to_block(weight, [2], edenn_d).reshape(weight.shape[0], mult, -1, edenn_d)
+
     for i in range(0, weight.shape[0], 64):
-        weight[i:i+64], entorpy = edenn(weight[i:i+64], edenn_d, edenn_n)
-    weight = weight.reshape(weight.shape[0], -1)[:,:real_num_columns]
+        weight[i:i+64], entorpy = higgs_quantize_dequantize(weight[i:i+64], edenn_d, edenn_n)
+    weight = weight.reshape(weight.shape[0], mult, -1)
+    
+    # Cut the padded values
+    weight = weight[...,:hadamard_groupsize]
     
     # Unscale
-    weight = (weight.reshape(weight.shape[0], -1, hadamard_groupsize) * scales[:, :, None]).reshape(weight.shape[0], -1)
+    weight = (weight * scales[:, :, None]).reshape(weight.shape[0], -1)
     
     return HadLinear(weight.half(), hadamard_groupsize), entorpy
     
@@ -284,7 +284,7 @@ def get_zero_shots(model, task_list = ('arc_easy',), num_fewshots=1):
 @torch.no_grad()
 def eval_grid(edenn_d: int, edenn_n: int):
     x = torch.empty((2**16, edenn_d), device=DEV).normal_()
-    dequant, entropy = edenn(x, edenn_d, edenn_n)
+    dequant, entropy = higgs_quantize_dequantize(x, edenn_d, edenn_n)
     mse = (x - dequant).pow(2).mean().item()
     return mse, entropy / edenn_d
 

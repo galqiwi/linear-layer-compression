@@ -26,7 +26,7 @@ class HiggsLinear(nn.Module):
         in_features: int,
         out_features: int,
         higgs_d: int,
-        higgs_n: int,
+        higgs_n: int = 256,
         bias=True,
         device=None,
         dtype=None,
@@ -44,14 +44,17 @@ class HiggsLinear(nn.Module):
         num_higgs_groups = in_features // higgs_d
         
         # CODES
-        self.codes = nn.Parameter(
-            torch.randint(
-                -127, 128,
-                (out_features, num_higgs_groups),
-                device=device,
-                dtype=torch.int8,
-            ),
-            requires_grad=False,
+        self.register_parameter(
+            f'codes_{higgs_d}',
+            nn.Parameter(
+                torch.randint(
+                    -127, 128,
+                    (out_features, num_higgs_groups),
+                    device=device,
+                    dtype=torch.int8,
+                ),
+                requires_grad=False,
+            )
         )
         
         # SCALES
@@ -79,3 +82,34 @@ class HiggsLinear(nn.Module):
             self.scales,
             self.bias,
         )
+
+
+class HiggsMultiLinear(nn.Module):
+    def __init__(
+        self,
+        multicodes,
+        scales,
+        bias,
+    ):
+        super().__init__()
+        
+        # CODES
+        for higgs_d, codes in multicodes.items():
+            self.register_parameter(
+                f'codes_{higgs_d}',
+                nn.Parameter(
+                    codes,
+                    requires_grad=False,
+                )
+            )
+        
+        # SCALES
+        self.scales = nn.Parameter(
+            scales, requires_grad=False
+        )
+
+        # BIAS
+        if bias:
+            self.bias = nn.Parameter(bias, requires_grad=False)
+        else:
+            self.register_parameter("bias", None)

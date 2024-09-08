@@ -5,7 +5,7 @@ import torch
 from torch import Tensor, nn
 import torch.nn.functional as F
 
-from edenn import edenn, pad_to_block
+from edenn import higgs_quantize_dequantize, pad_to_block
 from fast_hadamard_transform import hadamard_transform
 
 from tqdm.auto import tqdm, trange
@@ -24,7 +24,7 @@ def gptq_block(block_weight: Tensor, block_hessian_inverse: Tensor, edenn_d: int
         column_hessian_inverse = block_hessian_inverse[i, i]
 
         # Quantize the column weight
-        quantized_column_weight, _ = edenn(column_weight, edenn_d, edenn_n)
+        quantized_column_weight, _ = higgs_quantize_dequantize(column_weight, edenn_d, edenn_n)
         quantized_block_weight[:, i:i+edenn_d] = quantized_column_weight.clone()
         dequantized_column_weight = quantized_column_weight
 
@@ -98,17 +98,12 @@ def apply_gptq(
         scale=1/math.sqrt(had_block_size)
     ).permute(2, 3, 0, 1)
     
-    weight = weight.reshape(-1, mult * had_block_size)
-    hessian = hessian.reshape(mult * had_block_size, mult * had_block_size)
-        
-    
+    # Pad to edenn_d
+    weight = pad_to_block(weight, [2], edenn_d).reshape(weight.shape[0], -1)
+    hessian = pad_to_block(hessian, [1, 3], edenn_d, 0).reshape(weight.shape[1], weight.shape[1])
+
     # Process the Hessian to obtain the precomputed inverse Hessian
     hessian_inverse = prepare_inverse_hessian(hessian, percdamp)
-
-    # Pad to edenn_d
-    real_num_columns = weight.shape[1]
-    weight = pad_to_block(weight, [1], edenn_d)
-    hessian_inverse = pad_to_block(hessian_inverse, [0, 1], edenn_d, 0)
 
     # Iterate over the columns in blockss
     for block_start in trange(0, num_columns, blocksize, leave=False, desc="GPTQ blocks..."):
@@ -126,9 +121,11 @@ def apply_gptq(
         weight[:, block_start:block_end] = quantized_block_weight.clone()
         weight[:, block_end:] -= block_error.matmul(hessian_inverse[block_start:block_end, block_end:])
         # <<<<<<<<<<<<<<<<<<<<<<<
-    weight = weight[:,:real_num_columns]
         
-    weight = (weight.reshape(weight.shape[0], -1, had_block_size) * scales[:, :, None]).reshape(weight.shape[0], -1)
+    # Cut padded weights
+    weight = weight.reshape(weight.shape[0], mult, -1)[...,:had_block_size]
+        
+    weight = (weight * scales[:, :, None]).reshape(weight.shape[0], -1)
     return weight.to(dtype)
 
 
