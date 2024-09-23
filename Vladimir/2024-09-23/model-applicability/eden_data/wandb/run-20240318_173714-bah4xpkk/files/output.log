@@ -1,0 +1,23 @@
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.20it/s]
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/datasets/load.py:1461: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+  0%|                                                                                                                                                                                                                 | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+Starting ...
+Traceback (most recent call last):
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 336, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 133, in llama_sequential
+    res = gptq[name].fasterquant(
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/gptq.py", line 61, in fasterquant
+    raise ValueError("Incoherence preprocessing is incompatible with clipping and groupsize=-1")
+ValueError: Incoherence preprocessing is incompatible with clipping and groupsize=-1
+0 self_attn.q_proj
+Quantizing ...

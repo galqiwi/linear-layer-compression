@@ -1,0 +1,14 @@
+
+Loading checkpoint shards:  25%|███████████████                                             | 1/4 [00:02<00:08,  2.70s/it]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 195, in <module>
+    model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/models/auto/auto_factory.py", line 564, in from_pretrained
+    return model_class.from_pretrained(
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/modeling_utils.py", line 3941, in from_pretrained
+    ) = cls._load_pretrained_model(
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/modeling_utils.py", line 4415, in _load_pretrained_model
+    new_error_msgs, offload_index, state_dict_index = _load_state_dict_into_meta_model(
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/modeling_utils.py", line 889, in _load_state_dict_into_meta_model
+    param = param.to(dtype)
+KeyboardInterrupt

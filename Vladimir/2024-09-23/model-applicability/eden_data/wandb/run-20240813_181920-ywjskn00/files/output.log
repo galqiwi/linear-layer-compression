@@ -1,0 +1,52 @@
+
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████| 4/4 [00:04<00:00,  1.09s/it]
+
+
+
+
+
+
+
+
+
+
+
+Quantizing linear layers...: 100%|██████████████████████████████████████████████████████| 225/225 [00:21<00:00, 10.27it/s]
+Token indices sequence length is longer than the specified maximum sequence length for this model (2436214 > 131072). Running this sequence through the model will result in indexing errors
+Evaluating layer-by-layer...:   0%|                                                                | 0/32 [00:00<?, ?it/s]The attention layers in this model are transitioning from computing the RoPE embeddings internally through `position_ids` (2D tensor with the indexes of the tokens), to using externally computed `position_embeddings` (Tuple of tensors, containing cos and sin). In v4.45 `position_ids` will be removed and `position_embeddings` will be mandatory.
+wikitext2
+Evaluating ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Evaluating layer-by-layer...: 100%|███████████████████████████████████████████████████████| 32/32 [01:30<00:00,  2.83s/it]
+19.22144889831543

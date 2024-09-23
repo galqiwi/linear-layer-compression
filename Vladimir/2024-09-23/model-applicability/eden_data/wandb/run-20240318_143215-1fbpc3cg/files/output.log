@@ -1,0 +1,338 @@
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.19it/s]
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/datasets/load.py:1461: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+  0%|                                                                                                                                  | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+Starting ...
+Ready.
+0 self_attn.q_proj
+Quantizing ...
+time 3.03
+error 386.066650390625
+0 self_attn.k_proj
+Quantizing ...
+time 2.17
+error 344.17425537109375
+0 self_attn.v_proj
+Quantizing ...
+time 2.24
+error 19.968936920166016
+0 self_attn.o_proj
+Quantizing ...
+time 2.18
+error 0.27071863412857056
+0 mlp.gate_proj
+Quantizing ...
+time 2.53
+error 104.43157196044922
+0 mlp.up_proj
+Quantizing ...
+time 2.53
+error 99.27603149414062
+0 mlp.down_proj
+
+Quantizing ...
+time 6.20
+  3%|███▊                                                                                                                      | 1/32 [00:30<15:43, 30.44s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+1 self_attn.q_proj
+Quantizing ...
+time 2.61
+error 921.22705078125
+1 self_attn.k_proj
+Quantizing ...
+time 2.20
+error 941.4420166015625
+1 self_attn.v_proj
+Quantizing ...
+time 2.24
+error 90.51322937011719
+1 self_attn.o_proj
+Quantizing ...
+time 2.14
+error 2.9437475204467773
+1 mlp.gate_proj
+Quantizing ...
+time 2.59
+error 419.00042724609375
+1 mlp.up_proj
+Quantizing ...
+time 2.57
+error 364.01641845703125
+1 mlp.down_proj
+
+Quantizing ...
+time 5.99
+  6%|███████▋                                                                                                                  | 2/32 [00:59<14:54, 29.81s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+2 self_attn.q_proj
+Quantizing ...
+time 2.58
+error 2097.765380859375
+2 self_attn.k_proj
+Quantizing ...
+time 2.18
+error 2281.38427734375
+2 self_attn.v_proj
+Quantizing ...
+time 2.19
+error 537.5040283203125
+2 self_attn.o_proj
+Quantizing ...
+time 2.17
+error 5.916988372802734
+2 mlp.gate_proj
+Quantizing ...
+time 2.61
+error 1033.1982421875
+2 mlp.up_proj
+Quantizing ...
+time 2.58
+error 892.537109375
+2 mlp.down_proj
+
+Quantizing ...
+time 6.06
+  9%|███████████▍                                                                                                              | 3/32 [01:29<14:19, 29.63s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+3 self_attn.q_proj
+Quantizing ...
+time 2.57
+error 5309.60888671875
+3 self_attn.k_proj
+Quantizing ...
+time 2.17
+error 5517.45947265625
+3 self_attn.v_proj
+Quantizing ...
+time 2.19
+error 1399.4564208984375
+3 self_attn.o_proj
+Quantizing ...
+time 2.18
+error 10.368717193603516
+3 mlp.gate_proj
+Quantizing ...
+time 2.55
+error 1956.3050537109375
+3 mlp.up_proj
+Quantizing ...
+time 2.56
+error 1665.445068359375
+3 mlp.down_proj
+
+Quantizing ...
+time 6.12
+ 12%|███████████████▎                                                                                                          | 4/32 [01:58<13:46, 29.53s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+4 self_attn.q_proj
+Quantizing ...
+time 2.58
+error 5381.3154296875
+4 self_attn.k_proj
+Quantizing ...
+time 2.18
+error 5490.7060546875
+4 self_attn.v_proj
+Quantizing ...
+time 2.19
+error 1452.3983154296875
+4 self_attn.o_proj
+Quantizing ...
+time 2.18
+error 20.946964263916016
+4 mlp.gate_proj
+Quantizing ...
+time 2.51
+error 2832.41015625
+4 mlp.up_proj
+Quantizing ...
+time 2.52
+error 2275.092041015625
+4 mlp.down_proj
+
+Quantizing ...
+time 6.13
+ 16%|███████████████████                                                                                                       | 5/32 [02:27<13:15, 29.46s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+5 self_attn.q_proj
+Quantizing ...
+time 2.57
+error 5886.845703125
+5 self_attn.k_proj
+Quantizing ...
+time 2.17
+error 6423.658203125
+5 self_attn.v_proj
+Quantizing ...
+time 2.18
+error 1727.85107421875
+5 self_attn.o_proj
+Quantizing ...
+time 2.18
+error 35.224639892578125
+5 mlp.gate_proj
+Quantizing ...
+time 2.52
+error 3580.540771484375
+5 mlp.up_proj
+Quantizing ...
+time 2.52
+error 2858.378173828125
+5 mlp.down_proj
+Quantizing ...
+time 6.11
+
+ 19%|██████████████████████▉                                                                                                   | 6/32 [02:57<12:44, 29.40s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+6 self_attn.q_proj
+Quantizing ...
+time 2.58
+error 8508.7734375
+6 self_attn.k_proj
+Quantizing ...
+time 2.17
+error 8569.1103515625
+6 self_attn.v_proj
+Quantizing ...
+time 2.17
+error 2409.58056640625
+6 self_attn.o_proj
+Quantizing ...
+time 2.17
+error 44.46124267578125
+6 mlp.gate_proj
+Quantizing ...
+time 2.52
+error 4585.0703125
+6 mlp.up_proj
+Quantizing ...
+time 2.52
+error 3519.47265625
+6 mlp.down_proj
+
+Quantizing ...
+time 6.10
+ 22%|██████████████████████████▋                                                                                               | 7/32 [03:26<12:14, 29.37s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+7 self_attn.q_proj
+Quantizing ...
+time 2.57
+error 9158.04296875
+7 self_attn.k_proj
+Quantizing ...
+time 2.18
+error 9095.0517578125
+7 self_attn.v_proj
+Quantizing ...
+time 2.18
+error 2719.037353515625
+7 self_attn.o_proj
+Quantizing ...
+time 2.16
+error 67.26710510253906
+7 mlp.gate_proj
+Quantizing ...
+time 2.53
+error 5303.146484375
+7 mlp.up_proj
+Quantizing ...
+time 2.51
+error 4102.06640625
+7 mlp.down_proj
+
+Quantizing ...
+time 6.09
+ 25%|██████████████████████████████▌                                                                                           | 8/32 [03:55<11:44, 29.34s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+8 self_attn.q_proj
+Quantizing ...
+time 2.57
+error 9181.048828125
+8 self_attn.k_proj
+Quantizing ...
+time 2.16
+error 9216.427734375
+8 self_attn.v_proj
+Quantizing ...
+time 2.17
+error 2838.86328125
+8 self_attn.o_proj
+Quantizing ...
+time 2.14
+error 102.87541961669922
+8 mlp.gate_proj
+Quantizing ...
+time 2.51
+error 5514.173828125
+8 mlp.up_proj
+Quantizing ...
+time 2.49
+error 4512.33837890625
+8 mlp.down_proj
+Quantizing ...
+time 6.08
+
+ 28%|██████████████████████████████████▎                                                                                       | 9/32 [04:24<11:13, 29.29s/it]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+9 self_attn.q_proj
+Quantizing ...
+time 2.57
+error 9518.498046875
+9 self_attn.k_proj
+Quantizing ...
+time 2.17
+error 10046.6171875
+9 self_attn.v_proj
+Quantizing ...
+time 2.16
+error 3080.46435546875
+9 self_attn.o_proj
+Quantizing ...
+time 2.16
+error 140.083251953125
+9 mlp.gate_proj
+Quantizing ...
+time 2.50
+error 5829.560546875
+9 mlp.up_proj
+Quantizing ...
+time 2.50
+error 4939.38330078125
+9 mlp.down_proj
+
+Quantizing ...
+time 6.09
+ 31%|█████████████████████████████████████▊                                                                                   | 10/32 [04:54<10:43, 29.27s/it]
+Traceback (most recent call last):
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 311, in <module>
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 116, in llama_sequential
+    handles.append(subset[name].register_forward_hook(add_batch(name)))
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 796, in forward
+    hidden_states, self_attn_weights, present_key_value = self.self_attn(
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 692, in forward
+    key_states = self.k_proj(hidden_states)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1574, in _call_impl
+    hook_result = hook(self, args, result)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 110, in tmp
+    def add_batch(name):
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/gptq.py", line 53, in add_batch
+    self.H += inp.matmul(inp.t())
+KeyboardInterrupt

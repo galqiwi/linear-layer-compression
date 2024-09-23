@@ -1,0 +1,23 @@
+
+
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:02<00:00,  1.16s/it]
+/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/datasets/load.py:1429: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+Starting ...
+Ready.
+  0%|                                                                                                                                                                                                     | 0/32 [00:00<?, ?it/s]
+0 self_attn.q_proj
+Quantizing ...
+  0%|                                                                                                                                                                                                     | 0/32 [00:07<?, ?it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 340, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 133, in llama_sequential
+    res = gptq[name].fasterquant(
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/gptq.py", line 139, in fasterquant
+    assert count % step_size == 0, 'count must be divisible by step_size'
+AssertionError: count must be divisible by step_size

@@ -1,0 +1,196 @@
+
+
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:02<00:00,  1.02s/it]
+/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/datasets/load.py:1429: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+  0%|                                                                                                                                                                                                                                                                | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+Starting ...
+Ready.
+0 self_attn.q_proj
+Quantizing ...
+time 1.39
+error 298255.28125
+0 self_attn.k_proj
+Quantizing ...
+time 0.96
+error 301271.3125
+0 self_attn.v_proj
+Quantizing ...
+time 0.96
+error 293381.9375
+0 self_attn.o_proj
+Quantizing ...
+time 0.96
+error 5665.7333984375
+0 mlp.gate_proj
+Quantizing ...
+time 0.98
+error 1242568.5
+0 mlp.up_proj
+Quantizing ...
+time 0.98
+error 1241766.875
+0 mlp.down_proj
+
+Quantizing ...
+time 2.85
+  3%|███████▊                                                                                                                                                                                                                                                | 1/32 [00:18<09:27, 18.31s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+1 self_attn.q_proj
+Quantizing ...
+time 1.38
+error 2167326.5
+1 self_attn.k_proj
+Quantizing ...
+time 0.96
+error 2167999.5
+1 self_attn.v_proj
+Quantizing ...
+time 0.96
+error 2124197.25
+1 self_attn.o_proj
+Quantizing ...
+time 0.97
+error 45563.3671875
+1 mlp.gate_proj
+Quantizing ...
+time 0.98
+error 4164000.5
+1 mlp.up_proj
+Quantizing ...
+time 0.98
+error 4143845.0
+1 mlp.down_proj
+Quantizing ...
+time 2.87
+
+  6%|███████████████▌                                                                                                                                                                                                                                        | 2/32 [00:36<09:09, 18.30s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+2 self_attn.q_proj
+Quantizing ...
+time 1.37
+error 7972447.0
+2 self_attn.k_proj
+Quantizing ...
+time 0.96
+error 7991942.0
+2 self_attn.v_proj
+Quantizing ...
+time 0.96
+error 7897227.0
+2 self_attn.o_proj
+Quantizing ...
+time 0.96
+error 75684.90625
+2 mlp.gate_proj
+Quantizing ...
+time 0.98
+error 9848200.0
+2 mlp.up_proj
+Quantizing ...
+time 0.98
+error 9811178.0
+2 mlp.down_proj
+Quantizing ...
+time 2.85
+
+  9%|███████████████████████▎                                                                                                                                                                                                                                | 3/32 [00:54<08:50, 18.29s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+3 self_attn.q_proj
+Quantizing ...
+time 1.38
+error 23212576.0
+3 self_attn.k_proj
+Quantizing ...
+time 0.95
+error 23259562.0
+3 self_attn.v_proj
+Quantizing ...
+time 0.96
+error 23092704.0
+3 self_attn.o_proj
+Quantizing ...
+time 0.95
+error 165044.046875
+3 mlp.gate_proj
+Quantizing ...
+time 0.97
+error 17340054.0
+3 mlp.up_proj
+Quantizing ...
+time 0.97
+error 17300880.0
+3 mlp.down_proj
+
+Quantizing ...
+time 2.84
+ 12%|███████████████████████████████                                                                                                                                                                                                                         | 4/32 [01:13<08:32, 18.30s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+4 self_attn.q_proj
+Quantizing ...
+time 1.41
+error 21033498.0
+4 self_attn.k_proj
+Quantizing ...
+time 0.96
+error 21083236.0
+4 self_attn.v_proj
+Quantizing ...
+time 0.97
+error 20875408.0
+4 self_attn.o_proj
+Quantizing ...
+time 0.96
+error 298685.375
+4 mlp.gate_proj
+Quantizing ...
+time 0.98
+error 23694744.0
+4 mlp.up_proj
+Quantizing ...
+time 0.98
+error 23656624.0
+4 mlp.down_proj
+
+Quantizing ...
+time 2.87
+ 16%|██████████████████████████████████████▊                                                                                                                                                                                                                 | 5/32 [01:31<08:15, 18.35s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+5 self_attn.q_proj
+Quantizing ...
+time 1.40
+error 24061360.0
+5 self_attn.k_proj
+Quantizing ...
+time 0.96
+error 24074876.0
+5 self_attn.v_proj
+Quantizing ...
+time 0.96
+error 23881638.0
+5 self_attn.o_proj
+Quantizing ...
+time 0.96
+error 547253.875
+5 mlp.gate_proj
+Quantizing ...
+time 0.98
+error 29586650.0
+5 mlp.up_proj
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 340, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 133, in llama_sequential
+    res = gptq[name].fasterquant(
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/gptq.py", line 154, in fasterquant
+    W1[:, i:] -= err1.matmul(Hinv1[i: i + step_size, i:])
+KeyboardInterrupt
+time 0.98
+error 29516384.0
+5 mlp.down_proj
+Quantizing ...

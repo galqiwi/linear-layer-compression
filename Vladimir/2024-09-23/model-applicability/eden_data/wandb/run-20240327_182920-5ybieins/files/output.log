@@ -1,0 +1,67 @@
+
+
+Loading checkpoint shards: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.03it/s]
+/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/datasets/load.py:1429: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+  0%|                                                                                                                                                                                                                                                                                       | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                                                                                                                                                                        | 0/1 [00:00<?, ?it/s]
+Starting ...
+
+  assignments = torch.bucketize(weight, boundaries[bits])                                                                                                                                                                                                                                    | 0/1 [00:00<?, ?it/s]
+0 self_attn.q_proj
+Quantizing ...
+time 1.57
+error 78951.34375
+0 self_attn.k_proj
+Quantizing ...
+time 0.86
+error 79740.25
+0 self_attn.v_proj
+Quantizing ...
+time 0.86
+error 80243.3125
+0 self_attn.o_proj
+Quantizing ...
+time 0.88
+error 1495.39306640625
+0 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 333881.25
+0 mlp.up_proj
+Quantizing ...
+time 0.90
+error 334230.25
+0 mlp.down_proj
+Quantizing ...
+  0%|                                                                                                                                                                                                                                                                                       | 0/32 [00:20<?, ?it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 340, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 146, in llama_sequential
+    out = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 798, in forward
+    hidden_states, self_attn_weights, present_key_value = self.self_attn(
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 693, in forward
+    query_states = self.q_proj(hidden_states)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/hadamard.py", line 132, in forward
+    return F.linear(input, self.weight)
+RuntimeError: expected mat1 and mat2 to have the same dtype, but got: float != c10::Half
+time 2.70
+error 4467.56884765625

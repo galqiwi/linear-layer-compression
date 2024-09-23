@@ -1,0 +1,1 @@
+{"expected_mse": 0.11614990234375, "expected_entropy": 1.9080798625946045, "bitwidth": 2.0, "_timestamp": 1723558242.9129386, "_runtime": 22.668901681900024, "_step": 224, "layer_entropy": -170539.75, "_wandb": {"runtime": 107}}

@@ -1,0 +1,38 @@
+2024-03-18 14:42:27,946 INFO    MainThread:2177008 [wandb_setup.py:_flush():76] Current SDK version is 0.16.4
+2024-03-18 14:42:27,946 INFO    MainThread:2177008 [wandb_setup.py:_flush():76] Configure stats pid to 2177008
+2024-03-18 14:42:27,946 INFO    MainThread:2177008 [wandb_setup.py:_flush():76] Loading settings from /nfs/scistore14/alistgrp/apanfero/.config/wandb/settings
+2024-03-18 14:42:27,946 INFO    MainThread:2177008 [wandb_setup.py:_flush():76] Loading settings from /nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/wandb/settings
+2024-03-18 14:42:27,946 INFO    MainThread:2177008 [wandb_setup.py:_flush():76] Loading settings from environment variables: {'mode': 'online'}
+2024-03-18 14:42:27,946 INFO    MainThread:2177008 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-03-18 14:42:27,946 INFO    MainThread:2177008 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'gptq/llama2.py', 'program_abspath': '/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py', 'program': '/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py'}
+2024-03-18 14:42:27,946 INFO    MainThread:2177008 [wandb_init.py:_log_setup():526] Logging user logs to /nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/wandb/run-20240318_144227-6wrermts/logs/debug.log
+2024-03-18 14:42:27,947 INFO    MainThread:2177008 [wandb_init.py:_log_setup():527] Logging internal logs to /nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/wandb/run-20240318_144227-6wrermts/logs/debug-internal.log
+2024-03-18 14:42:27,947 INFO    MainThread:2177008 [wandb_init.py:init():566] calling init triggers
+2024-03-18 14:42:27,947 INFO    MainThread:2177008 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'model': 'meta-llama/Llama-2-7b-hf', 'dataset': 'red', 'seed': 0, 'nsamples': 256, 'percdamp': 0.1, 'nearest': False, 'wbits': 4, 'groupsize': 128, 'true_sequential': False, 'no_clip': False, 'skip_gq': False, 'save': ''}
+2024-03-18 14:42:27,947 INFO    MainThread:2177008 [wandb_init.py:init():616] starting backend
+2024-03-18 14:42:27,947 INFO    MainThread:2177008 [wandb_init.py:init():620] setting up manager
+2024-03-18 14:42:27,948 INFO    MainThread:2177008 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-03-18 14:42:27,950 INFO    MainThread:2177008 [wandb_init.py:init():628] backend started and connected
+2024-03-18 14:42:27,952 INFO    MainThread:2177008 [wandb_init.py:init():720] updated telemetry
+2024-03-18 14:42:27,960 INFO    MainThread:2177008 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-03-18 14:42:28,420 INFO    MainThread:2177008 [wandb_run.py:_on_init():2262] communicating current version
+2024-03-18 14:42:28,480 INFO    MainThread:2177008 [wandb_run.py:_on_init():2271] got version response 
+2024-03-18 14:42:28,480 INFO    MainThread:2177008 [wandb_init.py:init():804] starting run threads in backend
+2024-03-18 14:42:29,940 WARNING MainThread:2177008 [wandb_init.py:init():1198] interrupted
+Traceback (most recent call last):
+  File "/nfs/scistore14/alistgrp/apanfero/AQLM/.conda/lib/python3.10/site-packages/wandb/sdk/wandb_init.py", line 1176, in init
+    run = wi.init()
+  File "/nfs/scistore14/alistgrp/apanfero/AQLM/.conda/lib/python3.10/site-packages/wandb/sdk/wandb_init.py", line 817, in init
+    run_start_result = run_start_handle.wait(timeout=30)
+  File "/nfs/scistore14/alistgrp/apanfero/AQLM/.conda/lib/python3.10/site-packages/wandb/sdk/lib/mailbox.py", line 283, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+  File "/nfs/scistore14/alistgrp/apanfero/AQLM/.conda/lib/python3.10/site-packages/wandb/sdk/lib/mailbox.py", line 130, in _get_and_clear
+    if self._wait(timeout=timeout):
+  File "/nfs/scistore14/alistgrp/apanfero/AQLM/.conda/lib/python3.10/site-packages/wandb/sdk/lib/mailbox.py", line 126, in _wait
+    return self._event.wait(timeout=timeout)
+  File "/nfs/scistore14/alistgrp/apanfero/AQLM/.conda/lib/python3.10/threading.py", line 607, in wait
+    signaled = self._cond.wait(timeout)
+  File "/nfs/scistore14/alistgrp/apanfero/AQLM/.conda/lib/python3.10/threading.py", line 324, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt

@@ -1,0 +1,139 @@
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.21it/s]
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/datasets/load.py:1461: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+  0%|                                                                                                                                                                                                                | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+Starting ...
+Ready.
+0 self_attn.q_proj
+Quantizing ...
+time 3.23
+error 386.066650390625
+0 self_attn.k_proj
+Quantizing ...
+time 2.19
+error 344.17425537109375
+0 self_attn.v_proj
+Quantizing ...
+time 2.26
+error 19.968936920166016
+0 self_attn.o_proj
+Quantizing ...
+time 2.17
+error 0.27071863412857056
+0 mlp.gate_proj
+Quantizing ...
+time 2.55
+error 104.43157196044922
+0 mlp.up_proj
+Quantizing ...
+time 2.54
+error 99.27603149414062
+0 mlp.down_proj
+Quantizing ...
+time 6.29
+error 1.0900973081588745
+1 self_attn.q_proj
+Quantizing ...
+time 2.63
+error 921.22705078125
+1 self_attn.k_proj
+Quantizing ...
+time 2.22
+error 941.4420166015625
+1 self_attn.v_proj
+Quantizing ...
+time 2.27
+error 90.51322937011719
+1 self_attn.o_proj
+Quantizing ...
+time 2.17
+error 2.9437475204467773
+1 mlp.gate_proj
+Quantizing ...
+time 2.60
+error 419.00042724609375
+1 mlp.up_proj
+Quantizing ...
+time 2.60
+error 364.01641845703125
+1 mlp.down_proj
+Quantizing ...
+time 6.04
+error 8504.3876953125
+2 self_attn.q_proj
+Quantizing ...
+time 2.58
+error 2097.765380859375
+2 self_attn.k_proj
+Quantizing ...
+time 2.18
+error 2281.38427734375
+2 self_attn.v_proj
+Quantizing ...
+time 2.19
+error 537.5040283203125
+2 self_attn.o_proj
+Quantizing ...
+time 2.18
+error 5.916988372802734
+2 mlp.gate_proj
+Quantizing ...
+time 2.61
+error 1033.1982421875
+2 mlp.up_proj
+Quantizing ...
+time 2.60
+error 892.537109375
+2 mlp.down_proj
+
+Quantizing ...
+time 6.12
+  9%|██████████████████▊                                                                                                                                                                                     | 3/32 [01:29<14:21, 29.71s/it]
+  0%|                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+3 self_attn.q_proj
+Quantizing ...
+time 2.60
+error 5309.60888671875
+3 self_attn.k_proj
+Quantizing ...
+time 2.20
+error 5517.45947265625
+3 self_attn.v_proj
+Quantizing ...
+time 2.21
+error 1399.4564208984375
+3 self_attn.o_proj
+Quantizing ...
+time 2.20
+error 10.368717193603516
+3 mlp.gate_proj
+Quantizing ...
+time 2.58
+error 1956.3050537109375
+3 mlp.up_proj
+Quantizing ...
+time 2.57
+error 1665.445068359375
+3 mlp.down_proj
+Quantizing ...
+time 6.13
+
+ 12%|█████████████████████████                                                                                                                                                                               | 4/32 [01:58<13:50, 29.64s/it]
+  0%|                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+4 self_attn.q_proj
+Traceback (most recent call last):
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 318, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 125, in llama_sequential
+    res = gptq[name].fasterquant(
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/gptq.py", line 111, in fasterquant
+    q = quantize(
+KeyboardInterrupt

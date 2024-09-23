@@ -1,0 +1,18 @@
+
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:05<00:00,  1.46s/it]
+Quantizing linear layers...:   0%|                                                                                                                                | 0/225 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 199, in <module>
+    model = llama_zeroshot(model, args, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 63, in llama_zeroshot
+    quantized_layer, entropy = quantize_linear_layer(layer.to(device), args.hadamard_groupsize, args.edenn_d, args.edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 48, in quantize_linear_layer
+    weight, entorpy = edenn(weight.reshape(weight.shape[0], -1, edenn_d), edenn_d, edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/edenn.py", line 30, in edenn
+    idx = torch.argmax(2 * x @ GRIDS[dim][size].T - GRID_NORMS[dim][size], dim=-1)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 32.00 GiB. GPU 0 has a total capacty of 23.69 GiB of which 20.74 GiB is free. Process 1038169 has 1.62 GiB memory in use. Including non-PyTorch memory, this process has 1.32 GiB memory in use. Of the allocated memory 105.08 MiB is allocated by PyTorch, and 12.92 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

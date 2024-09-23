@@ -1,0 +1,20 @@
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.21it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 305, in <module>
+    dataloader, testloader = get_loaders(
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/datautils.py", line 67, in get_loaders
+    return get_red(nsamples, seed, seqlen, model)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/datautils.py", line 41, in get_red
+    tokenizer = AutoTokenizer.from_pretrained(model, use_fast=False)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 787, in from_pretrained
+    return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1288, in __getattribute__
+    requires_backends(cls, cls._backends)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/import_utils.py", line 1276, in requires_backends
+    raise ImportError("".join(failed))
+ImportError:
+LlamaTokenizer requires the SentencePiece library but it was not found in your environment. Checkout the instructions on the
+installation page of its repo: https://github.com/google/sentencepiece#installation and follow the ones
+that match your environment. Please note that you may need to restart your runtime after installation.

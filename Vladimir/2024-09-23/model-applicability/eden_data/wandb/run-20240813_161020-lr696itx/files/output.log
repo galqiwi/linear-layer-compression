@@ -1,0 +1,53 @@
+
+
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:05<00:00,  1.42s/it]
+
+
+
+
+
+Quantizing linear layers...: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 225/225 [00:10<00:00, 20.58it/s]
+Token indices sequence length is longer than the specified maximum sequence length for this model (2436214 > 131072). Running this sequence through the model will result in indexing errors
+Evaluating layer-by-layer...:   0%|                                                                                                                                | 0/32 [00:00<?, ?it/s]The attention layers in this model are transitioning from computing the RoPE embeddings internally through `position_ids` (2D tensor with the indexes of the tokens), to using externally computed `position_embeddings` (Tuple of tensors, containing cos and sin). In v4.45 `position_ids` will be removed and `position_embeddings` will be mandatory.
+wikitext2
+Evaluating ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Evaluating layer-by-layer...:  59%|██████████████████████████████████████████████████████████████████████▋                                                | 19/32 [01:01<00:41,  3.22s/it]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 208, in <module>
+    ppl = llama_eval(model, testloader, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 114, in llama_eval
+    inps[j] = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 750, in forward
+    hidden_states = self.mlp(hidden_states)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 309, in forward
+    down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 224.00 MiB. GPU 0 has a total capacty of 23.69 GiB of which 174.06 MiB is free. Process 1038169 has 1.62 GiB memory in use. Including non-PyTorch memory, this process has 4.55 GiB memory in use. Process 1177010 has 13.23 GiB memory in use. Process 1179458 has 4.11 GiB memory in use. Of the allocated memory 3.17 GiB is allocated by PyTorch, and 176.67 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 192, in <module>
+    mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 146, in eval_grid
+    entropy = entropy.item()
+AttributeError: 'float' object has no attribute 'item'

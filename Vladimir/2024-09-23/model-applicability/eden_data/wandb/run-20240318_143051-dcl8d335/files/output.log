@@ -1,0 +1,11 @@
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.22it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 305, in <module>
+    dataloader, testloader = get_loaders(
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/datautils.py", line 67, in get_loaders
+    return get_red(nsamples, seed, seqlen, model)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/datautils.py", line 39, in get_red
+    from datasets import load_dataset
+ModuleNotFoundError: No module named 'datasets'

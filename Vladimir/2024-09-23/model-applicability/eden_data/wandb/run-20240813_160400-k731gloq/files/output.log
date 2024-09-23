@@ -1,0 +1,16 @@
+
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:06<00:00,  1.58s/it]
+Quantizing linear layers...:   0%|                                                                                                                                | 0/225 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 200, in <module>
+    model = llama_zeroshot(model, args, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 64, in llama_zeroshot
+    quantized_layer, entropy = quantize_linear_layer(layer.to(device), args.hadamard_groupsize, args.edenn_d, args.edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 47, in quantize_linear_layer
+    weight = weight.reshape(weight.shape[0], -1, edenn_d)
+RuntimeError: shape '[4096, -1, 3]' is invalid for input of size 16777216

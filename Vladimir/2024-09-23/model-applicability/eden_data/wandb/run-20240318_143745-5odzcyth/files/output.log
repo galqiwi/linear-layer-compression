@@ -1,0 +1,47 @@
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.13it/s]
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/datasets/load.py:1461: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+  0%|                                                                                                                                  | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                   | 0/1 [00:00<?, ?it/s]
+Starting ...
+Ready.
+0 self_attn.q_proj
+Quantizing ...
+time 2.79
+error 386.066650390625
+0 self_attn.k_proj
+Quantizing ...
+time 2.21
+error 344.17425537109375
+0 self_attn.v_proj
+Quantizing ...
+time 2.26
+error 19.968936920166016
+0 self_attn.o_proj
+Quantizing ...
+time 2.19
+error 0.27071863412857056
+0 mlp.gate_proj
+Quantizing ...
+time 2.55
+error 104.43157196044922
+0 mlp.up_proj
+Quantizing ...
+time 2.55
+error 99.27603149414062
+0 mlp.down_proj
+Traceback (most recent call last):
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 318, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 136, in llama_sequential
+    mse += (outs[j] - out).pow(2).mean().item()
+TypeError: unsupported operand type(s) for -: 'tuple' and 'Tensor'
+time 6.29
+error 1.0900973081588745

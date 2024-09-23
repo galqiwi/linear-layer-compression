@@ -1,0 +1,1 @@
+{"expected_mse": 0, "expected_entropy": 16, "bitwidth": 16, "edenn_d": 0, "edenn_n": 0, "_timestamp": 1723567892.2841034, "_runtime": 123.52193140983582, "_step": 1, "wikitext2_PPL": 5.606886386871338, "_wandb": {"runtime": 123}}

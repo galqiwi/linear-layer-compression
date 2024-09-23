@@ -1,0 +1,22 @@
+
+
+
+Loading checkpoint shards: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:06<00:00,  1.62s/it]
+
+
+
+Quantizing linear layers...:  43%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                                                                                                                                                | 96/225 [00:07<00:10, 12.18it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 186, in <module>
+    model = llama_zeroshot(model, args, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 63, in llama_zeroshot
+    quantized_layer, entropy = quantize_linear_layer(layer.to(device), args.hadamard_groupsize, args.edenn_d, args.edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 48, in quantize_linear_layer
+    weight, entorpy = edenn(weight.reshape(weight.shape[0], -1, edenn_d), edenn_d, edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/edenn.py", line 29, in edenn
+    idx = torch.argmax(2 * x @ GRIDS[dim][size].T - GRID_NORMS[dim][size], dim=-1)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 7.00 GiB. GPU 0 has a total capacty of 23.69 GiB of which 2.23 GiB is free. Including non-PyTorch memory, this process has 21.46 GiB memory in use. Of the allocated memory 12.81 GiB is allocated by PyTorch, and 7.45 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

@@ -1,0 +1,15 @@
+
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:05<00:00,  1.31s/it]
+
+
+
+
+
+
+
+Quantizing linear layers...: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 225/225 [00:13<00:00, 16.30it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 191, in <module>
+    dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
+AttributeError: 'Namespace' object has no attribute 'seed'

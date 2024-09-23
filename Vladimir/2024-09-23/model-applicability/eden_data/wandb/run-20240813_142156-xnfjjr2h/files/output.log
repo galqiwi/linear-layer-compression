@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 180, in <module>
+    if args.nearest:
+AttributeError: 'Namespace' object has no attribute 'nearest'

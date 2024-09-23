@@ -1,0 +1,1 @@
+{"expected_mse": 0.040679931640625, "expected_entropy": 2.6347169876098633, "bitwidth": 2.69404968045129, "edenn_d": 3, "edenn_n": 271, "_timestamp": 1723565800.3748956, "_runtime": 143.24193859100342, "_step": 225, "layer_entropy": -20624.2265625, "wikitext2_PPL": 9.18890380859375, "_wandb": {"runtime": 142}}

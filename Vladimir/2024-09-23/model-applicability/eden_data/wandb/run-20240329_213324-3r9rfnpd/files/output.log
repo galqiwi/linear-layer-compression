@@ -1,0 +1,68 @@
+
+
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:02<00:00,  1.17s/it]
+/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/datasets/load.py:1429: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+Starting ...
+Ready.
+  0%|                                                                                                                                                                                                                                                                | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+0 self_attn.q_proj
+Quantizing ...
+time 1.00
+error nan
+0 self_attn.k_proj
+Quantizing ...
+time 0.56
+error nan
+0 self_attn.v_proj
+Quantizing ...
+time 0.56
+error nan
+0 self_attn.o_proj
+Quantizing ...
+time 0.56
+error nan
+0 mlp.gate_proj
+Quantizing ...
+time 0.57
+error nan
+0 mlp.up_proj
+Quantizing ...
+time 0.56
+error nan
+0 mlp.down_proj
+Quantizing ...
+time 1.75
+
+  3%|███████▊                                                                                                                                                                                                                                                | 1/32 [00:14<07:40, 14.87s/it]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 340, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 126, in llama_sequential
+    outs[j] = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 798, in forward
+    hidden_states, self_attn_weights, present_key_value = self.self_attn(
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 695, in forward
+    value_states = self.v_proj(hidden_states)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1581, in _call_impl
+    hook_result = hook(self, args, result)
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 120, in tmp
+    gptq[name].add_batch(inp[0].data, out.data)
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/gptq.py", line 55, in add_batch
+    inp = math.sqrt(2 / self.nsamples) * inp.float()
+KeyboardInterrupt

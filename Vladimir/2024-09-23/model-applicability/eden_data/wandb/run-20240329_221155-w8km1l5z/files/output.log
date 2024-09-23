@@ -1,0 +1,552 @@
+
+
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.00it/s]
+/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/datasets/load.py:1429: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+Starting ...
+Ready.
+  0%|                                                                                                                                                                                                                                                                | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+0 self_attn.q_proj
+Quantizing ...
+time 1.23
+error 298259.3125
+0 self_attn.k_proj
+
+  assignments = torch.bucketize(weight, boundaries[bits])                                                                                                                                                                                                             | 0/1 [00:00<?, ?it/s]
+time 0.79
+error 301271.0625
+0 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 293381.9375
+0 self_attn.o_proj
+Quantizing ...
+time 0.79
+error 5665.7333984375
+0 mlp.gate_proj
+Quantizing ...
+time 0.80
+error 1242566.5
+0 mlp.up_proj
+Quantizing ...
+time 0.80
+error 1241768.75
+0 mlp.down_proj
+Quantizing ...
+time 2.36
+error 16132.9228515625
+  3%|███████▊                                                                                                                                                                                                                                                | 1/32 [00:16<08:42, 16.87s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+1 self_attn.q_proj
+Quantizing ...
+time 1.21
+error 2167388.0
+1 self_attn.k_proj
+Quantizing ...
+time 0.78
+error 2167918.5
+1 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 2124260.5
+1 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 45558.73046875
+1 mlp.gate_proj
+Quantizing ...
+time 0.79
+error 4163815.5
+1 mlp.up_proj
+Quantizing ...
+time 0.79
+error 4143755.75
+1 mlp.down_proj
+Quantizing ...
+time 2.36
+
+  6%|███████████████▌                                                                                                                                                                                                                                        | 2/32 [00:33<08:26, 16.87s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+2 self_attn.q_proj
+Quantizing ...
+time 1.24
+error 7974403.0
+2 self_attn.k_proj
+Quantizing ...
+time 0.77
+error 7993965.0
+2 self_attn.v_proj
+Quantizing ...
+time 0.77
+error 7897113.0
+2 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 75702.8515625
+2 mlp.gate_proj
+Quantizing ...
+time 0.80
+error 9846716.0
+2 mlp.up_proj
+Quantizing ...
+time 0.80
+error 9808812.0
+2 mlp.down_proj
+Quantizing ...
+time 2.36
+
+  9%|███████████████████████▎                                                                                                                                                                                                                                | 3/32 [00:50<08:12, 16.99s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+3 self_attn.q_proj
+Quantizing ...
+time 1.30
+error 23233034.0
+3 self_attn.k_proj
+Quantizing ...
+time 0.79
+error 23286700.0
+3 self_attn.v_proj
+Quantizing ...
+time 0.79
+error 23114958.0
+3 self_attn.o_proj
+Quantizing ...
+time 0.79
+error 163605.28125
+3 mlp.gate_proj
+Quantizing ...
+time 0.80
+error 17446186.0
+3 mlp.up_proj
+Quantizing ...
+time 0.80
+error 17407192.0
+3 mlp.down_proj
+Quantizing ...
+time 2.37
+
+ 12%|███████████████████████████████                                                                                                                                                                                                                         | 4/32 [01:08<07:59, 17.14s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+4 self_attn.q_proj
+Quantizing ...
+time 1.25
+error 21172716.0
+4 self_attn.k_proj
+Quantizing ...
+time 0.78
+error 21231740.0
+4 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 21019164.0
+4 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 312315.5
+4 mlp.gate_proj
+Quantizing ...
+time 0.79
+error 23916480.0
+4 mlp.up_proj
+Quantizing ...
+time 0.79
+error 23875800.0
+4 mlp.down_proj
+Quantizing ...
+time 2.37
+
+ 16%|██████████████████████████████████████▊                                                                                                                                                                                                                 | 5/32 [01:25<07:45, 17.22s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+5 self_attn.q_proj
+Quantizing ...
+time 1.24
+error 24132882.0
+5 self_attn.k_proj
+Quantizing ...
+time 0.78
+error 24153338.0
+5 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 23957834.0
+5 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 535824.125
+5 mlp.gate_proj
+Quantizing ...
+time 0.79
+error 29814562.0
+5 mlp.up_proj
+Quantizing ...
+time 0.79
+error 29740452.0
+5 mlp.down_proj
+Quantizing ...
+time 2.35
+
+ 19%|██████████████████████████████████████████████▌                                                                                                                                                                                                         | 6/32 [01:42<07:27, 17.23s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+6 self_attn.q_proj
+Quantizing ...
+time 1.26
+error 39102528.0
+6 self_attn.k_proj
+Quantizing ...
+time 0.78
+error 39160784.0
+6 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 38789856.0
+6 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 857901.125
+6 mlp.gate_proj
+Quantizing ...
+time 0.79
+error 36912036.0
+6 mlp.up_proj
+Quantizing ...
+time 0.79
+error 36796344.0
+6 mlp.down_proj
+Quantizing ...
+time 2.37
+
+ 22%|██████████████████████████████████████████████████████▎                                                                                                                                                                                                 | 7/32 [02:00<07:11, 17.27s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+7 self_attn.q_proj
+Quantizing ...
+time 1.25
+error 43026944.0
+7 self_attn.k_proj
+Quantizing ...
+time 0.78
+error 43078196.0
+7 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 42665688.0
+7 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 1168879.0
+7 mlp.gate_proj
+Quantizing ...
+time 0.79
+error 42910752.0
+7 mlp.up_proj
+Quantizing ...
+time 0.79
+error 42746608.0
+7 mlp.down_proj
+
+Quantizing ...
+time 2.37
+ 25%|██████████████████████████████████████████████████████████████                                                                                                                                                                                          | 8/32 [02:17<06:54, 17.29s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+8 self_attn.q_proj
+Quantizing ...
+time 1.26
+error 42044248.0
+8 self_attn.k_proj
+Quantizing ...
+time 0.79
+error 42093864.0
+8 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 41815348.0
+8 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 1760474.25
+8 mlp.gate_proj
+Quantizing ...
+time 0.80
+error 45899040.0
+8 mlp.up_proj
+Quantizing ...
+time 0.80
+error 45788952.0
+8 mlp.down_proj
+Quantizing ...
+time 2.37
+
+ 28%|█████████████████████████████████████████████████████████████████████▊                                                                                                                                                                                  | 9/32 [02:34<06:38, 17.33s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+9 self_attn.q_proj
+Quantizing ...
+time 1.25
+error 44505340.0
+9 self_attn.k_proj
+Quantizing ...
+time 0.78
+error 44535168.0
+9 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 44205468.0
+9 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 2291838.75
+9 mlp.gate_proj
+Quantizing ...
+time 0.79
+error 49841480.0
+9 mlp.up_proj
+Quantizing ...
+time 0.79
+error 49726376.0
+9 mlp.down_proj
+Quantizing ...
+time 2.35
+
+ 31%|█████████████████████████████████████████████████████████████████████████████▏                                                                                                                                                                         | 10/32 [02:52<06:21, 17.36s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+10 self_attn.q_proj
+Quantizing ...
+time 1.25
+error 46151320.0
+10 self_attn.k_proj
+Quantizing ...
+time 0.78
+error 46253792.0
+10 self_attn.v_proj
+Quantizing ...
+time 0.78
+error 45888528.0
+10 self_attn.o_proj
+Quantizing ...
+time 0.78
+error 3249039.5
+10 mlp.gate_proj
+Quantizing ...
+time 0.80
+error 52209372.0
+10 mlp.up_proj
+Quantizing ...
+time 0.80
+error 52053816.0
+10 mlp.down_proj
+
+Quantizing ...
+time 2.36
+ 34%|████████████████████████████████████████████████████████████████████████████████████▉                                                                                                                                                                  | 11/32 [03:09<06:04, 17.37s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+11 self_attn.q_proj
+Quantizing ...
+time 1.26
+error 56682936.0
+11 self_attn.k_proj
+Quantizing ...
+time 0.80
+error 56771040.0
+11 self_attn.v_proj
+Quantizing ...
+time 0.82
+error 56378880.0
+11 self_attn.o_proj
+Quantizing ...
+time 0.82
+error 3168348.25
+11 mlp.gate_proj
+Quantizing ...
+time 0.84
+error 57060560.0
+11 mlp.up_proj
+Quantizing ...
+time 0.83
+error 56903104.0
+11 mlp.down_proj
+
+Quantizing ...
+time 2.49
+ 38%|████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                                                                                          | 12/32 [03:27<05:49, 17.48s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+12 self_attn.q_proj
+Quantizing ...
+time 1.24
+error 57287144.0
+12 self_attn.k_proj
+Quantizing ...
+time 0.79
+error 57362472.0
+12 self_attn.v_proj
+Quantizing ...
+time 0.80
+error 57077040.0
+12 self_attn.o_proj
+Quantizing ...
+time 0.80
+error 3806043.0
+12 mlp.gate_proj
+Quantizing ...
+time 0.81
+error 61249888.0
+12 mlp.up_proj
+Quantizing ...
+time 0.82
+error 61089000.0
+12 mlp.down_proj
+Quantizing ...
+time 2.43
+
+ 41%|████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                                                                                                  | 13/32 [03:45<05:32, 17.49s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+13 self_attn.q_proj
+Quantizing ...
+time 1.26
+error 59719112.0
+13 self_attn.k_proj
+Quantizing ...
+time 0.80
+error 59787912.0
+13 self_attn.v_proj
+Quantizing ...
+time 0.79
+error 59383584.0
+13 self_attn.o_proj
+Quantizing ...
+time 0.80
+error 3924832.5
+13 mlp.gate_proj
+Quantizing ...
+time 0.81
+error 64847420.0
+13 mlp.up_proj
+Quantizing ...
+time 0.82
+error 64689536.0
+13 mlp.down_proj
+Quantizing ...
+time 2.41
+
+ 44%|████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                                                                                                           | 14/32 [04:02<05:15, 17.51s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+14 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 61907296.0
+14 self_attn.k_proj
+Quantizing ...
+time 0.79
+error 61978332.0
+14 self_attn.v_proj
+Quantizing ...
+time 0.79
+error 61503992.0
+14 self_attn.o_proj
+Quantizing ...
+time 0.79
+error 4857487.0
+14 mlp.gate_proj
+Quantizing ...
+time 0.80
+error 71625792.0
+14 mlp.up_proj
+Quantizing ...
+time 0.79
+error 71470640.0
+14 mlp.down_proj
+Quantizing ...
+time 2.39
+
+ 47%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                                                                   | 15/32 [04:20<04:57, 17.51s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+15 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 60231616.0
+15 self_attn.k_proj
+Quantizing ...
+time 0.79
+error 60428184.0
+15 self_attn.v_proj
+Quantizing ...
+time 0.79
+error 60009620.0
+15 self_attn.o_proj
+Quantizing ...
+time 0.79
+error 5052238.0
+15 mlp.gate_proj
+Quantizing ...
+time 0.80
+error 77243440.0
+15 mlp.up_proj
+Quantizing ...
+time 0.80
+error 77058008.0
+15 mlp.down_proj
+
+Quantizing ...
+time 2.38
+ 50%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                                                           | 16/32 [04:37<04:40, 17.55s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+16 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 63357584.0
+16 self_attn.k_proj
+Quantizing ...
+time 0.79
+error 63456584.0
+16 self_attn.v_proj
+Quantizing ...
+time 0.79
+error 62946748.0
+16 self_attn.o_proj
+Quantizing ...
+time 0.79
+error 6098736.0
+16 mlp.gate_proj
+Quantizing ...
+time 0.81
+error 86758832.0
+16 mlp.up_proj
+Quantizing ...
+time 0.81
+error 86582896.0
+16 mlp.down_proj
+
+Quantizing ...
+time 2.39
+ 53%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                                                                   | 17/32 [04:55<04:23, 17.60s/it]
+  0%|                                                                                                                                                                                                                                                                 | 0/1 [00:00<?, ?it/s]
+17 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 66625176.0
+17 self_attn.k_proj
+Quantizing ...
+time 0.79
+error 66749880.0
+17 self_attn.v_proj
+Quantizing ...
+time 0.79
+error 66365116.0
+17 self_attn.o_proj
+Quantizing ...
+time 0.79
+error 4513958.0
+17 mlp.gate_proj
+Quantizing ...
+time 0.80
+error 99085936.0
+17 mlp.up_proj
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 340, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 133, in llama_sequential
+    res = gptq[name].fasterquant(
+  File "/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/gptq.py", line 156, in fasterquant
+KeyboardInterrupt

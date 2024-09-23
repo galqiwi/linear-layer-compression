@@ -1,0 +1,28 @@
+2024-03-27 18:29:20,930 INFO    MainThread:2500900 [wandb_setup.py:_flush():76] Current SDK version is 0.16.4
+2024-03-27 18:29:20,930 INFO    MainThread:2500900 [wandb_setup.py:_flush():76] Configure stats pid to 2500900
+2024-03-27 18:29:20,930 INFO    MainThread:2500900 [wandb_setup.py:_flush():76] Loading settings from /nfs/scistore19/alistgrp/apanfero/.config/wandb/settings
+2024-03-27 18:29:20,930 INFO    MainThread:2500900 [wandb_setup.py:_flush():76] Loading settings from /nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/wandb/settings
+2024-03-27 18:29:20,930 INFO    MainThread:2500900 [wandb_setup.py:_flush():76] Loading settings from environment variables: {'mode': 'online'}
+2024-03-27 18:29:20,930 INFO    MainThread:2500900 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-03-27 18:29:20,930 INFO    MainThread:2500900 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'gptq/llama2.py', 'program_abspath': '/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py', 'program': '/nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py'}
+2024-03-27 18:29:20,931 INFO    MainThread:2500900 [wandb_init.py:_log_setup():526] Logging user logs to /nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/wandb/run-20240327_182920-5ybieins/logs/debug.log
+2024-03-27 18:29:20,931 INFO    MainThread:2500900 [wandb_init.py:_log_setup():527] Logging internal logs to /nfs/scistore19/alistgrp/apanfero/CompressionEntropy/gptq/wandb/run-20240327_182920-5ybieins/logs/debug-internal.log
+2024-03-27 18:29:20,931 INFO    MainThread:2500900 [wandb_init.py:init():566] calling init triggers
+2024-03-27 18:29:20,931 INFO    MainThread:2500900 [wandb_init.py:init():573] wandb.init called with sweep_config: {}
+config: {'model': 'meta-llama/Llama-2-7b-hf', 'dataset': 'red', 'seed': 0, 'nsamples': 256, 'percdamp': 0.1, 'nearest': False, 'wbits': 4, 'groupsize': 1024, 'true_sequential': False, 'no_clip': True, 'skip_gq': False, 'save': '', 'had': True, 'eden': True, 'actquant': 4}
+2024-03-27 18:29:20,931 INFO    MainThread:2500900 [wandb_init.py:init():616] starting backend
+2024-03-27 18:29:20,931 INFO    MainThread:2500900 [wandb_init.py:init():620] setting up manager
+2024-03-27 18:29:20,933 INFO    MainThread:2500900 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-03-27 18:29:20,938 INFO    MainThread:2500900 [wandb_init.py:init():628] backend started and connected
+2024-03-27 18:29:20,941 INFO    MainThread:2500900 [wandb_init.py:init():720] updated telemetry
+2024-03-27 18:29:20,954 INFO    MainThread:2500900 [wandb_init.py:init():753] communicating run to backend with 90.0 second timeout
+2024-03-27 18:29:21,389 INFO    MainThread:2500900 [wandb_run.py:_on_init():2262] communicating current version
+2024-03-27 18:29:21,441 INFO    MainThread:2500900 [wandb_run.py:_on_init():2271] got version response upgrade_message: "wandb version 0.16.5 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-03-27 18:29:21,441 INFO    MainThread:2500900 [wandb_init.py:init():804] starting run threads in backend
+2024-03-27 18:29:25,674 INFO    MainThread:2500900 [wandb_run.py:_console_start():2241] atexit reg
+2024-03-27 18:29:25,675 INFO    MainThread:2500900 [wandb_run.py:_redirect():2096] redirect: wrap_raw
+2024-03-27 18:29:25,675 INFO    MainThread:2500900 [wandb_run.py:_redirect():2161] Wrapping output streams.
+2024-03-27 18:29:25,676 INFO    MainThread:2500900 [wandb_run.py:_redirect():2186] Redirects installed.
+2024-03-27 18:29:25,677 INFO    MainThread:2500900 [wandb_init.py:init():847] run started, returning control to user process
+2024-03-27 18:30:11,396 WARNING MsgRouterThr:2500900 [router.py:message_loop():77] message_loop has been closed

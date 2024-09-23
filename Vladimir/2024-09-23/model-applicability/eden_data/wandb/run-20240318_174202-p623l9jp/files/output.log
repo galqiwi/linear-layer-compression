@@ -1,0 +1,68 @@
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.17it/s]
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/datasets/load.py:1461: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+Starting ...
+Ready.
+  0%|                                                                                                                                                                                                                 | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+0 self_attn.q_proj
+Quantizing ...
+time 1.30
+error 285537.1875
+0 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 290740.8125
+0 self_attn.v_proj
+
+  assignments = torch.bucketize(weight, boundaries[bits])                                                                                                                                                              | 0/1 [00:00<?, ?it/s]
+time 0.85
+error 295898.3125
+0 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 5912.46875
+0 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 1222526.375
+0 mlp.up_proj
+Quantizing ...
+time 0.86
+error 1220041.75
+0 mlp.down_proj
+Quantizing ...
+time 2.49
+error 9713.65234375
+  0%|                                                                                                                                                                                                                 | 0/32 [00:15<?, ?it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 336, in <module>
+    quantizers = llama_sequential(model, dataloader, DEV)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py", line 146, in llama_sequential
+    out = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 796, in forward
+    hidden_states, self_attn_weights, present_key_value = self.self_attn(
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/models/llama/modeling_llama.py", line 691, in forward
+    query_states = self.q_proj(hidden_states)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/hadamard.py", line 107, in forward
+    input = pad_to_block(input, [-1])
+TypeError: pad_to_block() missing 1 required positional argument: 'blocksize'

@@ -1,0 +1,58 @@
+
+
+Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:05<00:00,  1.27s/it]
+
+
+
+
+
+
+
+Quantizing linear layers...: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 225/225 [00:13<00:00, 16.55it/s]
+Token indices sequence length is longer than the specified maximum sequence length for this model (2436214 > 131072). Running this sequence through the model will result in indexing errors
+Evaluating layer-by-layer...:   0%|                                                                                                                          | 0/32 [00:00<?, ?it/s]The attention layers in this model are transitioning from computing the RoPE embeddings internally through `position_ids` (2D tensor with the indexes of the tokens), to using externally computed `position_embeddings` (Tuple of tensors, containing cos and sin). In v4.45 `position_ids` will be removed and `position_embeddings` will be mandatory.
+wikitext2
+Evaluating ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Evaluating layer-by-layer...: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 32/32 [01:27<00:00,  2.74s/it]
+7.747555732727051
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 208, in <module>
+    mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 144, in eval_grid
+    dequant, entropy = edenn(x, edenn_d, edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/edenn.py", line 29, in edenn
+    idx = torch.argmax(2 * x @ GRIDS[dim][size].T - GRID_NORMS[dim][size], dim=-1)
+RuntimeError: expected mat1 and mat2 to have the same dtype, but got: float != c10::Half

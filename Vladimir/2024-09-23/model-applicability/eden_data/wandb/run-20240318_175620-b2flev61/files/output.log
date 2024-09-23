@@ -1,0 +1,1485 @@
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.19it/s]
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/.conda/lib/python3.10/site-packages/datasets/load.py:1461: FutureWarning: The repository for togethercomputer/RedPajama-Data-1T-Sample contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/togethercomputer/RedPajama-Data-1T-Sample
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+  0%|                                                                                                                                                                                                                 | 0/32 [00:00<?, ?it/s]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+Starting ...
+
+  assignments = torch.bucketize(weight, boundaries[bits])                                                                                                                                                              | 0/1 [00:00<?, ?it/s]
+0 self_attn.q_proj
+Quantizing ...
+time 1.30
+error 298259.3125
+0 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 301271.0625
+0 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 293381.9375
+0 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 5666.4873046875
+0 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 1242572.375
+0 mlp.up_proj
+Quantizing ...
+time 0.87
+error 1241758.25
+0 mlp.down_proj
+Quantizing ...
+                                                                                                                                                                                                                                             /nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1946, 4096])) that is different to the input size (torch.Size([1946, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 140, 4096])) that is different to the input size (torch.Size([140, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 257, 4096])) that is different to the input size (torch.Size([257, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 289, 4096])) that is different to the input size (torch.Size([289, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1659, 4096])) that is different to the input size (torch.Size([1659, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1286, 4096])) that is different to the input size (torch.Size([1286, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1219, 4096])) that is different to the input size (torch.Size([1219, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 127, 4096])) that is different to the input size (torch.Size([127, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1490, 4096])) that is different to the input size (torch.Size([1490, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 714, 4096])) that is different to the input size (torch.Size([714, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 918, 4096])) that is different to the input size (torch.Size([918, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 123, 4096])) that is different to the input size (torch.Size([123, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 79, 4096])) that is different to the input size (torch.Size([79, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 887, 4096])) that is different to the input size (torch.Size([887, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 414, 4096])) that is different to the input size (torch.Size([414, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 263, 4096])) that is different to the input size (torch.Size([263, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 48, 4096])) that is different to the input size (torch.Size([48, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 355, 4096])) that is different to the input size (torch.Size([355, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 190, 4096])) that is different to the input size (torch.Size([190, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2776, 4096])) that is different to the input size (torch.Size([2776, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1243, 4096])) that is different to the input size (torch.Size([1243, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1006, 4096])) that is different to the input size (torch.Size([1006, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 747, 4096])) that is different to the input size (torch.Size([747, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 755, 4096])) that is different to the input size (torch.Size([755, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 344, 4096])) that is different to the input size (torch.Size([344, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3023, 4096])) that is different to the input size (torch.Size([3023, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 446, 4096])) that is different to the input size (torch.Size([446, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3543, 4096])) that is different to the input size (torch.Size([3543, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 754, 4096])) that is different to the input size (torch.Size([754, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 890, 4096])) that is different to the input size (torch.Size([890, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 510, 4096])) that is different to the input size (torch.Size([510, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2434, 4096])) that is different to the input size (torch.Size([2434, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 517, 4096])) that is different to the input size (torch.Size([517, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 66, 4096])) that is different to the input size (torch.Size([66, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 884, 4096])) that is different to the input size (torch.Size([884, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 188, 4096])) that is different to the input size (torch.Size([188, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 132, 4096])) that is different to the input size (torch.Size([132, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3424, 4096])) that is different to the input size (torch.Size([3424, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1251, 4096])) that is different to the input size (torch.Size([1251, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 163, 4096])) that is different to the input size (torch.Size([163, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1198, 4096])) that is different to the input size (torch.Size([1198, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 471, 4096])) that is different to the input size (torch.Size([471, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 77, 4096])) that is different to the input size (torch.Size([77, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 878, 4096])) that is different to the input size (torch.Size([878, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 51, 4096])) that is different to the input size (torch.Size([51, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 552, 4096])) that is different to the input size (torch.Size([552, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 151, 4096])) that is different to the input size (torch.Size([151, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 975, 4096])) that is different to the input size (torch.Size([975, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2361, 4096])) that is different to the input size (torch.Size([2361, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 233, 4096])) that is different to the input size (torch.Size([233, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 210, 4096])) that is different to the input size (torch.Size([210, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2135, 4096])) that is different to the input size (torch.Size([2135, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 667, 4096])) that is different to the input size (torch.Size([667, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2838, 4096])) that is different to the input size (torch.Size([2838, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 746, 4096])) that is different to the input size (torch.Size([746, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 632, 4096])) that is different to the input size (torch.Size([632, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 366, 4096])) that is different to the input size (torch.Size([366, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 112, 4096])) that is different to the input size (torch.Size([112, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 615, 4096])) that is different to the input size (torch.Size([615, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 323, 4096])) that is different to the input size (torch.Size([323, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1750, 4096])) that is different to the input size (torch.Size([1750, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1220, 4096])) that is different to the input size (torch.Size([1220, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 137, 4096])) that is different to the input size (torch.Size([137, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 149, 4096])) that is different to the input size (torch.Size([149, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 809, 4096])) that is different to the input size (torch.Size([809, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1506, 4096])) that is different to the input size (torch.Size([1506, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2082, 4096])) that is different to the input size (torch.Size([2082, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 254, 4096])) that is different to the input size (torch.Size([254, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 628, 4096])) that is different to the input size (torch.Size([628, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1120, 4096])) that is different to the input size (torch.Size([1120, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 876, 4096])) that is different to the input size (torch.Size([876, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 440, 4096])) that is different to the input size (torch.Size([440, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1362, 4096])) that is different to the input size (torch.Size([1362, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 984, 4096])) that is different to the input size (torch.Size([984, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 367, 4096])) that is different to the input size (torch.Size([367, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 932, 4096])) that is different to the input size (torch.Size([932, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 78, 4096])) that is different to the input size (torch.Size([78, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 89, 4096])) that is different to the input size (torch.Size([89, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 110, 4096])) that is different to the input size (torch.Size([110, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 873, 4096])) that is different to the input size (torch.Size([873, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 448, 4096])) that is different to the input size (torch.Size([448, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 737, 4096])) that is different to the input size (torch.Size([737, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1210, 4096])) that is different to the input size (torch.Size([1210, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2613, 4096])) that is different to the input size (torch.Size([2613, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 305, 4096])) that is different to the input size (torch.Size([305, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 722, 4096])) that is different to the input size (torch.Size([722, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 792, 4096])) that is different to the input size (torch.Size([792, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 191, 4096])) that is different to the input size (torch.Size([191, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 528, 4096])) that is different to the input size (torch.Size([528, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 419, 4096])) that is different to the input size (torch.Size([419, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2594, 4096])) that is different to the input size (torch.Size([2594, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 631, 4096])) that is different to the input size (torch.Size([631, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 721, 4096])) that is different to the input size (torch.Size([721, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 166, 4096])) that is different to the input size (torch.Size([166, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1097, 4096])) that is different to the input size (torch.Size([1097, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 459, 4096])) that is different to the input size (torch.Size([459, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1224, 4096])) that is different to the input size (torch.Size([1224, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3793, 4096])) that is different to the input size (torch.Size([3793, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2066, 4096])) that is different to the input size (torch.Size([2066, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 338, 4096])) that is different to the input size (torch.Size([338, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 207, 4096])) that is different to the input size (torch.Size([207, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1651, 4096])) that is different to the input size (torch.Size([1651, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1033, 4096])) that is different to the input size (torch.Size([1033, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 827, 4096])) that is different to the input size (torch.Size([827, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 359, 4096])) that is different to the input size (torch.Size([359, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1882, 4096])) that is different to the input size (torch.Size([1882, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 436, 4096])) that is different to the input size (torch.Size([436, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 67, 4096])) that is different to the input size (torch.Size([67, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 544, 4096])) that is different to the input size (torch.Size([544, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 402, 4096])) that is different to the input size (torch.Size([402, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1802, 4096])) that is different to the input size (torch.Size([1802, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1102, 4096])) that is different to the input size (torch.Size([1102, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3396, 4096])) that is different to the input size (torch.Size([3396, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 130, 4096])) that is different to the input size (torch.Size([130, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1034, 4096])) that is different to the input size (torch.Size([1034, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 669, 4096])) that is different to the input size (torch.Size([669, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 55, 4096])) that is different to the input size (torch.Size([55, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 604, 4096])) that is different to the input size (torch.Size([604, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 443, 4096])) that is different to the input size (torch.Size([443, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 126, 4096])) that is different to the input size (torch.Size([126, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 160, 4096])) that is different to the input size (torch.Size([160, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 703, 4096])) that is different to the input size (torch.Size([703, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1590, 4096])) that is different to the input size (torch.Size([1590, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1047, 4096])) that is different to the input size (torch.Size([1047, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3802, 4096])) that is different to the input size (torch.Size([3802, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 663, 4096])) that is different to the input size (torch.Size([663, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 165, 4096])) that is different to the input size (torch.Size([165, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1951, 4096])) that is different to the input size (torch.Size([1951, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2013, 4096])) that is different to the input size (torch.Size([2013, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 442, 4096])) that is different to the input size (torch.Size([442, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 668, 4096])) that is different to the input size (torch.Size([668, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 518, 4096])) that is different to the input size (torch.Size([518, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 354, 4096])) that is different to the input size (torch.Size([354, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 120, 4096])) that is different to the input size (torch.Size([120, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 647, 4096])) that is different to the input size (torch.Size([647, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1870, 4096])) that is different to the input size (torch.Size([1870, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 202, 4096])) that is different to the input size (torch.Size([202, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 385, 4096])) that is different to the input size (torch.Size([385, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1340, 4096])) that is different to the input size (torch.Size([1340, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1183, 4096])) that is different to the input size (torch.Size([1183, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 353, 4096])) that is different to the input size (torch.Size([353, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 71, 4096])) that is different to the input size (torch.Size([71, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1529, 4096])) that is different to the input size (torch.Size([1529, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 42, 4096])) that is different to the input size (torch.Size([42, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 91, 4096])) that is different to the input size (torch.Size([91, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 563, 4096])) that is different to the input size (torch.Size([563, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 136, 4096])) that is different to the input size (torch.Size([136, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 972, 4096])) that is different to the input size (torch.Size([972, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1320, 4096])) that is different to the input size (torch.Size([1320, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 265, 4096])) that is different to the input size (torch.Size([265, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1827, 4096])) that is different to the input size (torch.Size([1827, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1014, 4096])) that is different to the input size (torch.Size([1014, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 867, 4096])) that is different to the input size (torch.Size([867, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 256, 4096])) that is different to the input size (torch.Size([256, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 45, 4096])) that is different to the input size (torch.Size([45, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 113, 4096])) that is different to the input size (torch.Size([113, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3964, 4096])) that is different to the input size (torch.Size([3964, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 635, 4096])) that is different to the input size (torch.Size([635, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 74, 4096])) that is different to the input size (torch.Size([74, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1214, 4096])) that is different to the input size (torch.Size([1214, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 276, 4096])) that is different to the input size (torch.Size([276, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 395, 4096])) that is different to the input size (torch.Size([395, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3266, 4096])) that is different to the input size (torch.Size([3266, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 309, 4096])) that is different to the input size (torch.Size([309, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 750, 4096])) that is different to the input size (torch.Size([750, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1146, 4096])) that is different to the input size (torch.Size([1146, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1613, 4096])) that is different to the input size (torch.Size([1613, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 121, 4096])) that is different to the input size (torch.Size([121, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 732, 4096])) that is different to the input size (torch.Size([732, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1377, 4096])) that is different to the input size (torch.Size([1377, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1893, 4096])) that is different to the input size (torch.Size([1893, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 4031, 4096])) that is different to the input size (torch.Size([4031, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 603, 4096])) that is different to the input size (torch.Size([603, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 49, 4096])) that is different to the input size (torch.Size([49, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1368, 4096])) that is different to the input size (torch.Size([1368, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2124, 4096])) that is different to the input size (torch.Size([2124, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 98, 4096])) that is different to the input size (torch.Size([98, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 981, 4096])) that is different to the input size (torch.Size([981, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 597, 4096])) that is different to the input size (torch.Size([597, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 201, 4096])) that is different to the input size (torch.Size([201, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 639, 4096])) that is different to the input size (torch.Size([639, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1725, 4096])) that is different to the input size (torch.Size([1725, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 864, 4096])) that is different to the input size (torch.Size([864, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 69, 4096])) that is different to the input size (torch.Size([69, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 930, 4096])) that is different to the input size (torch.Size([930, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 240, 4096])) that is different to the input size (torch.Size([240, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2318, 4096])) that is different to the input size (torch.Size([2318, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 415, 4096])) that is different to the input size (torch.Size([415, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1692, 4096])) that is different to the input size (torch.Size([1692, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1423, 4096])) that is different to the input size (torch.Size([1423, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 208, 4096])) that is different to the input size (torch.Size([208, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 484, 4096])) that is different to the input size (torch.Size([484, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 908, 4096])) that is different to the input size (torch.Size([908, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 227, 4096])) that is different to the input size (torch.Size([227, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 3515, 4096])) that is different to the input size (torch.Size([3515, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2941, 4096])) that is different to the input size (torch.Size([2941, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1596, 4096])) that is different to the input size (torch.Size([1596, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 850, 4096])) that is different to the input size (torch.Size([850, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1868, 4096])) that is different to the input size (torch.Size([1868, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 304, 4096])) that is different to the input size (torch.Size([304, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1294, 4096])) that is different to the input size (torch.Size([1294, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 269, 4096])) that is different to the input size (torch.Size([269, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 381, 4096])) that is different to the input size (torch.Size([381, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 542, 4096])) that is different to the input size (torch.Size([542, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 534, 4096])) that is different to the input size (torch.Size([534, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1862, 4096])) that is different to the input size (torch.Size([1862, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 328, 4096])) that is different to the input size (torch.Size([328, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1370, 4096])) that is different to the input size (torch.Size([1370, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 341, 4096])) that is different to the input size (torch.Size([341, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 939, 4096])) that is different to the input size (torch.Size([939, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1087, 4096])) that is different to the input size (torch.Size([1087, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 487, 4096])) that is different to the input size (torch.Size([487, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 246, 4096])) that is different to the input size (torch.Size([246, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 992, 4096])) that is different to the input size (torch.Size([992, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 874, 4096])) that is different to the input size (torch.Size([874, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 847, 4096])) that is different to the input size (torch.Size([847, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 194, 4096])) that is different to the input size (torch.Size([194, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2181, 4096])) that is different to the input size (torch.Size([2181, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1060, 4096])) that is different to the input size (torch.Size([1060, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 512, 4096])) that is different to the input size (torch.Size([512, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 785, 4096])) that is different to the input size (torch.Size([785, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2493, 4096])) that is different to the input size (torch.Size([2493, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 154, 4096])) that is different to the input size (torch.Size([154, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 393, 4096])) that is different to the input size (torch.Size([393, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2881, 4096])) that is different to the input size (torch.Size([2881, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1394, 4096])) that is different to the input size (torch.Size([1394, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 520, 4096])) that is different to the input size (torch.Size([520, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 607, 4096])) that is different to the input size (torch.Size([607, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 358, 4096])) that is different to the input size (torch.Size([358, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 999, 4096])) that is different to the input size (torch.Size([999, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 879, 4096])) that is different to the input size (torch.Size([879, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1092, 4096])) that is different to the input size (torch.Size([1092, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 2302, 4096])) that is different to the input size (torch.Size([2302, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+time 2.50
+error 9308.83984375
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 342, 4096])) that is different to the input size (torch.Size([342, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 1950, 4096])) that is different to the input size (torch.Size([1950, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 978, 4096])) that is different to the input size (torch.Size([978, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+/nfs/scistore14/alistgrp/apanfero/CompressionEntropy/gptq/llama2.py:147: UserWarning: Using a target size (torch.Size([1, 197, 4096])) that is different to the input size (torch.Size([197, 4096])). This will likely lead to incorrect results due to broadcasting. Please ensure they have the same size.
+  mse += torch.nn.functional.mse_loss(outs[j][0], out).item()
+  3%|██████▎                                                                                                                                                                                                  | 1/32 [00:17<08:56, 17.31s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+1 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 2166349.5
+1 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 2167403.75
+1 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 2123109.0
+1 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 45228.9375
+1 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 4171599.0
+1 mlp.up_proj
+Quantizing ...
+time 0.86
+error 4150428.5
+1 mlp.down_proj
+
+Quantizing ...
+time 2.49
+  6%|████████████▌                                                                                                                                                                                            | 2/32 [00:34<08:37, 17.25s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+2 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 7971039.5
+2 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 7992983.0
+2 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 7896148.0
+2 self_attn.o_proj
+Quantizing ...
+time 0.84
+error 75136.171875
+2 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 9656082.0
+2 mlp.up_proj
+Quantizing ...
+time 0.86
+error 9620174.0
+2 mlp.down_proj
+
+Quantizing ...
+time 2.48
+  9%|██████████████████▊                                                                                                                                                                                      | 3/32 [00:51<08:19, 17.24s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+3 self_attn.q_proj
+Quantizing ...
+time 1.29
+error 22983428.0
+3 self_attn.k_proj
+Quantizing ...
+time 0.86
+error 23020024.0
+3 self_attn.v_proj
+Quantizing ...
+time 0.86
+error 22854798.0
+3 self_attn.o_proj
+Quantizing ...
+time 0.86
+error 163681.65625
+3 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 16830116.0
+3 mlp.up_proj
+Quantizing ...
+time 0.87
+error 16791568.0
+3 mlp.down_proj
+
+Quantizing ...
+time 2.52
+ 12%|█████████████████████████▏                                                                                                                                                                               | 4/32 [01:09<08:04, 17.29s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+4 self_attn.q_proj
+Quantizing ...
+time 1.30
+error 20716926.0
+4 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 20774326.0
+4 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 20562540.0
+4 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 281578.21875
+4 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 23257076.0
+4 mlp.up_proj
+Quantizing ...
+time 0.87
+error 23214800.0
+4 mlp.down_proj
+Quantizing ...
+time 2.51
+
+ 16%|███████████████████████████████▍                                                                                                                                                                         | 5/32 [01:26<07:47, 17.33s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+5 self_attn.q_proj
+Quantizing ...
+time 1.29
+error 23787520.0
+5 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 23793632.0
+5 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 23617280.0
+5 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 526330.125
+5 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 29049512.0
+5 mlp.up_proj
+Quantizing ...
+time 0.87
+error 28983244.0
+5 mlp.down_proj
+Quantizing ...
+time 2.51
+
+ 19%|█████████████████████████████████████▋                                                                                                                                                                   | 6/32 [01:43<07:31, 17.36s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+6 self_attn.q_proj
+Quantizing ...
+time 1.30
+error 38635356.0
+6 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 38681416.0
+6 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 38318352.0
+6 self_attn.o_proj
+Quantizing ...
+time 0.86
+error 844844.0625
+6 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 36504312.0
+6 mlp.up_proj
+Quantizing ...
+time 0.87
+error 36385360.0
+6 mlp.down_proj
+Quantizing ...
+time 2.52
+
+ 22%|███████████████████████████████████████████▉                                                                                                                                                             | 7/32 [02:01<07:14, 17.38s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+7 self_attn.q_proj
+Quantizing ...
+time 1.29
+error 42628160.0
+7 self_attn.k_proj
+Quantizing ...
+time 0.86
+error 42679912.0
+7 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 42287036.0
+7 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 1146078.125
+7 mlp.gate_proj
+Quantizing ...
+time 0.88
+error 42398080.0
+7 mlp.up_proj
+Quantizing ...
+time 0.87
+error 42229716.0
+7 mlp.down_proj
+Quantizing ...
+time 2.52
+
+ 25%|██████████████████████████████████████████████████▎                                                                                                                                                      | 8/32 [02:18<06:57, 17.38s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+8 self_attn.q_proj
+Quantizing ...
+time 1.29
+error 41945304.0
+8 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 42009784.0
+8 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 41734180.0
+8 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 1727584.0
+8 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 45912496.0
+8 mlp.up_proj
+Quantizing ...
+time 0.87
+error 45799128.0
+8 mlp.down_proj
+Quantizing ...
+time 2.51
+
+ 28%|████████████████████████████████████████████████████████▌                                                                                                                                                | 9/32 [02:36<06:39, 17.38s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+9 self_attn.q_proj
+Quantizing ...
+time 1.28
+error 44586500.0
+9 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 44626692.0
+9 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 44295864.0
+9 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 2303102.0
+9 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 49836880.0
+9 mlp.up_proj
+Quantizing ...
+time 0.86
+error 49719400.0
+9 mlp.down_proj
+
+Quantizing ...
+time 2.50
+
+ 31%|██████████████████████████████████████████████████████████████▌                                                                                                                                         | 10/32 [02:53<06:21, 17.35s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+10 self_attn.q_proj
+Quantizing ...
+time 1.29
+error 46301100.0
+10 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 46380644.0
+10 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 46032368.0
+10 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 3273431.25
+10 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 52327728.0
+10 mlp.up_proj
+Quantizing ...
+time 0.87
+error 52168672.0
+10 mlp.down_proj
+Quantizing ...
+time 2.51
+
+ 34%|████████████████████████████████████████████████████████████████████▊                                                                                                                                   | 11/32 [03:10<06:04, 17.36s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+11 self_attn.q_proj
+Quantizing ...
+time 1.29
+error 56817756.0
+11 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 56877144.0
+11 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 56505408.0
+11 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 3219789.75
+11 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 57238936.0
+11 mlp.up_proj
+Quantizing ...
+time 0.86
+error 57086648.0
+11 mlp.down_proj
+Quantizing ...
+time 2.48
+
+ 38%|███████████████████████████████████████████████████████████████████████████                                                                                                                             | 12/32 [03:28<05:47, 17.35s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+12 self_attn.q_proj
+Quantizing ...
+time 1.32
+error 57494084.0
+12 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 57570496.0
+12 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 57296684.0
+12 self_attn.o_proj
+Quantizing ...
+time 0.84
+error 3758979.0
+12 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 61599868.0
+12 mlp.up_proj
+Quantizing ...
+time 0.85
+error 61431676.0
+12 mlp.down_proj
+
+Quantizing ...
+time 2.49
+
+ 41%|█████████████████████████████████████████████████████████████████████████████████▎                                                                                                                      | 13/32 [03:45<05:29, 17.36s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+13 self_attn.q_proj
+Quantizing ...
+time 1.30
+error 59991228.0
+13 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 60069352.0
+13 self_attn.v_proj
+Quantizing ...
+time 0.87
+error 59674400.0
+13 self_attn.o_proj
+Quantizing ...
+time 0.86
+error 3883821.5
+13 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 64996304.0
+13 mlp.up_proj
+Quantizing ...
+time 0.87
+error 64850800.0
+13 mlp.down_proj
+Quantizing ...
+time 2.50
+
+ 44%|███████████████████████████████████████████████████████████████████████████████████████▌                                                                                                                | 14/32 [04:02<05:12, 17.38s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+14 self_attn.q_proj
+Quantizing ...
+time 1.31
+error 61896368.0
+14 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 61959856.0
+14 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 61495152.0
+14 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 4865424.0
+14 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 71638936.0
+14 mlp.up_proj
+Quantizing ...
+time 0.86
+error 71501928.0
+14 mlp.down_proj
+Quantizing ...
+time 2.48
+
+ 47%|█████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                                          | 15/32 [04:20<04:55, 17.37s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+15 self_attn.q_proj
+Quantizing ...
+time 1.31
+error 60281080.0
+15 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 60487680.0
+15 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 60065624.0
+15 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 4973175.0
+15 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 77282368.0
+15 mlp.up_proj
+Quantizing ...
+time 0.86
+error 77092368.0
+15 mlp.down_proj
+Quantizing ...
+time 2.51
+
+ 50%|████████████████████████████████████████████████████████████████████████████████████████████████████                                                                                                    | 16/32 [04:37<04:37, 17.36s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+16 self_attn.q_proj
+Quantizing ...
+time 1.28
+error 63436088.0
+16 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 63547520.0
+16 self_attn.v_proj
+Quantizing ...
+time 0.86
+error 63037132.0
+16 self_attn.o_proj
+Quantizing ...
+time 0.86
+error 6098090.0
+16 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 86618192.0
+16 mlp.up_proj
+Quantizing ...
+time 0.87
+error 86468528.0
+16 mlp.down_proj
+Quantizing ...
+time 2.52
+
+ 53%|██████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                                             | 17/32 [04:54<04:20, 17.36s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+17 self_attn.q_proj
+Quantizing ...
+time 1.31
+error 66596176.0
+17 self_attn.k_proj
+Quantizing ...
+time 0.86
+error 66701880.0
+17 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 66314784.0
+17 self_attn.o_proj
+Quantizing ...
+time 0.86
+error 4476869.5
+17 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 99041104.0
+17 mlp.up_proj
+Quantizing ...
+time 0.87
+error 98766048.0
+17 mlp.down_proj
+Quantizing ...
+time 2.50
+
+ 56%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                       | 18/32 [05:12<04:03, 17.37s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+18 self_attn.q_proj
+Quantizing ...
+time 1.29
+error 75223584.0
+18 self_attn.k_proj
+Quantizing ...
+time 0.86
+error 75179920.0
+18 self_attn.v_proj
+Quantizing ...
+time 0.86
+error 74788448.0
+18 self_attn.o_proj
+Quantizing ...
+time 0.86
+error 4860320.5
+18 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 110539560.0
+18 mlp.up_proj
+Quantizing ...
+time 0.87
+error 110246576.0
+18 mlp.down_proj
+Quantizing ...
+time 2.51
+
+ 59%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                 | 19/32 [05:29<03:45, 17.37s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+19 self_attn.q_proj
+Quantizing ...
+time 1.28
+error 74118568.0
+19 self_attn.k_proj
+Quantizing ...
+time 0.86
+error 74179376.0
+19 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 73792480.0
+19 self_attn.o_proj
+Quantizing ...
+time 0.86
+error 4438583.0
+19 mlp.gate_proj
+Quantizing ...
+time 0.87
+error 118452624.0
+19 mlp.up_proj
+Quantizing ...
+time 0.89
+error 118272336.0
+19 mlp.down_proj
+Quantizing ...
+time 2.53
+
+ 62%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                                           | 20/32 [05:47<03:28, 17.36s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+20 self_attn.q_proj
+Quantizing ...
+time 1.30
+error 74922696.0
+20 self_attn.k_proj
+Quantizing ...
+time 0.88
+error 74904224.0
+20 self_attn.v_proj
+Quantizing ...
+time 0.88
+error 74443344.0
+20 self_attn.o_proj
+Quantizing ...
+time 0.88
+error 4752920.5
+20 mlp.gate_proj
+Quantizing ...
+time 0.89
+error 124241008.0
+20 mlp.up_proj
+Quantizing ...
+time 0.89
+error 124018416.0
+20 mlp.down_proj
+Quantizing ...
+time 2.57
+
+ 66%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                    | 21/32 [06:04<03:11, 17.42s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+21 self_attn.q_proj
+Quantizing ...
+time 1.26
+error 82861344.0
+21 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 83067184.0
+21 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 82503696.0
+21 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 4354568.0
+21 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 132511992.0
+21 mlp.up_proj
+Quantizing ...
+time 0.86
+error 132219872.0
+21 mlp.down_proj
+Quantizing ...
+time 2.48
+
+ 69%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                              | 22/32 [06:21<02:53, 17.35s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+22 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 85477696.0
+22 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 85466664.0
+22 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 84977480.0
+22 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 5128107.0
+22 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 138736560.0
+22 mlp.up_proj
+Quantizing ...
+time 0.86
+error 138588224.0
+22 mlp.down_proj
+Quantizing ...
+time 2.49
+
+ 72%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                        | 23/32 [06:39<02:35, 17.32s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+23 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 94662864.0
+23 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 94743312.0
+23 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 94367216.0
+23 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 4793427.0
+23 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 148506896.0
+23 mlp.up_proj
+Quantizing ...
+time 0.86
+error 148178096.0
+23 mlp.down_proj
+Quantizing ...
+time 2.48
+
+ 75%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                  | 24/32 [06:56<02:18, 17.29s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+24 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 92678856.0
+24 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 92817152.0
+24 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 92348816.0
+24 self_attn.o_proj
+Quantizing ...
+time 0.84
+error 5511135.5
+24 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 155323936.0
+24 mlp.up_proj
+Quantizing ...
+time 0.86
+error 155156672.0
+24 mlp.down_proj
+Quantizing ...
+time 2.48
+
+ 78%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                           | 25/32 [07:13<02:00, 17.26s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+25 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 106636296.0
+25 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 106705024.0
+25 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 106329664.0
+25 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 4097440.5
+25 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 166090784.0
+25 mlp.up_proj
+Quantizing ...
+time 0.86
+error 165912944.0
+25 mlp.down_proj
+Quantizing ...
+time 2.49
+
+ 81%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                     | 26/32 [07:30<01:43, 17.26s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+26 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 102515856.0
+26 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 102503840.0
+26 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 102147064.0
+26 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 6172590.5
+26 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 174408160.0
+26 mlp.up_proj
+Quantizing ...
+time 0.86
+error 174203232.0
+26 mlp.down_proj
+Quantizing ...
+time 2.50
+
+ 84%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                               | 27/32 [07:47<01:26, 17.25s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+27 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 104899072.0
+27 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 105000400.0
+27 self_attn.v_proj
+Quantizing ...
+time 0.85
+error 104600320.0
+27 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 5415777.0
+27 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 184821696.0
+27 mlp.up_proj
+Quantizing ...
+time 0.86
+error 184608544.0
+27 mlp.down_proj
+Quantizing ...
+time 2.49
+
+ 88%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                         | 28/32 [08:05<01:08, 17.24s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+28 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 108312736.0
+28 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 108356472.0
+28 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 108020832.0
+28 self_attn.o_proj
+Quantizing ...
+time 0.84
+error 6132322.0
+28 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 192623744.0
+28 mlp.up_proj
+Quantizing ...
+time 0.86
+error 192432544.0
+28 mlp.down_proj
+Quantizing ...
+time 2.48
+
+ 91%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                  | 29/32 [08:22<00:51, 17.23s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+29 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 99947296.0
+29 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 100174240.0
+29 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 99745824.0
+29 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 5894689.5
+29 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 196907248.0
+29 mlp.up_proj
+Quantizing ...
+time 0.86
+error 196959568.0
+29 mlp.down_proj
+Quantizing ...
+time 2.49
+
+ 94%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌            | 30/32 [08:39<00:34, 17.22s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+30 self_attn.q_proj
+Quantizing ...
+time 1.26
+error 104764280.0
+30 self_attn.k_proj
+Quantizing ...
+time 0.84
+error 104926464.0
+30 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 104532256.0
+30 self_attn.o_proj
+Quantizing ...
+time 0.84
+error 6647571.5
+30 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 192825200.0
+30 mlp.up_proj
+Quantizing ...
+time 0.86
+error 193024640.0
+30 mlp.down_proj
+Quantizing ...
+time 2.48
+
+ 97%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊      | 31/32 [08:56<00:17, 17.22s/it]
+  0%|                                                                                                                                                                                                                  | 0/1 [00:00<?, ?it/s]
+31 self_attn.q_proj
+Quantizing ...
+time 1.27
+error 68883528.0
+31 self_attn.k_proj
+Quantizing ...
+time 0.85
+error 68922080.0
+31 self_attn.v_proj
+Quantizing ...
+time 0.84
+error 68655080.0
+31 self_attn.o_proj
+Quantizing ...
+time 0.85
+error 9809227.0
+31 mlp.gate_proj
+Quantizing ...
+time 0.86
+error 150144960.0
+31 mlp.up_proj
+Quantizing ...
+time 0.86
+error 150177824.0
+31 mlp.down_proj
+Quantizing ...
+time 2.49
+
+error 140565440.0
+
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 32/32 [09:14<00:00, 17.31s/it]
+wikitext2
+Evaluating ...
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+5.784335136413574

@@ -1,0 +1,40 @@
+
+
+
+Loading checkpoint shards: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:06<00:00,  1.60s/it]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Quantizing linear layers...:  92%|████████████████████████████████████████████████████████████████████████████████████████████████████████████▌         | 207/225 [00:44<00:03,  4.65it/s]
+Traceback (most recent call last):
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 200, in <module>
+    model = llama_zeroshot(model, args, DEV)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 64, in llama_zeroshot
+    quantized_layer, entropy = quantize_linear_layer(layer.to(device), args.hadamard_groupsize, args.edenn_d, args.edenn_n)
+  File "/nfs/scistore19/alistgrp/apanfero/GPTAQ/.conda/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/llama2_zeroshot_edenn.py", line 37, in quantize_linear_layer
+    weight = pad_to_block(weight, [1], hadamard_groupsize)
+  File "/nfs/scistore19/alistgrp/apanfero/linear-layer-compression/Andrei/gptq/edenn.py", line 42, in pad_to_block
+    return F.pad(tensor, pad_dims, "constant", value)
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 112.00 MiB. GPU 0 has a total capacty of 23.69 GiB of which 64.06 MiB is free. Process 1038169 has 1.62 GiB memory in use. Process 1174386 has 4.55 GiB memory in use. Including non-PyTorch memory, this process has 13.34 GiB memory in use. Process 1179458 has 4.11 GiB memory in use. Of the allocated memory 12.09 GiB is allocated by PyTorch, and 44.88 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

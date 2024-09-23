@@ -1,0 +1,80 @@
+wandb_version: 1
+
+model:
+  desc: null
+  value: meta-llama/Llama-2-7b-hf
+dataset:
+  desc: null
+  value: red
+seed:
+  desc: null
+  value: 0
+nsamples:
+  desc: null
+  value: 256
+percdamp:
+  desc: null
+  value: 0.1
+nearest:
+  desc: null
+  value: false
+wbits:
+  desc: null
+  value: 4
+groupsize:
+  desc: null
+  value: 1024
+true_sequential:
+  desc: null
+  value: false
+no_clip:
+  desc: null
+  value: true
+skip_gq:
+  desc: null
+  value: false
+save:
+  desc: null
+  value: ''
+had:
+  desc: null
+  value: true
+eden:
+  desc: null
+  value: true
+actquant:
+  desc: null
+  value: 4
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.14
+    cli_version: 0.16.4
+    framework: huggingface
+    huggingface_version: 4.37.1
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1711560677.0
+    t:
+      1:
+      - 1
+      - 11
+      - 49
+      - 55
+      2:
+      - 1
+      - 11
+      - 49
+      - 51
+      - 55
+      - 71
+      3:
+      - 13
+      - 16
+      - 23
+      4: 3.10.14
+      5: 0.16.4
+      6: 4.37.1
+      8:
+      - 5
+      13: linux-x86_64
