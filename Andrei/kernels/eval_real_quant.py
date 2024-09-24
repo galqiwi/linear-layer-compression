@@ -251,7 +251,7 @@ if __name__ == '__main__':
     wandb.init(
         # set the wandb project where this run will be logged
         entity="rock-and-roll",
-        project="higgs-evals",
+        project="higgs-evals" if args.layerwise is None else "higgs-evals-layerwise",
         
         # track hyperparameters and run metadata
         config=args,
