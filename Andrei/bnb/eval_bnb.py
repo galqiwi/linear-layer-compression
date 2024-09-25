@@ -47,6 +47,7 @@ def replace_with_bnb_linear(
                     in_features,
                     out_features,
                     bias=module.bias is not None,
+                    threshold=6.0,
                 )
                 model._modules[name].weight.data = module.weight.data
                 model._modules[name].bias = module.bias
@@ -254,7 +255,7 @@ if __name__ == '__main__':
         "model": args.model,
     })
 
-    model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
+    model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype="auto", low_cpu_mem_usage=True, device_map="cpu")
     model.seqlen = args.seqlen
     model.eval()
     
