@@ -36,7 +36,7 @@ def replace_submodule(module, submodule_path, new_submodule):
 
 
 @torch.no_grad()
-def get_codes_and_scales(layer: nn.Linear, edenn_d: int):    
+def get_codes_and_scales(layer: nn.Linear, edenn_d: int, edenn_n: int):    
     weight = layer.weight.clone().float()
     # Pad to Hadamard transform size
     weight = pad_to_block(weight, [1], 1024)
@@ -54,7 +54,7 @@ def get_codes_and_scales(layer: nn.Linear, edenn_d: int):
     codes = torch.empty(weight.shape[:-1], device=weight.device, dtype=torch.uint8)
 
     for i in range(0, weight.shape[0], 64):
-        codes[i:i+64] = higgs_quantize(weight[i:i+64], edenn_d, 256)
+        codes[i:i+64] = higgs_quantize(weight[i:i+64], edenn_d, edenn_n)
         
     codes = codes.reshape(codes.shape[0], -1)
     
@@ -73,8 +73,11 @@ def llama_multi_quantize(model, device):
         multicodes = {}
         scales = None
         for edenn_d in tqdm([1, 2, 3, 4, 5, 6], desc="Iterating dimensions", leave=False):
-            codes, scales = get_codes_and_scales(layer, edenn_d)
-            multicodes[edenn_d] = codes.cpu()
+            codes, scales = get_codes_and_scales(layer, edenn_d, 256)
+            multicodes[(edenn_d, 256)] = codes.cpu()
+        for edenn_d in tqdm([1], desc="Iterating dimensions", leave=False):
+            codes, scales = get_codes_and_scales(layer, edenn_d, 8)
+            multicodes[(edenn_d, 8)] = codes.cpu()
         layer = layer.cpu()
         scales = scales.cpu().half()
         

@@ -30,7 +30,7 @@ def entropy(idx):
     return -torch.sum(counts / len(idx) * torch.log2(counts / len(idx))).item()
 
 def higgs_quantize(x, dim, size):
-    assert size == 256
+    assert size <= 256
     return torch.argmax(2 * x @ GRIDS[dim][size].T - GRID_NORMS[dim][size], dim=-1).to(torch.uint8)
 
 def higgs_quantize_dequantize(x, dim, size):

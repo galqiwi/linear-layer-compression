@@ -34,11 +34,12 @@ class HiggsLinear(nn.Module):
         device=None,
         dtype=None,
     ):
-        assert higgs_n == 256
+        assert higgs_n == 256 or higgs_n == 8 and higgs_d == 1
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
         self.hadamard_size = 1024
         self.higgs_d = higgs_d
+        self.higgs_n = higgs_n
         self.for_eval = for_eval
         
         in_features = ((in_features - 1) // self.hadamard_size + 1) * self.hadamard_size
@@ -49,7 +50,7 @@ class HiggsLinear(nn.Module):
         
         # CODES
         self.register_parameter(
-            f'codes_{higgs_d}',
+            f'codes_{higgs_d}_{higgs_n}',
             nn.Parameter(
                 torch.empty(
                     (out_features, num_higgs_groups),
@@ -78,14 +79,14 @@ class HiggsLinear(nn.Module):
                 post_hadamard_size = ((1024 - 1) // self.higgs_d + 1) * self.higgs_d
                 
                 self.codes = _dequantize_weight(
-                    self.__getattr__(f"codes_{self.higgs_d}")[:,:,None],
-                    torch.load(f"../grids/EDEN{self.higgs_d}-256.pt").half()[None,:,None,:],
+                    self.__getattr__(f"codes_{self.higgs_d}_{self.higgs_n}")[:,:,None],
+                    torch.load(f"../grids/EDEN{self.higgs_d}-{self.higgs_n}.pt").half()[None,:,None,:],
                 )
                 self.codes = self.codes.reshape(self.codes.shape[0], -1, post_hadamard_size)[...,:1024]
                 self.codes *= self.scales[...,None]
                 self.codes = self.codes.reshape(self.codes.shape[0], -1)
             else:
-                self.codes = self.__getattr__(f"codes_{self.higgs_d}")
+                self.codes = self.__getattr__(f"codes_{self.higgs_d}_{self.higgs_n}")
         input = pad_to_block(input, [-1], self.hadamard_size)
         input = hadamard_transform(
             input.reshape(input.shape[:-1] + (-1, self.hadamard_size)),
@@ -114,9 +115,9 @@ class HiggsMultiLinear(nn.Module):
         super().__init__()
         
         # CODES
-        for higgs_d, codes in multicodes.items():
+        for (higgs_d, higgs_n), codes in multicodes.items():
             self.register_parameter(
-                f'codes_{higgs_d}',
+                f'codes_{higgs_d}_{higgs_n}',
                 nn.Parameter(
                     codes,
                     requires_grad=False,
