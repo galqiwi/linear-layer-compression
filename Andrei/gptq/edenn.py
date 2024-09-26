@@ -14,7 +14,10 @@ GRIDS = {
 # Read files in the folder and read grids in the EDEN{DIM}_{SIZE}.pt format
 for file in grids_folder.iterdir():
     if file.suffix == ".pt":
-        dim, size = map(int, file.stem[4:].split('-'))
+        try:
+            dim, size = map(int, file.stem[4:].split('-'))
+        except ValueError:
+            continue
         GRIDS[dim] = GRIDS.get(dim, {})
         GRIDS[dim][size] = torch.load(file)
 

@@ -1,4 +1,5 @@
 import os
+import math
 import sys
 from typing import Optional
 
@@ -198,6 +199,28 @@ def build_layerwise_edenn_config(
         for layer_name in layer_names
         for i in range(len(blockwise_edenn_config))
     }
+    
+
+def calculate_bitwidth(layerwise_edenn_config):
+    total_params = 32 * (4096 * (2 * 4096 + 2 * 4096 * 8 / 32) + 3 * 4096 * 14336)
+    
+    total_bitwidth = 0
+    for name, (edenn_d, edenn_n) in layerwise_edenn_config.items():
+        if "q_proj" in name:
+            total_bitwidth += math.log2(edenn_n) / edenn_d * 4096 * 4096 / total_params
+        elif "k_proj" in name:
+            total_bitwidth += math.log2(edenn_n) / edenn_d * 4096 * 4096 * 8 / 32 / total_params
+        elif "v_proj" in name:
+            total_bitwidth += math.log2(edenn_n) / edenn_d * 4096 * 4096 * 8 / 32 / total_params
+        elif "o_proj" in name:
+            total_bitwidth += math.log2(edenn_n) / edenn_d * 4096 * 4096 / total_params
+        elif "gate_proj" in name:
+            total_bitwidth += math.log2(edenn_n) / edenn_d * 4096 * 14336 / total_params
+        elif "up_proj" in name:
+            total_bitwidth += math.log2(edenn_n) / edenn_d * 4096 * 14336 / total_params
+        elif "down_proj" in name:
+            total_bitwidth += math.log2(edenn_n) / edenn_d * 4096 * 14336 / total_params
+    return total_bitwidth
 
 
 if __name__ == '__main__':
@@ -251,7 +274,7 @@ if __name__ == '__main__':
     wandb.init(
         # set the wandb project where this run will be logged
         entity="rock-and-roll",
-        project="higgs-evals" if args.layerwise is None else "higgs-evals-layerwise",
+        project="higgs-evals-newgrids" if args.layerwise is None else "higgs-evals-newgrids-layerwise",
         
         # track hyperparameters and run metadata
         config=args,
@@ -271,7 +294,10 @@ if __name__ == '__main__':
         args.blockwise,
         args.layerwise,
     )
-    wandb.log({"layerwise_edenn_config": layerwise_edenn_config})
+    wandb.log({
+        "layerwise_edenn_config": layerwise_edenn_config,
+        "bitwidth": calculate_bitwidth(layerwise_edenn_config),
+    })
     
     model, _ = replace_with_higgs_linear(
         model,
