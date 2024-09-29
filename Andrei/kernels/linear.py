@@ -34,7 +34,10 @@ class HiggsLinear(nn.Module):
         device=None,
         dtype=None,
     ):
-        assert higgs_n == 256 or higgs_n == 8 and higgs_d == 1
+        assert (
+            higgs_n == 256 and higgs_d in [1, 2, 3, 4, 5, 6] # HIGGS
+            or higgs_d == 1 and higgs_n in [4, 8, 16]        # FLUTE
+        )
         factory_kwargs = {"device": device, "dtype": dtype}
         super().__init__()
         self.hadamard_size = 1024

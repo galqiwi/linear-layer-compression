@@ -75,9 +75,9 @@ def llama_multi_quantize(model, device):
         for edenn_d in tqdm([1, 2, 3, 4, 5, 6], desc="Iterating dimensions", leave=False):
             codes, scales = get_codes_and_scales(layer, edenn_d, 256)
             multicodes[(edenn_d, 256)] = codes.cpu()
-        for edenn_d in tqdm([1], desc="Iterating dimensions", leave=False):
-            codes, scales = get_codes_and_scales(layer, edenn_d, 8)
-            multicodes[(edenn_d, 8)] = codes.cpu()
+        for edenn_n in tqdm([4, 8, 16], desc="Iterating dimensions", leave=False):
+            codes, scales = get_codes_and_scales(layer, 1, edenn_n)
+            multicodes[(1, edenn_n)] = codes.cpu()
         layer = layer.cpu()
         scales = scales.cpu().half()
         
