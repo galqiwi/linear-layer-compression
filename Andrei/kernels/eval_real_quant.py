@@ -137,7 +137,6 @@ def llama_eval(model, dataloader, dev):
 
 def get_zero_shots(model, task_list = ('arc_easy',), num_fewshots=1):
     import lm_eval
-    from lm_eval import evaluator
 
     lm_eval_model = lm_eval.models.huggingface.HFLM(
         pretrained=model,
@@ -154,9 +153,9 @@ def get_zero_shots(model, task_list = ('arc_easy',), num_fewshots=1):
                 continue
             task.config.num_fewshot = num_fewshots
 
-    results = evaluator.evaluate(
+    results = lm_eval.evaluator.evaluate(
         lm=lm_eval_model,
-        task_dict=lm_eval.tasks.get_task_dict(task_list),
+        task_dict=tasks,
     )
 
     result_dict = {task_name: task_result['acc,none'] for task_name, task_result in results['results'].items()}
@@ -317,5 +316,5 @@ if __name__ == '__main__':
         ppl = llama_eval(model, testloader, DEV)
         wandb.log({f"{dataset}_PPL": ppl})
     
-    # model = model.to(DEV)
-    # wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
+    model = model.to(DEV)
+    wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
