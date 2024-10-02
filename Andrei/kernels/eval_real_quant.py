@@ -261,6 +261,21 @@ if __name__ == '__main__':
         '--multiquant-ckpt-path',
         type=str, help='Multiquant checkpoint file'
     )
+    parser.add_argument(
+        '--eval-ppl',
+        action='store_true',
+        help='Evaluate perplexity.'
+    )
+    parser.add_argument(
+        '--eval-mmlu',
+        action='store_true',
+        help='Evaluate mmlu.'
+    )
+    parser.add_argument(
+        '--eval-zeroshots',
+        action='store_true',
+        help='Evaluate common zeroshots.'
+    )
     args = parser.parse_args()
     
     if args.layerwise is not None:
@@ -308,13 +323,21 @@ if __name__ == '__main__':
         args.multiquant_ckpt_path,
     ).to("cuda")
 
-    datasets = ['wikitext2'] 
-    for dataset in datasets:
-        dataloader, testloader = get_loaders(
-            dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
-        )
-        ppl = llama_eval(model, testloader, DEV)
-        wandb.log({f"{dataset}_PPL": ppl})
+    if args.eval_ppl:
+        datasets = ['wikitext2']
+        for dataset in datasets:
+            dataloader, testloader = get_loaders(
+                dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
+            )
+            ppl = llama_eval(model, testloader, DEV)
+            wandb.log({f"{dataset}_PPL": ppl})
     
     model = model.to(DEV)
-    wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
+
+    if args.eval_mmlu:
+        wandb.log(get_zero_shots(model, task_list=['mmlu',], num_fewshots=5))
+
+    if args.eval_zeroshots:
+        wandb.log(get_zero_shots(model, task_list=[
+            'winogrande', 'piqa', 'hellaswag', 'arc_easy', 'arc_challenge',
+        ], num_fewshots=1))
