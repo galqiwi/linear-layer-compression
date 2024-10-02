@@ -370,7 +370,6 @@ if __name__ == '__main__':
     wandb.init(
         # set the wandb project where this run will be logged
         entity="rock-and-roll",
-        project="edenn-gptq-hetero",
         
         # track hyperparameters and run metadata
         config=args,
@@ -449,6 +448,5 @@ if __name__ == '__main__':
         wandb.log({f"{dataset}_PPL": ppl})
     
     model = model.to(DEV)
-    # wandb.log(get_zero_shots(model, task_list = ('winogrande','piqa','arc_easy','arc_challenge'), num_fewshots=1))
-    print(get_zero_shots(model, task_list=['mmlu',], num_fewshots=5))
-    # wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
+    wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','arc_easy','arc_challenge'], num_fewshots=1))
+    wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
