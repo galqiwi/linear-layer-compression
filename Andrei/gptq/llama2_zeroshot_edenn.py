@@ -14,6 +14,11 @@ from gptq import apply_gptq, get_accumulate_input_fn
 
 DEV = torch.device('cuda')
 
+
+def filter_dict(d, keys):
+    return {k: v for k, v in d.items() if k.lower() in keys}
+
+
 def find_layers(module, layers=[nn.Linear], name=''):
     if type(module) in layers:
         return {name: module}
@@ -449,4 +454,4 @@ if __name__ == '__main__':
     
     model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','arc_easy','arc_challenge'], num_fewshots=1))
-    wandb.log(get_zero_shots(model, task_list = ['mmlu',], num_fewshots=5))
+    wandb.log(filter_dict(get_zero_shots(model, task_list=['mmlu',], num_fewshots=5), ['mmlu@5']))
