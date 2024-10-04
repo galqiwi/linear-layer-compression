@@ -371,11 +371,16 @@ def main():
     wandb.log({'test_grid_mse': mse})
 
 
-    print(find_layers(model).keys())
-    assert False
+    layers = sorted([
+        layer for
+        layer in find_layers(model).keys()
+        if 'lm_head' not in layer
+    ])
 
-
-    layerwise_edenn_config = [(-1, -1)] * 16 * 7
+    layerwise_edenn_config = {
+        layer: (-1, -1)
+        for layer in layers
+    }
 
     for _ in range(10):
         eval_ppl_by_config(args, model, layerwise_edenn_config)
