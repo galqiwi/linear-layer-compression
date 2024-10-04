@@ -75,7 +75,7 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
             continue
 
         layer = linear_layers[layer_name]
-        edenn_d, edenn_n = layerwise_edenn_config[layer_name]
+        edenn_n, edenn_d = layerwise_edenn_config[layer_name]
 
         if (edenn_n, edenn_d) == (-1, -1):
             continue
