@@ -384,7 +384,7 @@ def main():
     ])
 
     layerwise_edenn_config = {
-        layer: (-1, -1)
+        layer: (args.edenn_n, args.edenn_d)
         for layer in layers
     }
 
