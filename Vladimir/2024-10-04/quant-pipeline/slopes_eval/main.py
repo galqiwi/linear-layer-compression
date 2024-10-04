@@ -291,6 +291,8 @@ def eval_grid(edenn_d: int, edenn_n: int):
 def eval_ppl_by_config(args, model, layerwise_edenn_config):
     model = copy.deepcopy(model)
 
+
+
     match args.method:
         case "rtn":
             model = llama_rtn(model, layerwise_edenn_config, args.hadamard_groupsize, DEV)
@@ -368,6 +370,9 @@ def main():
     mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
     wandb.log({'test_grid_mse': mse})
 
+
+    print(find_layers(model).keys())
+    assert False
 
 
     layerwise_edenn_config = [(-1, -1)] * 16 * 7
