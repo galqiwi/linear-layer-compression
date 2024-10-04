@@ -75,9 +75,9 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
             continue
 
         layer = linear_layers[layer_name]
-        edenn_n, edenn_d = layerwise_edenn_config[layer_name]
+        edenn_d, edenn_n = layerwise_edenn_config[layer_name]
 
-        if (edenn_n, edenn_d) == (-1, -1):
+        if (edenn_d, edenn_n) == (-1, -1):
             continue
 
         quantized_layer, entropy = quantize_linear_layer(layer.to(device), hadamard_groupsize, edenn_d, edenn_n)
@@ -384,7 +384,7 @@ def main():
     ])
 
     layerwise_edenn_config = {
-        layer: (args.edenn_n, args.edenn_d)
+        layer: (args.edenn_d, args.edenn_n)
         for layer in layers
     }
 
