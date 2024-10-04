@@ -392,6 +392,7 @@ def main():
     baseline_ppl = eval_ppl_by_config(args, model, get_empty_config(layers))
 
     wandb.log({'baseline_ppl': baseline_ppl})
+    print(f'baseline_ppl: {baseline_ppl}')
 
     ppl_delta_by_layer_name = {}
 
@@ -408,6 +409,9 @@ def main():
 
         ppl_delta_by_layer_name[layer_name] = ppl_delta
         print(f'ppl_delta: {ppl_delta}')
+
+    wandb.log({'ppl_delta_by_layer_name': ppl_delta_by_layer_name})
+    print(f'ppl_delta_by_layer_name: {ppl_delta_by_layer_name}')
     
     # model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
