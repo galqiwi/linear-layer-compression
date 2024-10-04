@@ -389,21 +389,25 @@ def main():
         if 'lm_head' not in layer
     ])
 
-    wandb.log({
-        'baseline_ppl': eval_ppl_by_config(args, model, get_empty_config(layers))
-    })
+    baseline_ppl = eval_ppl_by_config(args, model, get_empty_config(layers))
 
-    ppl_by_layer_name = {}
+    wandb.log({'baseline_ppl': baseline_ppl})
+
+    ppl_delta_by_layer_name = {}
 
     for layer_name in layers:
+        print(f'Checking {layer_name}')
         config = get_empty_config(layers)
         config[layer_name] = (args.edenn_d, args.edenn_n)
 
-        ppl_by_layer_name[layer_name] = eval_ppl_by_config(
+        ppl_delta = eval_ppl_by_config(
             args,
             model,
             config,
-        )
+        ) - baseline_ppl
+
+        ppl_delta_by_layer_name[layer_name] = ppl_delta
+        print(f'ppl_delta: {ppl_delta}')
     
     # model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
