@@ -406,5 +406,5 @@ if __name__ == '__main__':
         wandb.log({f"{dataset}_PPL": ppl})
     
     # model = model.to(DEV)
-    # wandb.log(get_zero_shots(model, task_list = ('winogrande','piqa','arc_easy','arc_challenge'), num_fewshots=1))
-    # wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
+    # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
+    # wandb.log(get_zero_shots(model, task_list = ['mmlu',], num_fewshots=5))
