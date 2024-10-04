@@ -395,7 +395,8 @@ def main():
 
     wandb.log({"layerwise_edenn_config": layerwise_edenn_config})
 
-    eval_ppl_by_config(args, model, layerwise_edenn_config)
+    for _ in range(10):
+        eval_ppl_by_config(args, model, layerwise_edenn_config)
     
     # model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
