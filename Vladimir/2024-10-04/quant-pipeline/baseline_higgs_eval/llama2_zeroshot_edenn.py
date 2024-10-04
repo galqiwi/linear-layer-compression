@@ -76,7 +76,6 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
         if "lm_head" in name:
             continue
         quantized_layer, entropy = quantize_linear_layer(layer.to(device), hadamard_groupsize, edenn_d, edenn_n)
-        wandb.log({f"layer_entropy": entropy})
         replace_submodule(model, name, quantized_layer.cpu())
         
     return model
@@ -159,7 +158,6 @@ def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamar
             mse += torch.nn.functional.mse_loss(outs[j][0], out[0]).item()
             norm += outs[j][0].float().pow(2).mean().item()
             inps[j] = out
-        wandb.log({"block_mse": mse, "block_rmse": mse / norm, "block_id": i})
 
         if any([inp.isnan().any() for inp in inps]):
             raise Exception("NaNs!")
@@ -354,10 +352,6 @@ if __name__ == '__main__':
         '--nsamples', type=int, default=256,
         help='Number of calibration data samples.'
     )
-    parser.add_argument(
-        '--cache-dir', type=str, default=None,
-        help='Models cache dir',
-    )
     args = parser.parse_args()
     
     if args.layerwise is not None:
@@ -368,23 +362,10 @@ if __name__ == '__main__':
         args.blockwise = ast.literal_eval(args.blockwise)
 
     wandb.init(
-        # set the wandb project where this run will be logged
-        entity="rock-and-roll",
-        project="edenn-gptq-hetero",
-        
         # track hyperparameters and run metadata
         config=args,
         name=f"{args.model}",
     )
-    
-    wandb.log({
-        "model": args.model,
-        "method": args.method,
-        "dataset": args.dataset,
-        "nsamples": args.nsamples,
-        "edenn_d": args.edenn_d,
-        "edenn_n": args.edenn_n
-    })
 
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
     model.seqlen = args.seqlen
@@ -399,45 +380,22 @@ if __name__ == '__main__':
     
     if args.edenn_d is not None:
         mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
-        wandb.log({
-            "expected_mse": mse,
-            "expected_entropy": entropy,
-            "bitwidth": np.log2(args.edenn_n) / args.edenn_d,
-        })
     
     if args.edenn_d is not None:
         ckpt_name = f"{args.model}_{args.method}_{args.edenn_d}_{args.edenn_n}.pt"
     else:
         ckpt_name = f"{args.model}_{args.method}_{layerwise_edenn_config}.pt"
-    
-    if args.cache_dir is not None and os.path.isfile(f"{args.cache_dir}/{ckpt_name}"):
-        replace_empty(model, args.hadamard_groupsize)
-        
-        print(f"Using quantized model at {args.cache_dir}/{ckpt_name}")
-        
-        model.load_state_dict(torch.load(
-            f"{args.cache_dir}/{ckpt_name}"
-        ))
-    else:
-        match args.method:
-            case "rtn":
-                model = llama_rtn(model, layerwise_edenn_config, args.hadamard_groupsize, DEV)
-            case "gptq":
-                dataloader, testloader = get_loaders(
-                    args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
-                )
-                model = llama_gptq(model, args.nsamples, dataloader, DEV, layerwise_edenn_config, args.hadamard_groupsize)
-            case _:
-                raise Exception("AAA")
-        
-        if args.cache_dir is not None:
-            ckpt_path = f"{args.cache_dir}/{ckpt_name}"
-            last_slash_pos = ckpt_path.rfind("/")
-            os.makedirs(ckpt_path[:last_slash_pos], exist_ok=True)
-            torch.save(
-                model.state_dict(),
-                ckpt_path,
+
+    match args.method:
+        case "rtn":
+            model = llama_rtn(model, layerwise_edenn_config, args.hadamard_groupsize, DEV)
+        case "gptq":
+            dataloader, testloader = get_loaders(
+                args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
             )
+            model = llama_gptq(model, args.nsamples, dataloader, DEV, layerwise_edenn_config, args.hadamard_groupsize)
+        case _:
+            raise Exception("AAA")
 
     datasets = ['wikitext2'] 
     for dataset in datasets:
@@ -447,6 +405,6 @@ if __name__ == '__main__':
         ppl = llama_eval(model, testloader, DEV)
         wandb.log({f"{dataset}_PPL": ppl})
     
-    model = model.to(DEV)
+    # model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ('winogrande','piqa','arc_easy','arc_challenge'), num_fewshots=1))
-    wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
+    # wandb.log(get_zero_shots(model, task_list = ('mmlu',), num_fewshots=5))
