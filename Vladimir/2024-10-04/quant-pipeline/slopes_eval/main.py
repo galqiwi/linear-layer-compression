@@ -68,16 +68,15 @@ def quantize_linear_layer(layer: nn.Linear, hadamard_groupsize: int, edenn_d: in
 def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
     linear_layers = find_layers(model)
 
-    layer_names = sorted(linear_layers.keys())
+    layer_names = sorted([
+        layer_name
+        for layer_name in linear_layers.keys()
+        if 'lm_head' not in layer_name
+    ])
 
-    print(set(layerwise_edenn_config.keys()), set(layer_names))
+    assert set(layer_names) == set(layerwise_edenn_config.keys())
 
-    assert set(layerwise_edenn_config.keys()) == set(layer_names)
-    
     for layer_name in tqdm(layer_names, desc="Quantizing linear layers..."):
-        if "lm_head" in layer_name:
-            continue
-
         layer = linear_layers[layer_name]
         edenn_d, edenn_n = layerwise_edenn_config[layer_name]
 
