@@ -396,7 +396,7 @@ def main():
 
     ppl_delta_by_layer_name = {}
 
-    for layer_name in layers:
+    for layer_idx, layer_name in enumerate(layers):
         print(f'Checking {layer_name}')
         config = get_empty_config(layers)
         config[layer_name] = (args.edenn_d, args.edenn_n)
@@ -407,7 +407,7 @@ def main():
             config,
         ) - baseline_ppl
 
-        wandb.log({'layer_ppl_delta': ppl_delta})
+        wandb.log({'layer_ppl_delta': ppl_delta}, layer_idx)
         ppl_delta_by_layer_name[layer_name] = ppl_delta
         print(f'ppl_delta: {ppl_delta}')
 
