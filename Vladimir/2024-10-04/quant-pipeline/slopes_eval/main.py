@@ -91,6 +91,7 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
 
 @torch.no_grad()
 def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamard_groupsize):
+    assert False
     use_cache = model.config.use_cache
     model.config.use_cache = False
     layers = model.model.layers
@@ -371,7 +372,6 @@ def main():
     wandb.init(
         # track hyperparameters and run metadata
         config=args,
-        name=f"{args.model}",
     )
 
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
