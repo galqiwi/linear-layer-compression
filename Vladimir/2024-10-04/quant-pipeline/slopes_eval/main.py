@@ -69,6 +69,8 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
     linear_layers = find_layers(model)
 
     layer_names = sorted(linear_layers.keys())
+
+    assert set(layerwise_edenn_config) == set(layer_names)
     
     for layer_name in tqdm(layer_names, desc="Quantizing linear layers..."):
         if "lm_head" in layer_name:
@@ -297,8 +299,6 @@ def eval_grid(edenn_d: int, edenn_n: int):
 def eval_ppl_by_config(args, model, layerwise_edenn_config):
     model = copy.deepcopy(model)
 
-
-
     match args.method:
         case "rtn":
             model = llama_rtn(model, layerwise_edenn_config, args.hadamard_groupsize, DEV)
@@ -317,6 +317,10 @@ def eval_ppl_by_config(args, model, layerwise_edenn_config):
         )
         ppl = llama_eval(model, testloader, DEV)
         return ppl
+
+
+def get_empty_config(layers):
+    return {layer: (-1, -1) for layer in layers}
 
 
 def main():
@@ -384,20 +388,26 @@ def main():
         if 'lm_head' not in layer
     ])
 
-    layerwise_edenn_config = {
-        layer: (args.edenn_d, args.edenn_n)
-        for layer in layers
-    }
+    wandb.log({
+        'baseline_ppl': eval_ppl_by_config(args, model, get_empty_config(layers))
+    })
 
-    for _ in range(10):
-        eval_ppl_by_config(args, model, layerwise_edenn_config)
+    ppl_by_layer_name = {}
+
+    for layer_name in layers:
+        config = get_empty_config(layers)
+        config[layer_name] = (args.edenn_d, args.edenn_n)
+
+        ppl_by_layer_name[layer_name] = eval_ppl_by_config(
+            args,
+            model,
+            config,
+        )
     
     # model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
     # wandb.log(get_zero_shots(model, task_list = ['mmlu',], num_fewshots=5))
-    # (2, 128, 0.015265518799424171): 11.23557186126709
-    # (2, 256, 0.007752560079097748): 9.735249519348145
-    # (2, 256, 0.000000000000000000):
+
 
 if __name__ == '__main__':
     main()
