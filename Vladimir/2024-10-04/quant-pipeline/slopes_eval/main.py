@@ -81,7 +81,7 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
             continue
 
         quantized_layer, entropy = quantize_linear_layer(layer.to(device), hadamard_groupsize, edenn_d, edenn_n)
-        replace_submodule(model, name, quantized_layer.cpu())
+        replace_submodule(model, layer_name, quantized_layer.cpu())
         
     return model
 
