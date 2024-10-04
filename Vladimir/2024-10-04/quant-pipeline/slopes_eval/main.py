@@ -373,8 +373,9 @@ def main():
     model.seqlen = args.seqlen
     model.eval()
 
-    mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
-    wandb.log({'test_grid_mse': mse})
+    if (args.edenn_d, args.edenn_n) != (-1, -1):
+        mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
+        wandb.log({'test_grid_mse': mse})
 
 
     layers = sorted([
@@ -394,7 +395,9 @@ def main():
     # model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
     # wandb.log(get_zero_shots(model, task_list = ['mmlu',], num_fewshots=5))
-
+    # (2, 128, 0.015265518799424171): 11.23557186126709
+    # (2, 256, 0.007752560079097748): 9.735249519348145
+    # (2, 256, 0.000000000000000000):
 
 if __name__ == '__main__':
     main()
