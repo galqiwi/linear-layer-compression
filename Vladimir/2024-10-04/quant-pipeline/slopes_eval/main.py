@@ -389,13 +389,13 @@ def main():
     model.eval()
 
     mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
-    wandb.log({'grid_mse': mse})
+    wandb.log({'test_grid_mse': mse})
 
     layerwise_edenn_config = [(-1, -1)] * 16 * 7
 
     wandb.log({"layerwise_edenn_config": layerwise_edenn_config})
 
-
+    eval_ppl_by_config(args, model, layerwise_edenn_config)
     
     # model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
