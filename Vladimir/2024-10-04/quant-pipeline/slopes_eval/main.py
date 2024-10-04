@@ -407,6 +407,7 @@ def main():
             config,
         ) - baseline_ppl
 
+        wandb.log({'layer_ppl_delta': ppl_delta})
         ppl_delta_by_layer_name[layer_name] = ppl_delta
         print(f'ppl_delta: {ppl_delta}')
 
