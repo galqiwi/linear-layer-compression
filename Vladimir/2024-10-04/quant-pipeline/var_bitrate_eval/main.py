@@ -395,6 +395,8 @@ def main():
 
     config = get_config(args)
 
+    print(config)
+
     # for layer_idx, layer_name in enumerate(layers):
     #     print(f'Checking {layer_name}')
     #     config = get_empty_config(layers)
