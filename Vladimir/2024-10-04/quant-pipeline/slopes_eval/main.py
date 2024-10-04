@@ -34,14 +34,6 @@ def replace_submodule(module, submodule_path, new_submodule):
     for submodule in submodule_names[:-1]:
         module = getattr(module, submodule)
     setattr(module, submodule_names[-1], new_submodule)
-    
-def replace_empty(model: nn.Module, had_block_size: int):
-    linear_layers = find_layers(model)
-    for name, layer in tqdm(linear_layers.items(), desc="Replacing linear layers..."):
-        if "lm_head" in name:
-            continue
-        
-        replace_submodule(model, name, HadLinear(pad_to_block(layer.weight, [1], had_block_size)))
 
 
 @torch.no_grad()
@@ -332,6 +324,7 @@ def eval_ppl_by_config(args, model, layerwise_edenn_config):
             dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
         )
         ppl = llama_eval(model, testloader, DEV)
+        return ppl
 
 
 def main():
@@ -391,9 +384,9 @@ def main():
     mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
     wandb.log({'test_grid_mse': mse})
 
-    layerwise_edenn_config = [(-1, -1)] * 16 * 7
 
-    wandb.log({"layerwise_edenn_config": layerwise_edenn_config})
+
+    layerwise_edenn_config = [(-1, -1)] * 16 * 7
 
     for _ in range(10):
         eval_ppl_by_config(args, model, layerwise_edenn_config)
