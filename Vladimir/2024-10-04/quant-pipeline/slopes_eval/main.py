@@ -73,6 +73,8 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
     linear_layers = find_layers(model)
     
     for (name, layer), (edenn_d, edenn_n) in tqdm(zip(linear_layers.items(), layerwise_edenn_config), desc="Quantizing linear layers..."):
+        if (edenn_n, edenn_d) == (-1, -1):
+            continue
         if "lm_head" in name:
             continue
         quantized_layer, entropy = quantize_linear_layer(layer.to(device), hadamard_groupsize, edenn_d, edenn_n)
@@ -141,7 +143,10 @@ def llama_gptq(model, nsamples, dataloader, dev, layerwise_edenn_config, hadamar
         for name, linear in linear_layers.items():
             (edenn_d, edenn_n) = layerwise_edenn_config[layer_counter]
             layer_counter += 1
-            
+
+            if (edenn_d, edenn_n) == (-1, -1):
+                continue
+
             quantized_layer = apply_gptq(
                 linear.weight.data, 2 * hessians[name] / num_samples[name],
                 edenn_d=edenn_d, edenn_n=edenn_n,
@@ -322,14 +327,6 @@ if __name__ == '__main__':
         help='EDENN grid size'
     )
     parser.add_argument(
-        '--blockwise', type=str, default=None,
-        help='Blockwise edenn configs'
-    )
-    parser.add_argument(
-        '--layerwise', type=str, default=None,
-        help='Layerwise edenn configs'
-    )
-    parser.add_argument(
         '--hadamard_groupsize', type=int, default=1024, choices=[64, 128, 256, 512, 1024, 2048, 4096],
         help='Groupsize to use for hadamard; default is 1024.'
     )
@@ -353,13 +350,6 @@ if __name__ == '__main__':
         help='Number of calibration data samples.'
     )
     args = parser.parse_args()
-    
-    if args.layerwise is not None:
-        import ast
-        args.layerwise = ast.literal_eval(args.layerwise)
-    if args.blockwise is not None:
-        import ast
-        args.blockwise = ast.literal_eval(args.blockwise)
 
     wandb.init(
         # track hyperparameters and run metadata
@@ -370,12 +360,9 @@ if __name__ == '__main__':
     model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
     model.seqlen = args.seqlen
     model.eval()
-    
-    layerwise_edenn_config = build_layerwise_edenn_config(
-        args.edenn_d, args.edenn_n,
-        args.blockwise,
-        args.layerwise,
-    )
+
+    layerwise_edenn_config = [(-1, -1)] * 32 * 7
+
     print(layerwise_edenn_config)
     wandb.log({"layerwise_edenn_config": layerwise_edenn_config})
     
