@@ -376,6 +376,7 @@ if __name__ == '__main__':
         args.blockwise,
         args.layerwise,
     )
+    print(layerwise_edenn_config)
     wandb.log({"layerwise_edenn_config": layerwise_edenn_config})
     
     if args.edenn_d is not None:
