@@ -71,12 +71,14 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
     layer_names = sorted(linear_layers.keys())
     
     for layer_name in tqdm(layer_names, desc="Quantizing linear layers..."):
-        if (edenn_n, edenn_d) == (-1, -1):
-            continue
         if "lm_head" in layer_name:
             continue
+
         layer = linear_layers[layer_name]
         edenn_d, edenn_n = layerwise_edenn_config[layer_name]
+
+        if (edenn_n, edenn_d) == (-1, -1):
+            continue
 
         quantized_layer, entropy = quantize_linear_layer(layer.to(device), hadamard_groupsize, edenn_d, edenn_n)
         replace_submodule(model, name, quantized_layer.cpu())
