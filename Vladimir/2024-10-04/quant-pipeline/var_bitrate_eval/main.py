@@ -300,33 +300,6 @@ def eval_grid(edenn_d: int, edenn_n: int):
     return mse, entropy / edenn_d
 
 
-def eval_ppl_by_config(args, model, layerwise_edenn_config):
-    model = copy.deepcopy(model)
-
-    match args.method:
-        case "rtn":
-            model = llama_rtn(model, layerwise_edenn_config, args.hadamard_groupsize, DEV)
-        case "gptq":
-            dataloader, testloader = get_loaders(
-                args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
-            )
-            model = llama_gptq(model, args.nsamples, dataloader, DEV, layerwise_edenn_config, args.hadamard_groupsize)
-        case _:
-            raise Exception("AAA")
-
-    datasets = ['wikitext2']
-    for dataset in datasets:
-        dataloader, testloader = get_loaders(
-            dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
-        )
-        ppl = llama_eval(model, testloader, DEV)
-        return ppl
-
-
-def get_empty_config(layers):
-    return {layer: (-1, -1) for layer in layers}
-
-
 def main():
     parser = argparse.ArgumentParser()
 
@@ -385,14 +358,6 @@ def main():
     model.seqlen = args.seqlen
     model.eval()
 
-    layers = sorted([
-        layer for
-        layer in find_layers(model).keys()
-        if 'lm_head' not in layer
-    ])
-
-    ppl_delta_by_layer_name = {}
-
     config = get_config(args)
     real_bits = config['real_bits']
     predicted_ppl = config['predicted_ppl']
@@ -421,29 +386,11 @@ def main():
             dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
         )
         ppl = llama_eval(model, testloader, DEV)
+        wandb.log({f'ppl_{dataset}': ppl})
 
-
-    # for layer_idx, layer_name in enumerate(layers):
-    #     print(f'Checking {layer_name}')
-    #     config = get_empty_config(layers)
-    #     config[layer_name] = (args.edenn_d, args.edenn_n)
-    #
-    #     ppl_delta = eval_ppl_by_config(
-    #         args,
-    #         model,
-    #         config,
-    #     ) - baseline_ppl
-    #
-    #     wandb.log({'layer_ppl_delta': ppl_delta}, layer_idx)
-    #     ppl_delta_by_layer_name[layer_name] = ppl_delta
-    #     print(f'ppl_delta: {ppl_delta}')
-    #
-    # wandb.log({'ppl_delta_by_layer_name': ppl_delta_by_layer_name})
-    # print(f'ppl_delta_by_layer_name: {ppl_delta_by_layer_name}')
-    
-    # model = model.to(DEV)
-    # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
-    # wandb.log(get_zero_shots(model, task_list = ['mmlu',], num_fewshots=5))
+    model = model.to(DEV)
+    wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
+    wandb.log(get_zero_shots(model, task_list = ['mmlu',], num_fewshots=5))
 
 
 if __name__ == '__main__':
