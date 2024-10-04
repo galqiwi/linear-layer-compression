@@ -70,7 +70,9 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
 
     layer_names = sorted(linear_layers.keys())
 
-    assert set(layerwise_edenn_config) == set(layer_names)
+    print(set(layerwise_edenn_config.keys()), set(layer_names))
+
+    assert set(layerwise_edenn_config.keys()) == set(layer_names)
     
     for layer_name in tqdm(layer_names, desc="Quantizing linear layers..."):
         if "lm_head" in layer_name:
