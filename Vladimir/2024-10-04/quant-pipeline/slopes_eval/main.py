@@ -69,6 +69,7 @@ def llama_rtn(model, layerwise_edenn_config, hadamard_groupsize, device):
     linear_layers = find_layers(model)
     
     for (name, layer), (edenn_d, edenn_n) in tqdm(zip(linear_layers.items(), layerwise_edenn_config), desc="Quantizing linear layers..."):
+        print(name)
         if (edenn_n, edenn_d) == (-1, -1):
             continue
         if "lm_head" in name:
@@ -285,23 +286,6 @@ def eval_grid(edenn_d: int, edenn_n: int):
     dequant, entropy = higgs_quantize_dequantize(x, edenn_d, edenn_n)
     mse = (x - dequant).pow(2).mean().item()
     return mse, entropy / edenn_d
-
-
-def build_layerwise_edenn_config(
-    edenn_d: Optional[int], edenn_n: Optional[int], 
-    blockwise_edenn_config: Optional[list[(int, int)]],
-    layerwise_edenn_config: Optional[list[(int, int)]],
-) -> list[(int, int)]:
-    if layerwise_edenn_config is not None:
-        assert edenn_d is None and edenn_n is None and blockwise_edenn_config is None
-        return layerwise_edenn_config
-    
-    if blockwise_edenn_config is not None:
-        assert edenn_d is None and edenn_n is None
-        return [block_config for block_config in blockwise_edenn_config for _ in range(7)]
-    
-    assert edenn_d is not None and edenn_n is not None
-    return [[edenn_d, edenn_n] for _ in range(32 * 7)]
 
 
 def eval_ppl_by_config(args, model, layerwise_edenn_config):
