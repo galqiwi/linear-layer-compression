@@ -6,6 +6,9 @@ import torch
 import torch.nn as nn
 from transformers import AutoModelForCausalLM
 
+import argparse
+from datautils import *
+
 import wandb
 from tqdm import tqdm, trange
 
@@ -332,9 +335,6 @@ def eval_ppl_by_config(args, model, layerwise_edenn_config):
 
 
 def main():
-    import argparse
-    from datautils import *
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
