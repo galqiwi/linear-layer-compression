@@ -394,8 +394,34 @@ def main():
     ppl_delta_by_layer_name = {}
 
     config = get_config(args)
+    real_bits = config['real_bits']
+    predicted_ppl = config['predicted_ppl']
+    optimal_config = config['optimal_config']
+    wandb.log({
+        'real_bits': real_bits,
+        'predicted_ppl': predicted_ppl,
+        'optimal_config': optimal_config,
+    })
 
-    print(config)
+
+    match args.method:
+        case "rtn":
+            model = llama_rtn(model, optimal_config, args.hadamard_groupsize, DEV)
+        case "gptq":
+            dataloader, testloader = get_loaders(
+                args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
+            )
+            model = llama_gptq(model, args.nsamples, dataloader, DEV, optimal_config, args.hadamard_groupsize)
+        case _:
+            raise Exception("AAA")
+
+    datasets = ['wikitext2']
+    for dataset in datasets:
+        dataloader, testloader = get_loaders(
+            dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
+        )
+        ppl = llama_eval(model, testloader, DEV)
+
 
     # for layer_idx, layer_name in enumerate(layers):
     #     print(f'Checking {layer_name}')
