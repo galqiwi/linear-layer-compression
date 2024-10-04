@@ -1,6 +1,7 @@
 import os
 from typing import Optional
 
+import copy
 import torch
 import torch.nn as nn
 from transformers import AutoModelForCausalLM
@@ -308,7 +309,29 @@ def build_layerwise_edenn_config(
     return [[edenn_d, edenn_n] for _ in range(32 * 7)]
 
 
-if __name__ == '__main__':
+def eval_ppl_by_config(args, model, layerwise_edenn_config):
+    model = copy.deepcopy(model)
+
+    match args.method:
+        case "rtn":
+            model = llama_rtn(model, layerwise_edenn_config, args.hadamard_groupsize, DEV)
+        case "gptq":
+            dataloader, testloader = get_loaders(
+                args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
+            )
+            model = llama_gptq(model, args.nsamples, dataloader, DEV, layerwise_edenn_config, args.hadamard_groupsize)
+        case _:
+            raise Exception("AAA")
+
+    datasets = ['wikitext2']
+    for dataset in datasets:
+        dataloader, testloader = get_loaders(
+            dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
+        )
+        ppl = llama_eval(model, testloader, DEV)
+
+
+def main():
     import argparse
     from datautils import *
 
@@ -319,12 +342,16 @@ if __name__ == '__main__':
         help='LlaMa model to load; pass location of hugginface converted checkpoint.'
     )
     parser.add_argument(
-        '--edenn-d', type=int, default=None,
+        '--edenn-d', type=int, required=True,
         help='EDENN grid dimension'
     )
     parser.add_argument(
-        '--edenn-n', type=int, default=None,
+        '--edenn-n', type=int, required=True,
         help='EDENN grid size'
+    )
+    parser.add_argument(
+        '--tag', type=str, default="default",
+        help='tag for wandb config'
     )
     parser.add_argument(
         '--hadamard_groupsize', type=int, default=1024, choices=[64, 128, 256, 512, 1024, 2048, 4096],
@@ -361,38 +388,19 @@ if __name__ == '__main__':
     model.seqlen = args.seqlen
     model.eval()
 
-    layerwise_edenn_config = [(-1, -1)] * 32 * 7
+    mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
+    wandb.log({'grid_mse': mse})
 
-    print(layerwise_edenn_config)
+    layerwise_edenn_config = [(-1, -1)] * 16 * 7
+
     wandb.log({"layerwise_edenn_config": layerwise_edenn_config})
-    
-    if args.edenn_d is not None:
-        mse, entropy = eval_grid(args.edenn_d, args.edenn_n)
-    
-    if args.edenn_d is not None:
-        ckpt_name = f"{args.model}_{args.method}_{args.edenn_d}_{args.edenn_n}.pt"
-    else:
-        ckpt_name = f"{args.model}_{args.method}_{layerwise_edenn_config}.pt"
 
-    match args.method:
-        case "rtn":
-            model = llama_rtn(model, layerwise_edenn_config, args.hadamard_groupsize, DEV)
-        case "gptq":
-            dataloader, testloader = get_loaders(
-                args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
-            )
-            model = llama_gptq(model, args.nsamples, dataloader, DEV, layerwise_edenn_config, args.hadamard_groupsize)
-        case _:
-            raise Exception("AAA")
 
-    datasets = ['wikitext2'] 
-    for dataset in datasets:
-        dataloader, testloader = get_loaders(
-            dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
-        )
-        ppl = llama_eval(model, testloader, DEV)
-        wandb.log({f"{dataset}_PPL": ppl})
     
     # model = model.to(DEV)
     # wandb.log(get_zero_shots(model, task_list = ['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
     # wandb.log(get_zero_shots(model, task_list = ['mmlu',], num_fewshots=5))
+
+
+if __name__ == '__main__':
+    main()
