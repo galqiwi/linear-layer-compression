@@ -367,9 +367,9 @@ def main():
     model.seqlen = args.seqlen
     model.eval()
 
-    if (args.edenn_d, args.edenn_n) != (-1, -1):
-        mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
-        wandb.log({'test_grid_mse': mse})
+    # if (args.edenn_d, args.edenn_n) != (-1, -1):
+    #     mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
+    #     wandb.log({'test_grid_mse': mse})
 
     layers = sorted([
         layer for
