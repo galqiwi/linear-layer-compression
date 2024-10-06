@@ -312,6 +312,8 @@ def eval_ppl_by_config(args, model, layerwise_edenn_config):
         case _:
             raise Exception("AAA")
 
+    model = model.half()
+
     datasets = ['wikitext2']
     for dataset in datasets:
         dataloader, testloader = get_loaders(

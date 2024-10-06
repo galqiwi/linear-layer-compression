@@ -535,6 +535,8 @@ def main():
 
         linear.weight.data = quantize_dequantize_weight(linear.weight, codes=codes.half(), block_size=args.block_size).cuda()
 
+    model = model.half()
+
     datasets = ['wikitext2']
     for dataset in datasets:
         dataloader, testloader = get_loaders(

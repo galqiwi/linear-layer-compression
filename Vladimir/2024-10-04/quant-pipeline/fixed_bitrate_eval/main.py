@@ -393,6 +393,8 @@ def main():
         case _:
             raise Exception("AAA")
 
+    model = model.half()
+
     datasets = ['wikitext2']
     for dataset in datasets:
         dataloader, testloader = get_loaders(
