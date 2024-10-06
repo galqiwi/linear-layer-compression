@@ -21,6 +21,16 @@ import torch
 import requests
 import os
 import io
+import torch
+from hqq.core.quantize import Quantizer as HqqQuantizer
+
+@torch.no_grad()
+def quantize_dequantize_hqq(weight, bits, group_size=64):
+    return HqqQuantizer.dequantize(*HqqQuantizer.quantize(
+        weight,
+        nbits=bits, group_size=group_size,
+    ))
+
 
 
 def get_af4_grid(block_size):
@@ -483,15 +493,12 @@ def main():
         help='Where to extract calibration data from.'
     )
     parser.add_argument(
-        '--grid', type=str, choices=["nf4", "af4", "int8"], default="nf4", help="Grid to quantize with",
+        '--bits',
+        type=float, default=4.0, help='Target wbits.'
     )
     parser.add_argument(
         '--block_size',
         type=int, default=1024, help='Block size for quantization.'
-    )
-    parser.add_argument(
-        '--do_hadamard',
-        action='store_true', help='Do Hadamard transform.'
     )
 
     args = parser.parse_args()
@@ -513,27 +520,11 @@ def main():
 
     model = model.half().cuda()
 
-    if args.grid == "nf4":
-        codes = NF4_CODES
-    elif args.grid == "af4":
-        codes = get_af4_grid(args.block_size)
-    elif args.grid == "int8":
-        codes = get_int8_grid()
-    else:
-        raise ValueError(f"Unknown grid {args.grid}")
-
 
     for layer in layers:
         linear = get_module_by_path(model, layer)
 
-        if args.do_hadamard:
-            new_linear = NoisyHadamarLinear(linear.weight, linear.bias)
-            new_linear.inner.weight.data = quantize_dequantize_weight(new_linear.inner.weight, codes=codes.half(),
-                                                                      block_size=args.block_size).cuda()
-            set_module_by_path(model, layer, new_linear)
-            continue
-
-        linear.weight.data = quantize_dequantize_weight(linear.weight, codes=codes.half(), block_size=args.block_size).cuda()
+        linear.weight.data = quantize_dequantize_hqq(linear.weight, bits=args.bits, group_size=args.block_size).cuda()
 
     model = model.half()
 
