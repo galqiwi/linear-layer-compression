@@ -34,6 +34,14 @@ def get_af4_grid(block_size):
 import copy
 import torch
 
+import torch
+import numpy as np
+
+
+def get_int8_grid():
+    return torch.tensor(list(np.linspace(-1, 1, 255)) + [float('+inf')])
+
+
 NF4_CODES = torch.tensor([
     -1.0, -0.6961928009986877, -0.5250730514526367, -0.39491748809814453, -0.28444138169288635, -0.18477343022823334,
     -0.09105003625154495, 0.0,
@@ -475,7 +483,7 @@ def main():
         help='Where to extract calibration data from.'
     )
     parser.add_argument(
-        '--grid', type=str, choices=["nf4", "af4", "edenn"], default="nf4", help="Grid to quantize with",
+        '--grid', type=str, choices=["nf4", "af4", "int8"], default="nf4", help="Grid to quantize with",
     )
     parser.add_argument(
         '--block_size',
@@ -509,8 +517,11 @@ def main():
         codes = NF4_CODES
     elif args.grid == "af4":
         codes = get_af4_grid(args.block_size)
+    elif args.grid == "int8":
+        codes = get_int8_grid()
     else:
-        assert False
+        raise ValueError(f"Unknown grid {args.grid}")
+
 
     for layer in layers:
         linear = get_module_by_path(model, layer)
