@@ -17,6 +17,76 @@ from get_config import get_config
 from edenn import higgs_quantize_dequantize, pad_to_block, HadLinear
 from fast_hadamard_transform import hadamard_transform
 from gptq import apply_gptq, get_accumulate_input_fn
+import torch
+import requests
+import os
+import io
+
+
+def get_af4_grid(block_size):
+    url = (
+        'https://github.com/galqiwi/linear-layer-compression/raw/' +
+        f'fb093fe7fe4a50a7ee357a148a6da512cf114786/Vladimir/2024-09-28/af4_{block_size}.pt'
+    )
+    return torch.load(io.BytesIO(requests.get(url).content))
+
+
+import copy
+import torch
+
+NF4_CODES = torch.tensor([
+    -1.0, -0.6961928009986877, -0.5250730514526367, -0.39491748809814453, -0.28444138169288635, -0.18477343022823334,
+    -0.09105003625154495, 0.0,
+    0.07958029955625534, 0.16093020141124725, 0.24611230194568634, 0.33791524171829224, 0.44070982933044434,
+    0.5626170039176941, 0.7229568362236023, 1.0,
+], dtype=torch.float16)
+
+
+def get_closest_idx(x, grid):
+    _grid_len, = grid.shape
+    input_shape = x.shape
+    x = x.reshape(-1)
+
+    output = (x[:, None] - grid[None, :]).abs().min(dim=1).indices
+    assert output.shape == x.shape
+
+    return output.reshape(input_shape)
+
+
+def quantize_weight(weight, block_size=64, codes=NF4_CODES):
+    out_dim, in_dim = weight.shape
+
+    codes = copy.deepcopy(codes).to(weight.device)
+
+    weight_groups = weight.reshape(-1, block_size)
+
+    scales = weight_groups.abs().max(dim=1).values
+
+    assert scales.shape == (out_dim * in_dim // block_size,)
+    weight_quantized = get_closest_idx(
+        weight_groups / scales[:, None],
+        codes,
+    ).reshape(out_dim, in_dim).to(weight.device)
+
+    return weight_quantized, scales
+
+
+def dequantize_weight(weight_quantized, scales, block_size=64, codes=NF4_CODES):
+    out_dim, in_dim = weight_quantized.shape
+
+    codes = copy.deepcopy(codes).to(weight_quantized.device)
+
+    return (
+            codes[weight_quantized].reshape(-1, block_size) *
+            scales[:, None]
+    ).reshape(out_dim, in_dim)
+
+
+def quantize_dequantize_weight(weight, block_size=64, codes=NF4_CODES):
+    weight_quantized, scales = quantize_weight(weight, block_size=block_size, codes=codes)
+    scales = scales.half()
+    return dequantize_weight(weight_quantized, scales, block_size=block_size, codes=codes)
+
 
 DEV = torch.device('cuda')
 
@@ -267,6 +337,28 @@ def llama_eval(model, dataloader, dev):
     return ppl.item()
 
 
+def get_module_by_path(model, path):
+    if path == '':
+        return model
+    splitted = path.split('.', 1)
+    if len(splitted) == 1:
+        splitted.append('')
+    next_name, suffix = splitted
+
+    try:
+        next_module = model[int(next_name)]
+    except:
+        next_module = getattr(model, next_name)
+
+    return get_module_by_path(next_module, suffix)
+
+def set_module_by_path(model, path, value):
+    parts = path.split('.')
+    prefix = '.'.join(parts[:-1])
+    parent = get_module_by_path(model, prefix)
+    setattr(parent, parts[-1], value)
+
+
 def get_zero_shots(model, task_list = ('arc_easy',), num_fewshots=1):
     import lm_eval
 
@@ -299,6 +391,48 @@ def get_zero_shots(model, task_list = ('arc_easy',), num_fewshots=1):
         result_dict = {f'{task_name}@{num_fewshots}': acc for task_name, acc in result_dict.items()}
 
     return result_dict
+
+
+from fast_hadamard_transform import hadamard_transform
+
+class NoisyHadamarLinear(torch.nn.Module):
+    def __init__(self, weight, bias, *, had_block_size = 2048, relative_mse = 0):
+        super().__init__()
+
+        weight = weight.detach().clone()
+        if bias is not None:
+            bias = bias.detach().clone()
+
+        self.had_block_size = had_block_size
+
+        self.out_features, self.in_features = weight.shape
+
+        self.inner = torch.nn.Linear(self.in_features, self.out_features, bias=(bias is not None), dtype=weight.dtype,
+                                     device=weight.device)
+
+        assert self.in_features % self.had_block_size == 0, (self.in_features, self.had_block_size)
+        weight = weight.reshape(self.out_features, self.in_features // self.had_block_size, self.had_block_size)
+        weight = hadamard_transform(weight, scale=1 / (self.had_block_size ** 0.5))
+        weight = weight.reshape(self.out_features, self.in_features)
+
+        weight = weight + torch.randn_like(weight) * torch.norm(weight) * (relative_mse ** 0.5) / (weight.numel() ** 0.5)
+
+
+
+        self.inner.weight.data = weight
+        if bias is not None:
+            self.inner.bias.data = bias
+
+    def forward(self, input):
+        input_shape = input.shape
+
+        assert input.shape[-1] % self.had_block_size == 0
+
+        input = input.reshape(-1, self.had_block_size)
+        input = hadamard_transform(input, scale=1 / (self.had_block_size ** 0.5))
+        input = input.reshape(input_shape)
+
+        return self.inner(input)
 
 
 @torch.no_grad()
@@ -337,23 +471,19 @@ def main():
         type=int, default=8192, help='Seq len for PPL evals.'
     )
     parser.add_argument(
-        '--method', type=str, choices=["rtn", "gptq"], default="gptq", help="Method to quantize with",
-    )
-    parser.add_argument(
         '--dataset', type=str, default='red', choices=['red'],
         help='Where to extract calibration data from.'
     )
     parser.add_argument(
-        '--nsamples', type=int, default=256,
-        help='Number of calibration data samples.'
+        '--grid', type=str, choices=["nf4", "af4", "edenn"], default="nf4", help="Grid to quantize with",
     )
     parser.add_argument(
-        '--edenn-d', type=int, required=True,
-        help='EDENN grid dimension'
+        '--block_size',
+        type=int, default=1024, help='Block size for quantization.'
     )
     parser.add_argument(
-        '--edenn-n', type=int, required=True,
-        help='EDENN grid size'
+        '--do_hadamard',
+        action='store_true', help='Do Hadamard transform.'
     )
 
     args = parser.parse_args()
@@ -367,31 +497,32 @@ def main():
     model.seqlen = args.seqlen
     model.eval()
 
-    # if (args.edenn_d, args.edenn_n) != (-1, -1):
-    #     mse, _entropy = eval_grid(args.edenn_d, args.edenn_n)
-    #     wandb.log({'test_grid_mse': mse})
-
     layers = sorted([
         layer for
         layer in find_layers(model).keys()
         if 'lm_head' not in layer
     ])
 
-    config = {
-        layer: (args.edenn_d, args.edenn_n)
-        for layer in layers
-    }
+    model = model.half().cuda()
 
-    match args.method:
-        case "rtn":
-            model = llama_rtn(model, config, args.hadamard_groupsize, DEV)
-        case "gptq":
-            dataloader, testloader = get_loaders(
-                args.dataset, nsamples=args.nsamples, seed=args.seed, model=args.model, seqlen=model.seqlen
-            )
-            model = llama_gptq(model, args.nsamples, dataloader, DEV, config, args.hadamard_groupsize)
-        case _:
-            raise Exception("AAA")
+    if args.grid == "nf4":
+        codes = NF4_CODES
+    elif args.grid == "af4":
+        codes = get_af4_grid(args.block_size)
+    else:
+        assert False
+
+    for layer in layers:
+        linear = get_module_by_path(model, layer)
+
+        if args.do_hadamard:
+            new_linear = NoisyHadamarLinear(linear.weight, linear.bias)
+            new_linear.inner.weight.data = quantize_dequantize_weight(new_linear.inner.weight, codes=codes.half(),
+                                                                      block_size=args.block_size).cuda()
+            set_module_by_path(model, layer, new_linear)
+            continue
+
+        linear.weight.data = quantize_dequantize_weight(linear.weight, codes=codes.half(), block_size=args.block_size).cuda()
 
     datasets = ['wikitext2']
     for dataset in datasets:
