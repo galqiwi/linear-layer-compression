@@ -527,7 +527,7 @@ def main():
         linear = get_module_by_path(model, layer)
 
         if args.do_hadamard:
-            new_linear = NoisyHadamarLinear(linear.weight, linear.bias)
+            new_linear = NoisyHadamarLinear(linear.weight, linear.bias, had_block_size=args.hadamard_groupsize)
             new_linear.inner.weight.data = quantize_dequantize_weight(new_linear.inner.weight, codes=codes.half(),
                                                                       block_size=args.block_size).cuda()
             set_module_by_path(model, layer, new_linear)
