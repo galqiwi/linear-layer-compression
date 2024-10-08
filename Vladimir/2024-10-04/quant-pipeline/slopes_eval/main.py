@@ -403,6 +403,19 @@ def get_zero_shots(model, task_list = ('arc_easy',), num_fewshots=1):
 
 
 @torch.no_grad()
+def kl_div_from_logits(inp, target):
+    assert inp.shape == target.shape
+    n_tokens = inp.shape[-1]
+    inp = inp.reshape(-1, n_tokens)
+    target = target.reshape(-1, n_tokens)
+
+    inp = torch.nn.functional.log_softmax(inp, dim=-1)
+    target = torch.nn.functional.log_softmax(target, dim=-1)
+
+    return torch.nn.functional.kl_div(input=inp, target=target, reduction='sum', log_target=True)
+
+
+@torch.no_grad()
 def eval_grid(edenn_d: int, edenn_n: int):
     x = torch.empty((2**16, edenn_d), device=DEV).normal_()
     dequant, entropy = higgs_quantize_dequantize(x, edenn_d, edenn_n)
