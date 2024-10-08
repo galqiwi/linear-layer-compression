@@ -256,6 +256,118 @@ def llama_eval(model, dataloader, dev):
     return ppl.item()
 
 
+@torch.no_grad()
+def llama_eval_cross_entropy(orig_model, model, dataloader, dev):
+    print('Evaluating ...')
+
+    nsamples = len(dataloader)
+
+    use_cache = model.config.use_cache
+    orig_use_cache = orig_model.config.use_cache
+
+    model.config.use_cache = False
+    orig_model.config.use_cache = False
+    layers = model.model.layers
+    orig_layers = orig_model.model.layers
+
+    model.model.embed_tokens = model.model.embed_tokens.to(dev)
+    model.model.rotary_emb = model.model.rotary_emb.to(dev)
+    layers[0] = layers[0].to(dev)
+
+    inps = []
+    attention_masks = []
+    position_ids = []
+
+    class Catcher(nn.Module):
+        def __init__(self, module):
+            super().__init__()
+            self.module = module
+
+        def forward(self, inp, **kwargs):
+            inps.append(inp)
+            attention_masks.append(kwargs['attention_mask'])
+            position_ids.append(kwargs['position_ids'])
+            raise ValueError
+
+    layers[0] = Catcher(layers[0])
+    for batch in dataloader:
+        try:
+            model(batch.to(dev))
+        except ValueError:
+            pass
+    layers[0] = layers[0].module
+
+    layers[0] = layers[0].cpu()
+
+    model.model.embed_tokens = model.model.embed_tokens.cpu()
+    torch.cuda.empty_cache()
+
+    orig_model.model.embed_tokens = orig_model.model.embed_tokens.to(dev)
+    orig_model.model.rotary_emb = orig_model.model.rotary_emb.to(dev)
+    layers[0] = layers[0].to(dev)
+
+    orig_inps = []
+
+    class Catcher(nn.Module):
+        def __init__(self, module):
+            super().__init__()
+            self.module = module
+
+        def forward(self, inp, **kwargs):
+            orig_inps.append(inp)
+            raise ValueError
+
+    orig_layers[0] = Catcher(orig_layers[0])
+    for batch in dataloader:
+        try:
+            orig_model(batch.to(dev))
+        except ValueError:
+            pass
+    orig_layers[0] = orig_layers[0].module
+
+    orig_layers[0] = orig_layers[0].cpu()
+
+    orig_model.model.embed_tokens = orig_model.model.embed_tokens.cpu()
+    torch.cuda.empty_cache()
+
+    for i in trange(len(layers), desc=f"Evaluating layer-by-layer..."):
+        layer = layers[i].to(dev)
+        orig_layer = orig_layers[i].to(dev)
+        for j in range(nsamples):
+            inps[j] = layer(inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
+            orig_inps[j] = orig_layer(orig_inps[j], attention_mask=attention_masks[j], position_ids=position_ids[j])[0]
+        layers[i] = layer.cpu()
+        orig_layers[i] = orig_layer.cpu()
+        del layer
+        del orig_layer
+        torch.cuda.empty_cache()
+
+    if model.model.norm is not None:
+        model.model.norm = model.model.norm.to(dev)
+    model.lm_head = model.lm_head.to(dev)
+    if orig_model.model.norm is not None:
+        orig_model.model.norm = orig_model.model.norm.to(dev)
+    orig_model.lm_head = orig_model.lm_head.to(dev)
+
+    loss = 0
+    for i in range(nsamples):
+        hidden_states = inps[i]
+        orig_hidden_states = orig_inps[i]
+        if model.model.norm is not None:
+            hidden_states = model.model.norm(hidden_states)
+        if orig_model.model.norm is not None:
+            orig_hidden_states = orig_model.model.norm(orig_hidden_states)
+        lm_logits = model.lm_head(hidden_states)
+        orig_lm_logits = orig_model.lm_head(orig_hidden_states)
+
+        loss += kl_div_from_logits(inp=lm_logits, target=orig_lm_logits)
+
+    model.config.use_cache = use_cache
+    orig_model.config.use_cache = orig_use_cache
+
+    return loss / nsamples
+
+
 def get_zero_shots(model, task_list = ('arc_easy',), num_fewshots=1):
     import lm_eval
 
@@ -300,6 +412,9 @@ def eval_grid(edenn_d: int, edenn_n: int):
 
 def eval_ppl_by_config(args, model, layerwise_edenn_config):
     model = copy.deepcopy(model)
+    orig_model = None
+    if args.div_loss:
+        orig_model = copy.deepcopy(model)
 
     match args.method:
         case "rtn":
@@ -319,7 +434,10 @@ def eval_ppl_by_config(args, model, layerwise_edenn_config):
         dataloader, testloader = get_loaders(
             dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
         )
-        ppl = llama_eval(model, testloader, DEV)
+        if args.div_loss:
+            ppl = llama_eval_cross_entropy(orig_model, model, testloader, DEV)
+        else:
+            ppl = llama_eval(model, testloader, DEV)
         return ppl
 
 
@@ -364,6 +482,10 @@ def main():
     parser.add_argument(
         '--dataset', type=str, default='red', choices=['red'],
         help='Where to extract calibration data from.'
+    )
+    parser.add_argument(
+        '--div_loss', action='store_true',
+        help='calculate KL divergence.'
     )
     parser.add_argument(
         '--nsamples', type=int, default=256,
