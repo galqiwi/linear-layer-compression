@@ -441,6 +441,7 @@ def eval_ppl_by_config(args, model, layerwise_edenn_config):
             raise Exception("AAA")
 
     model = model.half()
+    orig_model = orig_model.half()
 
     datasets = ['wikitext2']
     for dataset in datasets:
