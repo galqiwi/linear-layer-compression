@@ -31,6 +31,12 @@ def get_af4_grid(block_size):
     return torch.load(io.BytesIO(requests.get(url).content))
 
 
+def get_af3_grid(block_size):
+    assert block_size == 64
+
+    return torch.tensor([-1.0000, -0.4786, -0.2171,  0.0000,  0.1609,  0.3379,  0.5626,  1.0000])
+
+
 import copy
 import torch
 
@@ -483,7 +489,7 @@ def main():
         help='Where to extract calibration data from.'
     )
     parser.add_argument(
-        '--grid', type=str, choices=["nf4", "af4", "int8"], default="nf4", help="Grid to quantize with",
+        '--grid', type=str, choices=["nf4", "af4", "af3", "int8"], default="nf4", help="Grid to quantize with",
     )
     parser.add_argument(
         '--block_size',
@@ -517,6 +523,8 @@ def main():
         codes = NF4_CODES
     elif args.grid == "af4":
         codes = get_af4_grid(args.block_size)
+    elif args.grid == "af3":
+        codes = get_af3_grid(args.block_size)
     elif args.grid == "int8":
         codes = get_int8_grid()
     else:
