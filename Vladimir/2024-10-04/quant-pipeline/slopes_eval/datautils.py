@@ -31,7 +31,21 @@ def get_wikitext2(nsamples, seed, seqlen, model):
     for i in range(0, testenc.input_ids.shape[1] - seqlen, seqlen):
         testloader.append(testenc.input_ids[:, i:(i + seqlen)])
 
-    return trainloader, testloader 
+    return trainloader, testloader
+
+
+def get_random(nsamples, seed, seqlen, model):
+    from transformers import AutoTokenizer
+
+    tokenizer = AutoTokenizer.from_pretrained(model, use_fast=False)
+
+    output = [
+        torch.randint(low=0, high=tokenizer.vocab_size, size=(1, seqlen), dtype=torch.int64)
+        for _ in range(35)
+    ]
+
+    return [], output
+
 
 def get_red(nsamples, seed, seqlen, model):
     VALSAMPLES = 1024
@@ -62,7 +76,8 @@ def get_loaders(
 ):
     if 'wikitext2' in name:
         return get_wikitext2(nsamples, seed, seqlen, model)
-        return data, None
+    if 'random' in name:
+        return get_random(nsamples, seed, seqlen, model)
     if 'red' in name:
         return get_red(nsamples, seed, seqlen, model)
 
