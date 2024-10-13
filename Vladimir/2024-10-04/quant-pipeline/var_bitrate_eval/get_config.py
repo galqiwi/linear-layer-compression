@@ -126,6 +126,10 @@ def get_config(args):
 
     ppl_delta_df = pd.DataFrame(ppl_delta_lines)
 
+    ppl_delta_df = ppl_delta_df[
+        ppl_delta_df['ppl_delta'].apply(lambda x: not isinstance(x, str))
+    ]
+
     layers = sorted(set(ppl_delta_df['layer']))
 
     slope_by_layer = {}
