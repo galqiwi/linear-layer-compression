@@ -449,7 +449,7 @@ def eval_ppl_by_config(args, model, layerwise_edenn_config):
         dataloader, testloader = get_loaders(
             dataset, seed=args.seed, model=args.model, seqlen=model.seqlen
         )
-        print([x.shape for x in testloader])
+        print([x.shape for x in testloader], len(testloader))
         if args.div_loss:
             ppl = llama_eval_cross_entropy(orig_model, model, testloader, DEV)
         else:
