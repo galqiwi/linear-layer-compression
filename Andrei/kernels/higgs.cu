@@ -28,6 +28,26 @@ __global__ void HiggsAlignedMatVec(
   int a_gl_rd_half = a_gl_stride_half * c_gl_wr + (threadIdx.x % threads_in_wave) * (scales_size / group_size) / threads_in_wave / codes_in_half;
   int a_gl_end_half = a_gl_stride_half * (c_gl_wr + 1);
 
+  constexpr int replication = 1024 / 16 / group_size;
+  int lane = threadIdx.x % replication;
+  __shared__ uint4 sh_grid[replication * 256 * group_size / halfs_in_uint4];
+  const uint4* codebook;
+  if constexpr (group_size == 2 && codebook_bits == 8) {
+    codebook = HIGGS_2_256;
+  } else if constexpr (group_size == 4 && codebook_bits == 8) {
+    codebook = HIGGS_4_256;
+  } else if constexpr (group_size == 1 && codebook_bits == 8) {
+    codebook = HIGGS_1_256;
+  }
+  
+  for (int i = threadIdx.x; i < 256 * group_size / halfs_in_uint4; i += blockDim.x) {
+    uint4 dec = codebook[i];
+    #pragma unroll
+    for (int j = 0; j < replication; j++)
+      sh_grid[replication * i + (j + lane) % replication] = dec;
+  }
+  __syncthreads();
+
   __shared__ uint4 sh_b[threads_in_wave * (steps_in_wave + 1)];
   float res = 0;
 
@@ -54,11 +74,11 @@ __global__ void HiggsAlignedMatVec(
         #pragma unroll
         for (int j = 0; j < (8 - 1) / group_size + 1; j++) {
           if constexpr (group_size == 2 && codebook_bits == 8) {
-            ((uint32_t*)dec)[j] = __ldca(((uint32_t*)HIGGS_2_256) + enc[(8 / group_size) * i + j]); // read 2 halfs at a time
+            ((uint32_t*)dec)[j] = *(((const uint32_t*)sh_grid) + replication * enc[(8 / group_size) * i + j] + lane); // read 2 halfs at a time
           } else if constexpr (group_size == 4 && codebook_bits == 8) {
-            ((uint64_t*)dec)[j] = __ldca(((uint64_t*)HIGGS_4_256) + enc[(8 / group_size) * i + j]); // read 4 halfs at a time
+            ((uint64_t*)dec)[j] = *(((const uint64_t*)sh_grid) + replication * enc[(8 / group_size) * i + j] + lane); // read 4 halfs at a time
           } else if constexpr (group_size == 1 && codebook_bits == 8) {
-            ((uint16_t*)dec)[j] = __ldca(((uint16_t*)HIGGS_1_256) + enc[(8 / group_size) * i + j]); // read 1 halfs at a time
+            ((uint16_t*)dec)[j] = *(((const uint16_t*)sh_grid) + replication * enc[(8 / group_size) * i + j] + lane); // read 1 halfs at a time
           }
         }
         
