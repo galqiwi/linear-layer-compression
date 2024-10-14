@@ -4,6 +4,7 @@
 #include <c10/util/Exception.h>
 #include <cuda_fp16.h>
 
+#include <fast_hadamard_transform.h>
 
 namespace F = torch::nn::functional;
 
@@ -116,19 +117,28 @@ void higgs_matvec(
   );
 }
 
+torch::Tensor apply_hadamard(const torch::Tensor& input) {
+  auto input_sizes = input.sizes();
+  auto flat_input = input.reshape({-1, 1024});
+  return fast_hadamard_transform(flat_input, 1.0/32.0).reshape(input_sizes);
+}
+
+
 torch::Tensor higgs_matmat(
   const torch::Tensor& input,
   const torch::Tensor& codes,
   const torch::Tensor& scales,
   const std::optional<torch::Tensor>& bias
 ) {
+  auto had_input = apply_hadamard(input);
+
   auto codebook_bits = codes.dtype().itemsize() * 8;
   auto group_size = (input.size(-1) - 1) / codes.size(1) + 1;
 
   bool use_bfloat16 = check_use_bfloat16(input);
   auto input_sizes = input.sizes();
   auto out_features = codes.size(0);
-  auto flat_input = input.reshape({-1, input.size(-1)});
+  auto flat_input = had_input.reshape({-1, input.size(-1)});
   auto flat_output = torch::empty({flat_input.size(0), out_features},
     torch::TensorOptions()
       .dtype(input.dtype())
@@ -138,6 +148,9 @@ torch::Tensor higgs_matmat(
   for (int i = 0; i < flat_input.size(0); ++i) {
     auto input_vec = flat_input.index({i});
     auto output_vec = flat_output.index({i});
+    // print first 4 elements of input_vec
+    // std::cout << "input_vec: " << input_vec[0].item<float>() << " " << input_vec[1].item<float>() << " " << input_vec[2].item<float>() << " " << input_vec[3].item<float>() << std::endl;
+
     higgs_matvec(
       codes,
       input_vec,

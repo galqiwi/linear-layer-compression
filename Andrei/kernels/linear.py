@@ -91,13 +91,12 @@ class HiggsLinear(nn.Module):
             else:
                 self.codes = self.__getattr__(f"codes_{self.higgs_d}_{self.higgs_n}")
         input = pad_to_block(input, [-1], self.hadamard_size)
-        input = hadamard_transform(
-            input.reshape(input.shape[:-1] + (-1, self.hadamard_size)),
-            scale=1/math.sqrt(self.hadamard_size),
-        )
-        input = input.reshape(input.shape[:-2] + (-1,))
 
         if self.for_eval:
+            input = hadamard_transform(
+                input.reshape(input.shape[:-1] + (-1, self.hadamard_size)),
+                scale=1/math.sqrt(self.hadamard_size),
+            ).reshape(input.shape)
             return nn.functional.linear(input, self.codes, self.bias)
         else:
             return torch.ops.higgs.higgs_matmat(

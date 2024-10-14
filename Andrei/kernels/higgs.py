@@ -7,7 +7,13 @@ from torch.utils.cpp_extension import load
 CUDA_FOLDER = os.path.dirname(os.path.abspath(__file__))
 CUDA_KERNEL = load(
     name="higgs_cuda",
-    sources=[os.path.join(CUDA_FOLDER, "higgs.cpp"), os.path.join(CUDA_FOLDER, "higgs.cu")],
+    sources=[
+        os.path.join(CUDA_FOLDER, "higgs.cpp"),
+        os.path.join(CUDA_FOLDER, "higgs.cu"),
+        os.path.join(CUDA_FOLDER, "fast_hadamard_transform.cpp"),
+        os.path.join(CUDA_FOLDER, "fast_hadamard_transform_cuda.cu"),
+    ],
+    extra_include_paths=[CUDA_FOLDER],
 )
 
 torch.library.define(
