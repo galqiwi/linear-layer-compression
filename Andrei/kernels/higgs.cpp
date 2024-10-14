@@ -119,8 +119,8 @@ void higgs_matvec(
 
 torch::Tensor apply_hadamard(const torch::Tensor& input) {
   auto input_sizes = input.sizes();
-  auto flat_input = input.reshape({-1, 1024});
-  return fast_hadamard_transform(flat_input, 1.0/32.0).reshape(input_sizes);
+  auto flat_input = input.reshape({-1, 1024}).contiguous();
+  return fast_hadamard_transform(flat_input, 1.0/32.0).reshape(input_sizes).contiguous();
 }
 
 
@@ -128,9 +128,13 @@ torch::Tensor higgs_matmat(
   const torch::Tensor& input,
   const torch::Tensor& codes,
   const torch::Tensor& scales,
+  bool do_hadamard,
   const std::optional<torch::Tensor>& bias
 ) {
-  auto had_input = apply_hadamard(input);
+  auto had_input = input;
+  if (do_hadamard) {
+    had_input = apply_hadamard(had_input);
+  }
 
   auto codebook_bits = codes.dtype().itemsize() * 8;
   auto group_size = (input.size(-1) - 1) / codes.size(1) + 1;

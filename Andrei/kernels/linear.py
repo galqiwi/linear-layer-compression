@@ -103,6 +103,7 @@ class HiggsLinear(nn.Module):
                 input,
                 self.codes,
                 self.scales,
+                True,
                 self.bias,
             )
 
