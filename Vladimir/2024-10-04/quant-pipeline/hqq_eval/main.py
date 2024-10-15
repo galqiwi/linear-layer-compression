@@ -546,7 +546,7 @@ def main():
         ppl = llama_eval(model, testloader, DEV)
         wandb.log({f'ppl_{dataset}': ppl})
 
-    model = model.to(DEV)
+    # model = model.to(DEV)
     wandb.log(get_zero_shots(model, task_list=['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
     wandb.log(
         filter_dict(
