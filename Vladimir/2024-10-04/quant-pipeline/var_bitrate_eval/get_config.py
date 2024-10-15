@@ -186,10 +186,10 @@ def get_config(args):
         real_bits = solution_size / len(solution_idxs)
 
         old_solution_idxs = solution_idxs
-        solution_idx = []
+        solution_idxs = []
         for idx in old_solution_idxs:
             assert len(layers) % len(scales) == 0
-            solution_idx.extend([idx] * (len(layers) // len(scales)))
+            solution_idxs.extend([idx] * (len(layers) // len(scales)))
 
     # output
 
