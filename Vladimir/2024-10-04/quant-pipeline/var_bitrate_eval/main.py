@@ -348,6 +348,10 @@ def main():
         help='Bits separation value.'
     )
     parser.add_argument(
+        '--blockwise', action='store_true',
+        help='Enable blockwise quantization.'
+    )
+    parser.add_argument(
         '--target_bits', type=float, default=4.0,
         help='Target bits value.'
     )

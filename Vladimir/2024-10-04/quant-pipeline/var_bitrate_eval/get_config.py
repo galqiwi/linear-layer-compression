@@ -160,6 +160,14 @@ def get_config(args):
 
     scales = [slope_by_layer[layer] for layer in layers]
     numels = [get_numel(layer) for layer in layers]
+
+    if args.blockwise:
+        scales = [
+            sum([slope_by_layer[layer] for layer in layers if layer.startswith(f'model.layers.{i}.')])
+            for i in range(len(model_pt.model.layers))
+        ]
+        numels = [1.0 for _ in range(len(model_pt.model.layers))]
+
     grid_edenn_d = ok_grids['edenn_d'].values
     grid_edenn_n = ok_grids['edenn_n'].values
     grid_bits = ok_grids['bits'].values
@@ -172,10 +180,19 @@ def get_config(args):
         grid_bits=grid_bits,
         grid_mses=grid_mses,
     )
+    real_bits = solution_size / sum(numels)
+
+    if args.blockwise:
+        real_bits = solution_size / len(solution_idxs)
+
+        old_solution_idxs = solution_idxs
+        solution_idx = []
+        for idx in old_solution_idxs:
+            assert len(layers) % len(scales) == 0
+            solution_idx.extend([idx] * (len(layers) // len(scales)))
 
     # output
 
-    real_bits = solution_size / sum(numels)
     predicted_ppl = baseline_ppl + sum(
         max(grid_mses[solution_idx] * scale, 0.0) for solution_idx, scale in zip(solution_idxs, scales))
     optimal_config = {
