@@ -24,6 +24,9 @@ import io
 import torch
 from hqq.core.quantize import Quantizer as HqqQuantizer
 
+from transformers import AutoModelForCausalLM, HqqConfig
+
+
 @torch.no_grad()
 def quantize_dequantize_hqq(weight, bits, group_size=64):
     return HqqQuantizer.dequantize(*HqqQuantizer.quantize(
@@ -508,25 +511,33 @@ def main():
         config=args,
     )
 
-    model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16, low_cpu_mem_usage=True, device_map="cpu")
+    quant_config = HqqConfig(nbits=args.bits, group_size=args.block_size)
+
+    model = AutoModelForCausalLM.from_pretrained(
+        args.model,
+        torch_dtype=torch.float16,
+        low_cpu_mem_usage=True,
+        device_map="cuda",
+        quantization_config=quant_config,
+    )
     model.seqlen = args.seqlen
     model.eval()
 
-    layers = sorted([
-        layer for
-        layer in find_layers(model).keys()
-        if 'lm_head' not in layer
-    ])
+    # layers = sorted([
+    #     layer for
+    #     layer in find_layers(model).keys()
+    #     if 'lm_head' not in layer
+    # ])
+    #
+    # model = model.half().cuda()
+    #
+    #
+    # for layer in layers:
+    #     linear = get_module_by_path(model, layer)
+    #
+    #     linear.weight.data = quantize_dequantize_hqq(linear.weight, bits=args.bits, group_size=args.block_size).cuda()
 
-    model = model.half().cuda()
-
-
-    for layer in layers:
-        linear = get_module_by_path(model, layer)
-
-        linear.weight.data = quantize_dequantize_hqq(linear.weight, bits=args.bits, group_size=args.block_size).cuda()
-
-    model = model.half()
+    # model = model.half()
 
     datasets = ['wikitext2']
     for dataset in datasets:
