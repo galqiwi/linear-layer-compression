@@ -546,6 +546,15 @@ def main():
         ppl = llama_eval(model, testloader, DEV)
         wandb.log({f'ppl_{dataset}': ppl})
 
+    model = AutoModelForCausalLM.from_pretrained(
+        args.model,
+        torch_dtype=torch.float16,
+        device_map="cuda",
+        quantization_config=quant_config,
+    )
+    model.seqlen = args.seqlen
+    model.eval()
+
     # model = model.to(DEV)
     wandb.log(get_zero_shots(model, task_list=['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
     wandb.log(
