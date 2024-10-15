@@ -516,7 +516,6 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(
         args.model,
         torch_dtype=torch.float16,
-        low_cpu_mem_usage=True,
         device_map="cuda",
         quantization_config=quant_config,
     )
