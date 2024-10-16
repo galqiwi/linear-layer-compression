@@ -355,6 +355,9 @@ def main():
         '--edenn-n', type=int, required=True,
         help='EDENN grid size'
     )
+    parser.add_argument(
+        '--skip-zeroshots', action='store_true', help='Skip zero-shot evaluations.'
+    )
 
     args = parser.parse_args()
 
@@ -402,6 +405,9 @@ def main():
         )
         ppl = llama_eval(model, testloader, DEV)
         wandb.log({f'ppl_{dataset}': ppl})
+
+    if args.skip_zeroshots:
+        return
 
     model = model.to(DEV)
     wandb.log(get_zero_shots(model, task_list=['winogrande','piqa','hellaswag', 'arc_easy','arc_challenge'], num_fewshots=1))
