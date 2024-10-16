@@ -112,7 +112,7 @@ void higgs_matvec(
   throw c10::NotImplementedError(
     {__func__, __FILE__, static_cast<uint32_t>(__LINE__)},
     c10::str(
-      "FUCK YOU CUNT!"
+      "Shape not supported"
     )
   );
 }
