@@ -38,8 +38,6 @@ def get_af3_grid(block_size):
 
 
 def get_nf3_grid(block_size):
-    assert block_size == 64
-
     return torch.tensor([-1.0000, -0.4786, -0.2171, 0.0000, 0.1609, 0.3379, 0.5626, 1.0000])
 
 
